@@ -1,0 +1,86 @@
+<%= javascript_include_tag "light" %>
+<%= javascript_include_tag "experimental2" %>
+<%= javascript_include_tag "saver" %>
+
+<script>
+	var savePartial = "<%= escape_javascript render :partial => 'partials/save_modal' %>"
+	var pageLB;
+	var saver;
+	/* Fetch wave data */
+	$(document).ready(function () {
+		/* Implement Saver and modal */
+		saver = new Saver('behavior', savePartial, { 'behavior' : null });
+		saver.init();
+		$.ajax({
+			type : "GET",
+			dataType : "json",
+			data : { 'name' : "<%= @behavior.name %>" },
+			url : "/behaviors/get_states",
+			success : function(data, textStatus, jqXHR) {
+				var waveStates = data["states"];
+				var currWave = new Wave($(this), waveStates, data["is_smooth?"]);
+				pageLB = new LP(currWave, false);
+				saver.sources.behavior = pageLB;
+			} ,
+			error: function(jqXHR, textStatus, errorThrown) {
+				return errorThrown;
+			}
+		});
+	});
+</script>
+
+<p>
+	<strong>Name of Behavior:</strong>
+	<%= @behavior.name %>
+</p>
+
+<p>
+	<strong>Notification Score:</strong>
+	<%= @behavior.notification %>
+</p>
+
+<p>
+	<strong>Active Score:</strong>
+	<%= @behavior.active %>
+</p>
+
+<p>
+	<strong>Unable Score:</strong>
+	<%= @behavior.unable %>
+</p>
+
+<p>
+	<strong>Low Energy Score:</strong>
+	<%= @behavior.low_energy %>
+</p>
+
+<p>
+	<strong>Turning On Score:</strong>
+	<%= @behavior.turning_on %>
+</p>
+
+<p>
+	<strong>Smooth Wave?</strong>
+	<%= @behavior.is_smooth %>
+</p>
+
+<p>
+	<strong>Part of the Light Behavior Libraray?</strong>
+	<%= @behavior.is_library %>
+</p>
+
+<p>
+	<strong>States (temporary form):</strong>
+	<%= @behavior.states.map{|x| number_with_precision(x, :precision => 2).to_f} %>
+</p>
+
+<div id="graph">
+</div>
+
+<div id="meta-btns" class="btn-group">
+	<button id="export-button" class="btn btn-info" data-toggle="modal" data-target="#save-modal">
+		Export
+	</button>
+</div
+
+<%= link_to 'Back', behaviors_path %>

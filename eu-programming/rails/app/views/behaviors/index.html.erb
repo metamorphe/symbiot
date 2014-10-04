@@ -1,0 +1,45 @@
+<div class='row'>
+
+	<ul class="nav nav-tabs" role="tablist">
+		<li class="active"><a href="/behaviors">Behaviors</a></li>
+		<li><a href="/sequences">Sequences</a></li>
+		<li><a href="#">Schemes</a></li>
+	</ul>
+
+	<h3>Light Behavior Library</h3>
+
+	<table class="table table-striped">
+		<tr>
+			<th>Name</th>
+			<th>Notification</th>
+			<th>Active</th>
+			<th>Unable</th>
+			<th>Low Energy</th>
+			<th>Turning On</th>
+			<th colspan="3"></th>
+		</tr>
+
+		<% @behaviors.each do |behavior| %>
+		<tr>
+			<td><%= behavior.name.humanize %></td>
+			<td><%= behavior.notification %></td>
+			<td><%= behavior.active %></td>
+			<td><%= behavior.unable %></td>
+			<td><%= behavior.low_energy %></td>
+			<td><%= behavior.turning_on %></td>
+			<td>
+				<%= link_to '<span class="glyphicon glyphicon-search"></span>'.html_safe, behavior_path(behavior) %></td>
+			<td>
+				<%= link_to '<span class="glyphicon glyphicon-edit"></span>'.html_safe, edit_behavior_path(behavior) %></td>
+			<td>
+				<%= link_to '<span class="glyphicon glyphicon-remove"></span>'.html_safe, behavior_path(behavior),
+							method: :delete, data: { confirm: 'Delete behavior?'}
+				%>
+			</td>
+		</tr>
+		<% end %>
+	</table>
+	<%= link_to 'New Behavior', new_behavior_path , {:role => "button", :class => "btn btn-primary"}%>
+	<%= link_to 'Mix Behaviors', '/behaviors/new_wave' , {:role => "button", :class => "btn btn-default"}%>
+
+</div>

@@ -1,0 +1,29 @@
+//
+//  Aamun_seq.h
+//  Flixels - Aamun Sequence
+//
+//  Created by Cesar Torres on 7/2/14.
+//  Copyright (c) 2014 Cesar Torres. All rights reserved.
+//
+
+#ifndef __Aamun__flixel__
+#define __Aamun__flixel__
+
+#include "BlinkM_funcs.h"
+blinkm_script_line Aamun[] = {
+	{ 23, { 'n', 0x7f,0x7f,0x7f}},
+	{ 39, { 'n', 0xff,0xff,0xff}},
+	{ 18, { 'n', 0x00,0x00,0x00}},
+	{ 38, { 'n', 0x7f,0x7f,0x7f}},
+	{ 7, { 'n', 0x00,0x00,0x00}},
+	{ 15, { 'n', 0x7f,0x7f,0x7f}},
+	{ 24, { 'n', 0xff,0xff,0xff}},
+	{ 22, { 'n', 0x7f,0x7f,0x7f}},
+	{ 21, { 'n', 0x00,0x00,0x00}},
+	{ 39, { 'n', 0x7f,0x7f,0x7f}},
+	{ 7, { 'n', 0xff,0xff,0xff}},
+	{ 22, { 'n', 0x7f,0x7f,0x7f}},
+	{ 24, { 'n', 0x7f,0x7f,0x7f}}
+};
+int script_aamun_len = 12;  // number of script lines above
+#endif /* defined(__Aamun__flixel__) */

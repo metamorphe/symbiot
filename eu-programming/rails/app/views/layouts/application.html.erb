@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>FlixelLights - <%= params[:action].capitalize %></title>
+	<%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+	<%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+	<%= csrf_meta_tags %>
+	<script>
+	try { Typekit.load(); } catch (e) {}
+	</script>
+</head>
+
+<body class='gray'>
+	<nav class="navbar navbar-default" role="navigation">
+	  <div class="container-fluid">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+		  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		  </button>
+		  <a class="navbar-brand" href="/light/index"><b>Flixel Lights</b></a>
+		</div>
+
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		  <ul class="nav navbar-nav">
+			<li class="<%= params[:action] == "index" ? "active" : "" %>">
+				<a href="/light/index"> Home</a>
+			</li>
+			<li class="<%= params[:action] == "library" ? "active" : "" %>">
+				<a href="/light/library"> Library</a>
+			</li>
+			<li class="<%= params[:action] == "examples" ? "active" : "" %>">
+				<a href="/light/sequence"> Sequence</a>
+			</li>
+			<li class="<%= params[:action] == "examples" ? "active" : "" %>">
+				<a href="/light/synthesize"> Synthesize</a>
+			</li>
+
+			<li class="<%= params[:action] == "blinkm" ? "active" : "" %>">
+				<a href="/light/blinkm"> BlinkM</a>
+			</li>
+		  </ul>
+		    
+		</div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+
+	<div class="container">
+		<%= yield %>
+	</div>
+</body>
+</html>
