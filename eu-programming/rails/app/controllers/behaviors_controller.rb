@@ -59,6 +59,11 @@ class BehaviorsController < ApplicationController
 
 	def show
 		@behavior = Behavior.find(params[:id])
+		respond_to do |format|
+      	format.html # show.html.erb
+      	format.json { render json: @behavior }
+    end
+    
 	end
 
 	def index
