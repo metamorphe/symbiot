@@ -14,14 +14,15 @@ public:
     boolean log(unsigned int);
     void print();
     boolean clear();
-    int _log[20];
+    unsigned int _log[100];
     unsigned int state;
+    unsigned int pos;
 private:
 	unsigned int size;
 	unsigned int max_cap;
 	unsigned int min_cap;
 
-    unsigned int pos;
+ 
 };
 
 #endif /* defined(__Expresso__logger__) */

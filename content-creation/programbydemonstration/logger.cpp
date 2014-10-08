@@ -9,9 +9,7 @@
 #include "logger.h"
 
 Logger::Logger(){
-  size = 20;
-  max_cap = 1024;
-  min_cap = 0;
+  size = 100;
   state = READY;
   pos = 0;
   init();
@@ -26,9 +24,9 @@ void Logger::print(){
   Serial.print(": { size: ");
   Serial.print(size);
   Serial.println(", values: [");
-  for(unsigned int i = 0; i < size; i ++){
+  for(unsigned int i = 0; i < pos; i ++){
     Serial.print(_log[i]);
-    if(i != (size - 1))
+    if(i != (pos - 1))
       Serial.print(", ");
   }
   Serial.println("]}");

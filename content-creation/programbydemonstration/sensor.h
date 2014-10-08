@@ -2,8 +2,7 @@
 
 #ifndef __Expresso__sensor__
 #define __Expresso__sensor__
-#define READY 1
-#define OUT_OF_MEMORY 0
+
 #include <Arduino.h>
 class Sensor {
 public:
@@ -13,8 +12,8 @@ public:
     void print();
     unsigned int value;
 private:
-	unsigned int max_cap;
-	unsigned int min_cap;
+    unsigned int max_cap;
+    unsigned int min_cap;
         unsigned int pin;
 
 };
