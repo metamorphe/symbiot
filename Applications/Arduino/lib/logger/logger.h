@@ -9,12 +9,12 @@
 
 class Logger {
 public:
-    Logger();
+    Logger(uint16_t);
     void init();
     boolean log(unsigned int);
     void print();
     boolean clear();
-    unsigned int _log[100];
+    unsigned int* _log;
     unsigned int state;
     unsigned int pos;
 private:

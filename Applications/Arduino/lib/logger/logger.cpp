@@ -8,8 +8,8 @@
 
 #include "logger.h"
 
-Logger::Logger(){
-  size = 1000;
+Logger::Logger(uint16_t _size){
+  size = _size;
   state = READY;
   pos = 0;
   init();
@@ -31,6 +31,7 @@ void Logger::print(){
   }
   Serial.println("]}");
 }
+
 boolean Logger::clear(){
   pos = 0;
   state = READY;

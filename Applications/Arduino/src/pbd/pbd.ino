@@ -52,9 +52,6 @@ void setup() {
   s = new Screen(SCREEN_CS, SCREEN_DC, SCREEN_RST, SCREEN_CSSD);
   
   s->println("Expresso", 1);
-
-  
-  
 }
 
 void update(){
