@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>D3</title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+		<style type="text/css">
+			
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+			
+			.axis text {
+				font-family: sans-serif;
+				font-size: 11px;
+			}
+
+			div.tooltip {	
+		    position: absolute;			
+		    text-align: center;			
+		    width: 50px;					
+		    height: 12px;					
+		    padding: 2px;				
+		    font: 9px sans-serif;		
+		    background: lightsteelblue;	
+		    border: 0px;		
+		    border-radius: 8px;			
+		    pointer-events: none;			
+		}
+
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+		//Generates and plots random data points
+
+			//Width and height
+			var w = 700;
+			var h = 500;
+			var padding = 30;
+			
+			// var dataset = [
+			// 				[5, 20], [480, 90], [250, 50], [100, 33], [330, 95],
+			// 				[410, 12], [475, 44], [25, 67], [85, 21], [220, 88],
+			// 				[600, 150]
+			// 			  ];
+
+			//get data from database
+
+			//Dynamic, random dataset
+			var dataset = [];
+			var numDataPoints = 50;
+			var xRange = Math.random() * 1000;
+			var yRange = Math.random() * 1000;
+			for (var i = 0; i < numDataPoints; i++) {
+			    var newNumber1 = Math.round(Math.random() * xRange);
+			    var newNumber2 = Math.round(Math.random() * yRange);
+			    dataset.push([newNumber1, newNumber2]);
+			}
+
+			//Create scale functions
+			var xScale = d3.scale.linear()
+								 .domain([0, d3.max(dataset, function(d) { return d[0]; })])
+								 .range([padding, w - padding * 2]);
+
+			var yScale = d3.scale.linear()
+								 .domain([0, d3.max(dataset, function(d) { return d[1]; })])
+								 .range([h - padding, padding]);
+
+			//Define X axis
+			var xAxis = d3.svg.axis()
+							  .scale(xScale)
+							  .orient("bottom");
+
+			//Define Y axis
+			var yAxis = d3.svg.axis()
+			                  .scale(yScale)
+			                  .orient("left")
+			                  .ticks(5);
+
+			// Define the div for the tooltip
+			var div = d3.select("body").append("div")	
+			    .attr("class", "tooltip")				
+			    .style("opacity", 0);
+
+
+			//Create SVG element
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+			//Create circles - plot data points
+			svg.selectAll("circle")
+			   .data(dataset)
+			   .enter().append("circle")
+				   .attr("cx", function(d) { return xScale(d[0]); })
+				   .attr("cy", function(d) { return yScale(d[1]); })
+				   .attr("r", 5)
+				   .attr("fill", "steelblue")
+			       .on("mouseover", function(d) {		
+			            div.transition()		
+			                .duration(200)		
+			                .style("opacity", .9);		
+			            div	.html("[" + d[0] + ", "  + d[1] + "]")	// tool tip message 
+			                .style("left", (d3.event.pageX) + "px")		
+			                .style("top", (d3.event.pageY - 28) + "px");	
+			            })					
+			        .on("mouseout", function(d) {		
+			            div.transition()		
+			                .duration(500)		
+			                .style("opacity", 0);	
+			        });
+		
+			
+			//Create X axis
+			svg.append("g")
+				.attr("class", "axis")
+				.attr("transform", "translate(0," + (h - padding) + ")")
+				.call(xAxis);
+
+			//Create Y axis
+			svg.append("g")
+			    .attr("class", "axis")
+			    .attr("transform", "translate(" + padding + ",0)")
+			    .call(yAxis);
+
+			//display statistics
+
+
+		</script>
+	</body>
+</html>
