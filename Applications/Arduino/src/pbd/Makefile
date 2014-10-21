@@ -5,7 +5,7 @@
 
 ### PROJECT_DIR
 ### This is the path to where you have created/cloned your project
-PROJECT_DIR       = /Users/cearto/Repos/expressive-actuation/hardware/arduino-cpp
+PROJECT_DIR       = /Users/cearto/Repos/expressive-actuation/Applications/Arduino
 
 ### AVR_GCC_VERSION
 ### Check if the version is equal or higher than 4.9

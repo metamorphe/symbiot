@@ -1,8 +1,0 @@
-In Arduino IDE, 
-
-Add library -> New Library -> "src"
-Add library -> Wire
-
-Compile/Upload/Run
-
-Baud rate 19200!
