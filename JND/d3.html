@@ -4,6 +4,7 @@
 		<meta charset="utf-8">
 		<title>D3</title>
 		<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+		<script src="numbers.js"></script>
 		<style type="text/css">
 			
 			.axis path,
@@ -44,15 +45,16 @@
 		        width = 960 - margin.left - margin.right,
 		        height = 500 - margin.top - margin.bottom;
 
-		              var dataset = [];
-		        var numDataPoints = 50;
-		        var xRange = Math.random() * 1000;
-		        var yRange = Math.random() * 1000;
-		        for (var i = 0; i < numDataPoints; i++) {
-		            var newNumber1 = Math.round(Math.random() * xRange);
-		            var newNumber2 = Math.round(Math.random() * yRange);
-		            dataset.push([newNumber1, newNumber2]);
-		        }
+			//Dynamic, random dataset
+			var dataset = [];
+			var numDataPoints = 50;
+			var xRange = Math.random() * 1000;
+			var yRange = Math.random() * 1000;
+			for (var i = 0; i < numDataPoints; i++) {
+			    var newNumber1 = Math.round(Math.random() * xRange);
+			    var newNumber2 = Math.round(Math.random() * yRange);
+			    dataset.push([newNumber1, newNumber2]);
+			}
 
 		    //Create scale functions
 		    var xScale = d3.scale.linear()
@@ -121,8 +123,62 @@
 		                    .style("opacity", 0); 
 		            });
 
-			//display statistics
 
+		    // returns sum of xValues and log yValues
+		    function sumOfProducts(xValues, yValues){
+				var sum = 0;
+				for (i = 0; i < xValues.length; i++) { 
+				    sum += (xValues[i]*Math.log(yValues[i]));
+				}
+				return sum;
+		    }
+
+		    function sumOfX(xValues){
+		    	var sum = 0;
+		    	for (i=0; i < xValues.length; i++) {
+		    		sum += xValues[i];
+		    	}
+		    	return sum;
+		    }
+
+		    function sumOfY(yValues){
+		    	var sum = 0;
+		    	for (i=0; i < yValues.length; i++) {
+		    		sum += Math.log(yValues[i]);
+		    	}
+		    	return sum;
+		    }
+
+		    function sumOfXSquared(xValues) {
+		    	var sum = 0;
+		    	for (i=0; i < xValues.length; i++) {
+		    		sum += Math.pow(xValues[i], 2);
+		    	}
+		    	return sum;
+		    }
+
+		    function regressionSlope(xValues, yValues) {
+		    	var n = xValues.length;
+		    	var numerator = n*sumOfProducts(xValues, yValues) - sumOfX(xValues)*sumOfY(yValues);
+		    	var denominator = n*sumOfXSquared(xValues) - Math.pow(sumOfX(xValues), 2);
+		    	var slope = numerator / denominator;
+		    	return slope;
+		    }
+
+		    function regressionIntercept(xValues, yValues){
+		    	var numerator = sumOfY(yValues) - regressionSlope(xValues, yValues)*sumOfX(xValues);
+		    	var n = xValues.length;
+		    	var intercept = numerator / n;
+		    	return intercept;
+		    }
+
+		    function expRegression(xValues, yValues) {
+		    	var A = Math.pow(10, regressionIntercept(xValues, yValues));
+		    	var r = Math.pow(10, regressionSlope(xValues, yValues));
+		    	return [A, r];
+		    }
+
+			//display statistics
 
 		</script>
 	</body>
