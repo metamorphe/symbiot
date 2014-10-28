@@ -1,6 +1,6 @@
 <%= javascript_include_tag "light" %>
 <%= javascript_include_tag "experimental2" %>
-<%= javascript_include_tag "saver" %>
+<%= javascript_include_tag "saver" %>	
 
 <script>
 	var savePartial = "<%= escape_javascript render :partial => 'partials/save_modal' %>"
@@ -21,66 +21,82 @@
 				var currWave = new Wave($(this), waveStates, data["is_smooth?"]);
 				pageLB = new LP(currWave, false);
 				saver.sources.behavior = pageLB;
+				pageLB.load($('#graph'));
 			} ,
 			error: function(jqXHR, textStatus, errorThrown) {
 				return errorThrown;
 			}
 		});
+		$('#show-btn').click(function() {
+			$('#details').toggle();
+		});
 	});
 </script>
 
-<p>
-	<strong>Name of Behavior:</strong>
-	<%= @behavior.name %>
-</p>
+<h1><%= @behavior.name.humanize %></h1>
+<br/>
 
-<p>
-	<strong>Notification Score:</strong>
-	<%= @behavior.notification %>
-</p>
-
-<p>
-	<strong>Active Score:</strong>
-	<%= @behavior.active %>
-</p>
-
-<p>
-	<strong>Unable Score:</strong>
-	<%= @behavior.unable %>
-</p>
-
-<p>
-	<strong>Low Energy Score:</strong>
-	<%= @behavior.low_energy %>
-</p>
-
-<p>
-	<strong>Turning On Score:</strong>
-	<%= @behavior.turning_on %>
-</p>
-
-<p>
-	<strong>Smooth Wave?</strong>
-	<%= @behavior.is_smooth %>
-</p>
-
-<p>
-	<strong>Part of the Light Behavior Libraray?</strong>
-	<%= @behavior.is_library %>
-</p>
-
-<p>
-	<strong>States (temporary form):</strong>
-	<%= @behavior.states.map{|x| number_with_precision(x, :precision => 2).to_f} %>
-</p>
-
-<div id="graph">
+<div id="graph"></div>
+<div class="led-box">
+	<%= render 'partials/led' %>
 </div>
+<br/>
 
 <div id="meta-btns" class="btn-group">
 	<button id="export-button" class="btn btn-info" data-toggle="modal" data-target="#save-modal">
 		Export
 	</button>
-</div
+	<button id="show-btn" class="btn btn-info">
+		Show Details
+	</button>
+</div>
+<br/>
+
+<div id="details" style="display:none;">
+	<p>
+		<strong>Name of Behavior:</strong>
+		<%= @behavior.name %>
+	</p>
+
+	<p>
+		<strong>Notification Score:</strong>
+		<%= @behavior.notification %>
+	</p>
+
+	<p>
+		<strong>Active Score:</strong>
+		<%= @behavior.active %>
+	</p>
+
+	<p>
+		<strong>Unable Score:</strong>
+		<%= @behavior.unable %>
+	</p>
+
+	<p>
+		<strong>Low Energy Score:</strong>
+		<%= @behavior.low_energy %>
+	</p>
+
+	<p>
+		<strong>Turning On Score:</strong>
+		<%= @behavior.turning_on %>
+	</p>
+
+	<p>
+		<strong>Smooth Wave?</strong>
+		<%= @behavior.is_smooth %>
+	</p>
+
+	<p>
+		<strong>Part of the Light Behavior Libraray?</strong>
+		<%= @behavior.is_library %>
+	</p>
+
+	<p>
+		<strong>States (temporary form):</strong>
+		<%= @behavior.states.map{|x| number_with_precision(x, :precision => 2).to_f} %>
+	</p>
+</div>
 
 <%= link_to 'Back', behaviors_path %>
