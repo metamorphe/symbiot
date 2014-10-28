@@ -17,7 +17,7 @@ class Actuator {
       Actuator(unsigned int, unsigned int, unsigned int) ;
       void init();
       void print();
-      void set(unsigned int*, unsigned int);
+      void set(Record*, uint16_t);
       void actuate(int);
       void go_to_pos(int);
       void next();
@@ -26,15 +26,21 @@ class Actuator {
       boolean play;
       boolean repeat;
 
+      inline uint16_t bound(boolean min){ 
+        if(min) return vmin;
+        else(max) return vmax;
+      }
+
+      inline length(){ return active_size;}
   private:
-    unsigned int* active_behavior;
-    unsigned int active_size;
-    unsigned int pin;
+    Record* active_behavior;
+    uint16_t active_size;
+    uint8_t pin;
   
-    unsigned int vmax;
-    unsigned int vmin;
-    unsigned int value;
-    int pos;
+    uint16_t vmax;
+    uint16_t vmin;
+    uint16_t value;
+    uint16_t pos;
 };
 
 #endif /* defined(__Expresso__actuator__) */

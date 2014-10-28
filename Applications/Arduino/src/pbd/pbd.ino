@@ -39,16 +39,18 @@ Screen *s;
 
 void setup() {
   Serial.begin(9600);
+
   Serial.println("Expresso");
   record = new Button("record", RECORD_PIN, NO_DEBOUNCE);
   playback = new Button("playback", PLAYBACK_PIN, NO_DEBOUNCE);
-  logger = new Logger();
   pot = new Sensor(SENSOR_PIN, 0, 500);
+ 
   Serial.println("Setting up BlinkM");
+  logger = new Logger(1000, 0, 100);
   led = new BlinkMActuator(0, 0, 100);
   led->init();
   Serial.println("Done setting up BlinkM");
-//  led = new Actuator(LED_PIN, 0, 255);
+  //  led = new Actuator(LED_PIN, 0, 255);
   s = new Screen(SCREEN_CS, SCREEN_DC, SCREEN_RST, SCREEN_CSSD);
   
   s->println("Expresso", 1);

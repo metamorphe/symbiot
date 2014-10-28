@@ -19,10 +19,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#ifndef FAKE_STREAM_H
-#define FAKE_STREAM_H
+#pragma once
 
-#include "ArduinoCompatibility.h"
+#include "Arduino.h"
 
 /**
  * A fake stream which can be used in place of other streams
@@ -34,7 +33,7 @@ class FakeStream : public Stream {
 public:
     /**
      * Creates a fake stream. Until nextByte() is called all bytes
-     * read will be zero.
+     * returned from read() or peek() will be -1 (end-of-stream).
      */
     FakeStream();
 
@@ -53,9 +52,15 @@ public:
     size_t write(uint8_t val);
 
     /**
-     * Flushes this stream. Does nothing in this implementation.
+     * Flushes this stream. Does nothing in this implementation to avoid conflicts (false negative tests).
      */
     void flush();
+
+    /**
+     * Reset the FakeStream so that it can be reused across tests. 
+     * When called, 'bytesWritten' becomes empty  ("").
+     */
+    void reset();
 
     /**
      * The bytes written by calling write(uint8_t).
@@ -63,7 +68,12 @@ public:
      * @return the bytes written
      */
     const String& bytesWritten();
-
+    
+    /**
+     * Sets the next value to be read via read() or peek() to -1 (end-of-stream).
+     */
+    void setToEndOfStream();
+        
     /**
      * Sets the value of the next byte to be read via read() or peek().
      *
@@ -81,22 +91,21 @@ public:
     /**
      * Reads a byte, removing it from the stream.
      *
-     * @return the byte passed to nextByte() or zero if 
-     *         nextByte() has not been called
+     * @return the byte passed to nextByte() or -1 (end-of-stream) if 
+     *         nextByte() has not been called or setToEndOfStream() has been called
      */
     int read();
 
     /**
      * Reads a byte without removing it from the stream.
      *
-     * @return the byte passed to nextByte() or zero if 
-     *         nextByte() has not been called
+     * @return the byte passed to nextByte() or -1 (end-of-stream) if 
+     *         nextByte() has not been called or setToEndOfStream() has been called
      */
     int peek();
 
 private:
     String _bytesWritten;
-    byte _nextByte;
+    int _nextByte;
 };
 
-#endif // FAKE_STREAM_H
