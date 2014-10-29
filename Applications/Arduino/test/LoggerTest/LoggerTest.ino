@@ -1,5 +1,5 @@
 #include "ArduinoUnit.h"
-#include "logger.h"
+#include "Logger.h"
 // assertLess(arg1,arg2)
 // assertLessOrEqual(arg1,arg2)
 // assertEqual(arg1,arg2)
@@ -36,6 +36,7 @@ test(logging){
 	logger->log(8);
 	logger->log(1024);
 
+	logger->print();
 	assertEqual(logger->length(), 5);
 	// ACCURATE STORAGE
 	assertEqual(logger->get(0)->value, 0); 
@@ -50,7 +51,11 @@ test(logging){
 
 	// TIME HAS ELAPSED
 	assertNotEqual((logger->last()->timestamp - logger->first()->timestamp), 0);
+	// RELATION HAPPENS_BEFORE IS HELD
+	
 }
+
+
 
 // HANDLE LOG 10 VALUES, PRINT 10 VALUES, EQUIV DELAYS
 // HANDLE LOG 10 VALUES, PRINT 10 VALUES, NON_EQUIV DELAYS

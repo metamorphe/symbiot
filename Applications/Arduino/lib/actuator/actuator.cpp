@@ -6,7 +6,7 @@
  *  For now, a behavior is defined as a sequence of integers [0, 1000]
  *  It regulates its own voltage thresholds
  */ 
-#include "actuator.h"
+#include "Actuator.h"
 
 void Actuator::playable(boolean _play){ play = _play; }
 void Actuator::repeatable(boolean _repeat){ repeat = _repeat;}

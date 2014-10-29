@@ -29,8 +29,8 @@ public:
     unsigned int state;
     uint16_t pos;
 
-    inline Record* length(){return pos;}
-    inline Record* getLog(){return _log();}
+    inline uint16_t length(){return pos;}
+    inline Record* getLog(){return _log;}
     inline Record* get(uint16_t _i){ return &(_log[_i]);}
     inline Record* first(){ return &(_log[0]);}
     inline Record* last(){ return &(_log[pos-1]);}

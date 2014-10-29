@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Cesar Torres. All rights reserved.
 //
 
-#include "button.h"
+#include "Button.h"
 long debounceDelay = 50;
 
 Button::Button(String _name, unsigned int _pin, boolean _debounceable){

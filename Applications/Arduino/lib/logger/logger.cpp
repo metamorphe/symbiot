@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Cesar Torres. All rights reserved.
 //
 
-#include "logger.h"
+#include "Logger.h"
 
 // A logger should be able to handle up to 65,535 samples
 // Samples are normalized values from 0 to 256 (8bit-precision)
