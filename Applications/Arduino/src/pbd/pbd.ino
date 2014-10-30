@@ -1,11 +1,11 @@
 #include <Arduino.h>
 #include "Wire.h"
 
-#include "button.h"
-#include "logger.h"
-#include "sensor.h"
-#include "actuator.h"
-#include "blinkm.h"
+#include "Button.h"
+#include "Logger.h"
+#include "Sensor.h"
+#include "Actuator.h"
+#include "Blinkm.h"
 #include <Adafruit_GFX.h>    // Core graphics library
 #include <Adafruit_ST7735.h> // Hardware-specific library
 #include <SPI.h>
