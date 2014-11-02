@@ -21,7 +21,7 @@ THE SOFTWARE.
 */
 #include "FakeStream.h"
 
-FakeStream::FakeStream() : _nextByte(0) {
+FakeStream::FakeStream() : _nextByte(-1) {
 }
 
 FakeStream::~FakeStream() {
@@ -34,10 +34,21 @@ size_t FakeStream::write(uint8_t val) {
 }
 
 void FakeStream::flush() {
+    // does nothing to avoid conflicts (false negative tests)
+    // for test purpose, use 'reset' function instead
+}
+
+void FakeStream::reset() {
+    _bytesWritten="";
+    setToEndOfStream();
 }
 
 const String& FakeStream::bytesWritten() {
     return _bytesWritten;
+}
+
+void FakeStream::setToEndOfStream() {
+    _nextByte = -1;
 }
 
 void FakeStream::nextByte(byte b) {
@@ -49,7 +60,9 @@ int FakeStream::available()  {
 }
 
 int FakeStream::read() {
-    return _nextByte;
+    int b = _nextByte;
+        _nextByte = -1;
+    return b;
 }
 
 int FakeStream::peek() {

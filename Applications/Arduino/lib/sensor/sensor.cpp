@@ -1,13 +1,13 @@
 
 //
-//  Button.cpp
-//  Buttons
+//  Sensor.cpp
+//  Sensor
 //
 //  Created by Cesar Torres on 7/2/14.
 //  Copyright (c) 2014 Cesar Torres. All rights reserved.
 //
 
-#include "sensor.h"
+#include "Sensor.h"
 
 Sensor::Sensor(unsigned int _pin, unsigned int _min, unsigned int _max){
   pin = _pin;

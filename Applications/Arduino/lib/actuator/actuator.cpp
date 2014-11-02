@@ -6,7 +6,7 @@
  *  For now, a behavior is defined as a sequence of integers [0, 1000]
  *  It regulates its own voltage thresholds
  */ 
-#include "actuator.h"
+#include "Actuator.h"
 
 void Actuator::playable(boolean _play){ play = _play; }
 void Actuator::repeatable(boolean _repeat){ repeat = _repeat;}
@@ -37,7 +37,7 @@ void Actuator::print(){
   Serial.println("}");
 }
 
-void Actuator::set(unsigned int* _behavior, unsigned int size){
+void Actuator::set(Record* _behavior, uint16_t size){
   playable(false);
   active_behavior = _behavior;
   active_size = size;
@@ -64,6 +64,6 @@ void Actuator::next(){
 		go_to_pos(0);
 		return;
 	}
-	actuate(active_behavior[pos]);
+	actuate(active_behavior[pos]->value);
 	pos++;
 }
