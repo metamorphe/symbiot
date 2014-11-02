@@ -4,8 +4,6 @@ class Sequence < ActiveRecord::Base
 	has_many :behavior_links, dependent: :destroy
 	has_many :behaviors, through: :behavior_links
 
-	self.primary_key = 'name'
-
 	validates :name, presence: true
 	validates_uniqueness_of :name
 	validates :behaviors, presence: true

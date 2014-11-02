@@ -40,7 +40,7 @@ Saver.prototype = {
 		$(jsonButton).click(function(e) {
 			switch (scope.layer) {
 				case "behavior":
-					exportJSON($('#name-field').val(), mixedWave.getData(), 'behavior');
+					exportJSON($('#name-field').val(), scope.sources.behavior.wave.getData(), 'behavior');
 					break;
 				case "sequence":
 					exportJSON($('#name-field').val(), sources.sequence.getData(), 'sequence');

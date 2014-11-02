@@ -1,4 +1,10 @@
 FlixelLights::Application.routes.draw do
+  resources :actuations
+
+  resources :experiments
+
+  resources :actuators
+
   root "light#index"
 
   get "light/view"

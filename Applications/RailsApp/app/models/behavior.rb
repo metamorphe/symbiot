@@ -1,10 +1,12 @@
 class Behavior < ActiveRecord::Base
 
-	# GET convention: /behaviors/<behavior name>
-	self.primary_key = 'name'
-
 	has_many :behavior_links, dependent: :destroy
 	has_many :sequences, through: :behavior_links
+
+	has_many :actuations
+	has_many :actuators, through: :actuations
+
+	has_many :experiments
 
 	def states
 		if self[:states]
@@ -83,6 +85,18 @@ class Behavior < ActiveRecord::Base
 		values = values.map(&:to_f)
 		self.array2cpp(name, values);
 	end
+
+	def self.compress(name, values, duration=1)
+		self.array2cpp(name, values, duration=1)
+	end
+
+	# TODO: make metamethod to get to_actuator methods to turn pure
+	# Behaviors into actuator-adjusted Behavior subclasses
+	# !ACTUATORS.each do |actuator|
+	# 	define_method("to_#{actuator}") do
+	# 		#code body goes here
+	# 	end
+	# end
 
 	private
 
