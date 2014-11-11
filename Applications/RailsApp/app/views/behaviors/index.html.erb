@@ -1,3 +1,23 @@
+<%= javascript_include_tag 'light' %>
+<%= javascript_include_tag 'experimental2' %>
+
+<script>
+	var waveStates = {};
+	var waveIsSmooths = {};
+	<% @behaviors.each do |behavior| %>
+		waveStates['<%= behavior.name %>'] = <%= behavior.states %>;
+		waveIsSmooths['<%= behavior.name %>'] = <%= behavior.is_smooth %>;
+	<% end %>
+	$(document).ready(function () {
+		$.map($('.view'), function(el, idx) {
+			var name = $(el).attr('id');
+			var wave = new Wave(name, waveStates[name], waveIsSmooths[name]);
+			var behavior = new LP(wave, false);
+			behavior.load($(el));
+		});
+	});
+</script>
+
 <div class='row'>
 
 	<ul class="nav nav-tabs" role="tablist">
@@ -10,22 +30,24 @@
 	<table class="table table-striped">
 		<tr>
 			<th>Name</th>
-			<th>Notification</th>
-			<th>Active</th>
-			<th>Unable</th>
-			<th>Low Energy</th>
-			<th>Turning On</th>
+			<th>Waveform</th>
+			<th>Preview</th>
 			<th colspan="3"></th>
 		</tr>
 
 		<% @behaviors.each do |behavior| %>
 		<tr>
 			<td><%= behavior.name.humanize %></td>
-			<td><%= behavior.notification %></td>
-			<td><%= behavior.active %></td>
-			<td><%= behavior.unable %></td>
-			<td><%= behavior.low_energy %></td>
-			<td><%= behavior.turning_on %></td>
+			<td class='view' id='<%= behavior.name %>'></td>
+			<td>
+				<div class="led-box">
+					<%= render 'partials/led' %>
+				</div>
+				<div class="field">
+				 	Select a preview actuator<br>
+				    <%= select("actuation", "actuator_id", Actuator.all.collect {|p| [ p.name.humanize, p.id ] }, {include_blank: 'None'}) %>
+				</div>
+			</td>
 			<td>
 				<%= link_to '<span class="glyphicon glyphicon-search"></span>'.html_safe, behavior_path(behavior) %></td>
 			<td>
