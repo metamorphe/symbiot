@@ -18,12 +18,39 @@ Logger::Logger(uint16_t _size, uint16_t _min, uint16_t _max){
   // Actuator bounds
   min_cap = _min; 
   max_cap = _max;
+
+  _log = (Record*) calloc(sizeof(Record*), _size);
+  if (_log == NULL) Serial.println("OUT_OF_MEMORY - LOG ALLOC");
   init();
 } 
 
 void Logger::init(){
   clear();
 }
+
+void Logger::printIR(){
+  Serial.println("++++++++++ Schedule +++++++++++");
+  Serial.println("----------------------------");
+  Serial.println("|  curr  |  delay |  next  |");
+  InterruptRecord ir;
+  for(unsigned int i = 0; i < pos; i ++){
+    ir = getIR(i);
+    Serial.print("|  ");
+    Serial.print(ir.curr);
+    Serial.print("  |  ");
+    Serial.print(ir.delay);    
+    Serial.print("  |  ");
+    Serial.print(ir.next);
+    Serial.println("  |");
+  }
+  Serial.println("----------------------------");
+
+  Serial.print("Elapsed time: ");
+  double elapsed_time = ((double)(last()->timestamp) - (double)(first()->timestamp)) / 1000;
+  Serial.print(elapsed_time);
+  Serial.println("ms");
+}
+
 
 void Logger::print(){
   Serial.print("Log ");
@@ -39,7 +66,9 @@ void Logger::print(){
   }
   Serial.println("]}");
   Serial.print("Elapsed time: ");
-  Serial.println(last()->timestamp - first()->timestamp);
+  double elapsed_time = ((double)(last()->timestamp) - (double)(first()->timestamp)) / 1000;
+  Serial.print(elapsed_time);
+  Serial.println("ms");
 }
 
 boolean Logger::clear(){

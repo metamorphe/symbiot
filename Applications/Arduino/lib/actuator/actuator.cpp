@@ -7,6 +7,7 @@
  *  It regulates its own voltage thresholds
  */ 
 #include "Actuator.h"
+#include "Logger.h"
 
 void Actuator::playable(boolean _play){ play = _play; }
 void Actuator::repeatable(boolean _repeat){ repeat = _repeat;}
@@ -37,33 +38,43 @@ void Actuator::print(){
   Serial.println("}");
 }
 
-void Actuator::set(Record* _behavior, uint16_t size){
+void Actuator::set(Logger* _behavior){
   playable(false);
   active_behavior = _behavior;
-  active_size = size;
   go_to_pos(0);
 }
 
-void Actuator::actuate(int _value){
-  value = map(_value, 0, 1000, vmin, vmax);
-  analogWrite(pin, value);    
-}
+void Actuator::actuate(unsigned int value, unsigned long delay_t){
+  Serial.print("Actuating ");
+  Serial.print(value);
+  Serial.print(" delayed ");
+  Serial.println(delay_t);
+  Serial.print(" @ ");
+  Serial.println(delay_t);
 
+  value = map(value, 0, 1000, vmin, vmax);
+  analogWrite(pin, value);  
+  delay(delay_t);  
+}
 
 void  Actuator::go_to_pos(int _pos){ 
-	if(_pos < 0) _pos = active_size + _pos; 
+	if(_pos < 0) _pos = length() + _pos; 
 	pos = _pos;
 }
+
+InterruptRecord temp;
 // TODO: Add x # of repeats; currently inf. repeats
-void Actuator::next(){
+void Actuator::next(unsigned long t0){
 	if(!play) return;
-	if(repeat && pos >= active_size){
+	if(repeat && pos >= length()){
 		go_to_pos(0);
-        } else if (!repeat && pos >= active_size) {
+        } else if (!repeat && pos >= length()) {
 		playable(false);
 		go_to_pos(0);
 		return;
 	}
-	actuate(active_behavior[pos]->value);
+  temp = active_behavior->getIR(pos);
+
+	actuate(temp.curr, temp.delay);
 	pos++;
 }

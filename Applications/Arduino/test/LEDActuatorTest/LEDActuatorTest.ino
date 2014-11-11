@@ -1,5 +1,6 @@
 #include "ArduinoUnit.h"
 #include "Logger.h"
+#include "Actuator.h"
 // assertLess(arg1,arg2)
 // assertLessOrEqual(arg1,arg2)
 // assertEqual(arg1,arg2)
@@ -10,7 +11,7 @@
 
 // Create test suite
 // TestSuite suite;
-#define LED_PIN 13
+#define LED_PIN 9
 #define MIN 1
 #define MAX 0
 
@@ -26,17 +27,66 @@ test(init){
 	assertEqual(led->bound(MIN), 0);
 	assertEqual(led->bound(MAX), 255);
 }
+// test(turn_on){
+// 	led = new Actuator(LED_PIN, 0, 255);
+// 	led->actuate(1000, 1000);
+// }
+
+// test(turn_off){
+// 	led = new Actuator(LED_PIN, 0, 255);
+// 	led->actuate(0, 1000);
+// }
+
+// test(turn_progression){
+// 	led = new Actuator(LED_PIN, 0, 255);
+
+// 	led->actuate(0, 1000);
+// 	led->actuate(100, 1000);
+// 	led->actuate(0, 3000);
+// 	led->actuate(1000, 1000);
+// 	led->actuate(0, 1000);
+// 	led->actuate(500, 1000);
+// 	led->actuate(0, 1000);
+// 	led->actuate(0, 1000);
+// 	led->actuate(1000, 1000);
+// }
 test(storage){
-	logger = new Logger(100, 0, 1024);
-		logger->log(0);delay(100);	
-		logger->log(255);delay(100);
-		logger->log(0);delay(100);
-		logger->log(255);delay(100);
-		logger->log(0);delay(100);
+	logger = new Logger(100, 0, 1000);
+		logger->log(255); delay(1000);	
+		logger->log(0); delay(1000);
+		logger->log(255); delay(1000);
+		logger->log(0); delay(1000);
+		logger->log(255); delay(1000);
+	logger->print();
+
+
+	assertEqual(logger->get(0)->value, 255); 
+	assertEqual(logger->get(1)->value, 0); 
+	assertEqual(logger->get(2)->value, 255); 
+	assertEqual(logger->get(3)->value, 0); 
+	assertEqual(logger->get(4)->value, 255);
+
 
 	led = new Actuator(LED_PIN, 0, 255);
-	led->set(logger->getLog(), logger->length());
+	led->set(logger);
+
 	assertEqual(led->length(), 5);
+
+	unsigned long t0 = micros();
+	Serial.print("Start time: ");
+	Serial.println(t0);
+	led->playable(true);
+	led->next(t0);
+	led->next(t0);
+	led->next(t0);
+	led->next(t0);
+	led->next(t0);
+	led->next(t0);
+	// led->next(t0);
+	// led->next(t0);
+	// led->next(t0);
+	// led->next(t0);
+
 }
 
 void loop() {

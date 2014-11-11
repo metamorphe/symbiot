@@ -11,16 +11,21 @@
 
 #include "string.h"
 #include <Arduino.h>
+#include <Logger.h>
 
 class Actuator {
   public:
       Actuator(unsigned int, unsigned int, unsigned int) ;
       void init();
       void print();
-      void set(Record*, uint16_t);
-      void actuate(int);
+      void set(Logger*);
+      /* Function: actuate(value, delay)
+       * @params value integer value from 1 - 1000
+       * @params # of milliseconds to delay
+       */
+      void actuate(unsigned int, unsigned long);
       void go_to_pos(int);
-      void next();
+      void next(unsigned long);
       void playable(boolean);
       void repeatable(boolean);
       boolean play;
@@ -28,13 +33,14 @@ class Actuator {
 
       inline uint16_t bound(boolean min){ 
         if(min) return vmin;
-        else(max) return vmax;
+        else return vmax;
       }
 
-      inline length(){ return active_size;}
+      inline uint16_t length(){ return active_behavior->length();}
+    Logger* active_behavior;
+    
+
   private:
-    Record* active_behavior;
-    uint16_t active_size;
     uint8_t pin;
   
     uint16_t vmax;

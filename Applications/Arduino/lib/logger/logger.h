@@ -13,9 +13,9 @@ typedef struct {
     byte priority;
 }Record;
 typedef struct {    
-    Record* curr;
-    Record* next;
-    unsigned long diff;
+    uint16_t curr;
+    uint16_t next;
+    unsigned long delay;
 }InterruptRecord;
 
 class Logger {
@@ -23,6 +23,7 @@ public:
     Logger(uint16_t, uint16_t, uint16_t);
     void init();
     boolean log(uint16_t);/* 16-bit aesthetic */
+    void printIR();
     void print();
     boolean clear();
     
@@ -36,9 +37,17 @@ public:
     inline Record* last(){ return &(_log[pos-1]);}
     inline InterruptRecord getIR(uint16_t _i){
         InterruptRecord ir;
-        ir.curr = get(_i);
-        if(_i + 1 < size) ir.next = get(_i + 1);
-        else ir.next = NULL;
+        Record* curr = get(_i);
+        ir.curr = curr->value;
+        if(_i < pos - 1){
+            Record* next = get(_i + 1);
+            ir.next = next->value;
+            ir.delay = (next->timestamp - curr->timestamp) / 1000;
+        }
+        else{
+            ir.next = 0;
+            ir.delay = 0;
+        }
         return ir;
     }
     boolean write(char*);
