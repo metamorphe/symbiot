@@ -1,3 +1,5 @@
+# ruby sparse_format.rb lightbehaviors_harrison.json 
+
 require 'json';
 require 'fileutils'
 
@@ -39,8 +41,8 @@ def optimize_commands(values, duration)
 	values.compact!
 	
 	# CALCULATE COMPRESSION
-		# optimized = values.length
-		# p "Start-End: #{start}-#{optimized} // #{"%0.2f" % ((start - optimized).to_f / start)} %"
+		optimized = values.length
+		p "Start-End: #{start}-#{optimized} // #{"%0.2f" % ((start - optimized).to_f / start)} %"
 	return values
 end
 
