@@ -84,7 +84,7 @@ def process(flag, duration=1)
 		unoptimized = values.length
 		values = optimize_commands(name, values, duration)
 		optimized = values.length
-		compression << {name: name, sparse: 1.0/(optimized/unoptimized.to_f ), bits: optimized * 16};
+		compression << {name: name, full: unoptimized, sparse: 1.0/(optimized/unoptimized.to_f ), bits: optimized * 16};
 
 		array2arduino(@arduino_directory, name, values)
 		array2command(@command_directory, name, values)
