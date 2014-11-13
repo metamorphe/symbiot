@@ -9,10 +9,10 @@ require 'fileutils'
 @project_name = "expresso"
 
 
+
 # takes in a values array of uint8 and output tuple array #[[value, duration]]
 # duration is a scaling factor - use 1
-def optimize_commands(values, duration)
-	start = values.length
+def optimize_commands(name, values, duration)
 	last_value = values[0];
 	time_since_switch = 0;
 	values = values.each_with_index.collect do |v,i|
@@ -40,11 +40,9 @@ def optimize_commands(values, duration)
 	# SPARSIFY
 	values.compact!
 	
-	# CALCULATE COMPRESSION
-		optimized = values.length
-		p "Start-End: #{start}-#{optimized} // #{"%0.2f" % ((start - optimized).to_f / start)} %"
 	return values
 end
+
 
 def clean_values values
 	# normalize to [0,1] float array
@@ -76,21 +74,50 @@ def process(flag, duration=1)
 	create_directory(@command_directory)
 	create_directory(@matlab_directory)
 
+	compression = []
 
 
-	if(flag == "all")
-		lb_hash.each do |name, values|
-			values = clean_values(values)
-			values = optimize_commands(values, duration)
 
-			name = parseName(name)
-			array2arduino(@arduino_directory, name, values)
-			array2command(@command_directory, name, values)
-			array2matlab(@matlab_directory, name, values)
-		end
-	else
-		name = unparseName(flag)
-		array2arduino(@arduino_directory, flag, lb_hash[name]);
+	lb_hash.each do |name, values|
+		name = parseName(name)
+		values = clean_values(values)
+		unoptimized = values.length
+		values = optimize_commands(name, values, duration)
+		optimized = values.length
+		compression << {name: name, sparse: 1.0/(optimized/unoptimized.to_f ), bits: optimized * 16};
+
+		array2arduino(@arduino_directory, name, values)
+		array2command(@command_directory, name, values)
+		array2matlab(@matlab_directory, name, values)
+	end
+
+	print_results(compression)
+end
+
+def hr size, marker
+	line = []
+	size.times do
+		line << marker
+	end
+	line.join('');
+end
+
+def print_results(data)
+	
+	data= data.sort_by{|v| - v[:sparse] }
+	header = data.first.keys().collect{|v| if v != :name then v.to_s.capitalize.center(5) else v.to_s.capitalize.center(30) end}
+	header = header.join(' | ');
+	hr_n = header.length
+	p "COMPRESSION RESULTS".center(hr_n)
+	p hr hr_n, "%"
+	p header
+	p hr hr_n, "-"
+	rows = data.collect do |v|
+		r = v.collect{|k, v| if k != :name then "#{"%5.0f" % v }" else v.to_s.ljust(30)  end }
+		
+	end
+	rows.each do |r|
+		p r.join(' | ');
 	end
 end
 
