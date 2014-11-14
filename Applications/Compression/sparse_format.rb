@@ -1,11 +1,13 @@
 # ruby sparse_format.rb lightbehaviors_harrison.json 
 
+require 'csv';
 require 'json';
 require 'fileutils'
 
 @arduino_directory = "behaviors/cpp"
 @command_directory = "behaviors/commands"
 @matlab_directory = "behaviors/matlab"
+@results_directory = "behaviors/results"
 @project_name = "expresso"
 
 
@@ -70,6 +72,7 @@ def process(flag, duration=1)
 	create_directory(@arduino_directory)
 	create_directory(@command_directory)
 	create_directory(@matlab_directory)
+	create_directory(@results_directory)
 
 	compression = []
 
@@ -85,8 +88,8 @@ def process(flag, duration=1)
 		array2command(@command_directory, name, values)
 		array2matlab(@matlab_directory, name, values)
 	end
-
 	print_results(compression)
+	save_results(compression)
 end
 
 def hr size, marker
@@ -97,9 +100,25 @@ def hr size, marker
 	line.join('');
 end
 
+def save_results(data)
+	time = Time.new
+	date =  time.strftime("%m%d%Y_%H%M%S")
+
+	data = data.sort_by{|v| - v[:sparse] }
+	header = data.first.keys();
+	rows = data.collect do |v|
+		r = v.collect{|k, v| v }
+	end
+	CSV.open(@results_directory + "/" + "results_#{date}.csv", "wb") do |csv|
+	  csv << header
+	  rows.each{|r| csv << r}	  
+	end
+end
+
+
 def print_results(data)
 	
-	data= data.sort_by{|v| - v[:sparse] }
+	data = data.sort_by{|v| - v[:sparse] }
 	header = data.first.keys().collect{|v| if v != :name then v.to_s.capitalize.center(5) else v.to_s.capitalize.center(30) end}
 	header = header.join(' | ');
 	hr_n = header.length
