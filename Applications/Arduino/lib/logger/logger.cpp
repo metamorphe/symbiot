@@ -91,6 +91,21 @@ boolean Logger::log(uint16_t value){
   pos++;
   return true;
 }
+// logs normalized values
+boolean Logger::log(uint16_t value, unsigned long timestamp){
+  if(pos >= size){
+    state = OUT_OF_MEMORY;
+    return false;
+  }
+  Record r;
+  r.value = value;
+  r.timestamp = timestamp * 10000;
+  _log[pos] = r;
+
+  pos++;
+  return true;
+}
+
 boolean Logger::write(char* filename){
 }
 

@@ -57,26 +57,21 @@ def clean_values values
 end
 
 # Usage: process("all") => Generates header files for all behaviors
-# Usage: process("Lighthouse") => Generates header files for Lighthouse behavior
 def process(flag, duration=1)
 	if !ARGV[0]
 		abort("Missing input file.")
 	end
+
 	filename = ARGV[0] # source file
 	f = IO.read(filename)
 	lb_hash = JSON.parse f
 
-	# name = lb_hash["behavior"]["name"]
-	# values = lb_hash["behavior"]["states"][0]
-	# array2cpp(name, values);
-	
+
 	create_directory(@arduino_directory)
 	create_directory(@command_directory)
 	create_directory(@matlab_directory)
 
 	compression = []
-
-
 
 	lb_hash.each do |name, values|
 		name = parseName(name)
@@ -134,11 +129,14 @@ def array2command(dirname, name, data, duration=1)
 			# last = data.pop
 			header(name, file);
 
-			file.write "\tLogger *#{name.underscore} = new Logger(#{"%3.0f" % data_cum.length}, 0, 1024);\n"
+			file.write "\tLogger *#{name.underscore};\n"
+			file.write "\tvoid getLog(){\n"
+			file.write "\t\t #{name.underscore} = new Logger(#{"%3.0f" % data_cum.length}, 0, 255);\n"
 
 			data_cum.each do |v, d|
-				file.write "\t#{name.underscore}->log(#{"%3.0f" % v}, #{"%3.0f" % d});\n"
+				file.write "\t\t#{name.underscore}->log(#{"%3.0f" % v}, #{"%3.0f" % d});\n"
 			end
+			file.write "\t}\n"
 			footer(name, file);
 		# END HEADER FILE
 	end

@@ -1,5 +1,6 @@
 #include "ArduinoUnit.h"
 #include "Logger.h"
+#include "Behavior.h"
 // assertLess(arg1,arg2)
 // assertLessOrEqual(arg1,arg2)
 // assertEqual(arg1,arg2)
@@ -67,7 +68,12 @@ test(logging){
 	assertNotEqual((logger->last()->timestamp - logger->first()->timestamp), 0);
 	// RELATION HAPPENS_BEFORE IS HELD
 }
-
+test(behavior_log){
+	getLog();
+	alternate_on_and_dim->print();
+	assertEqual(alternate_on_and_dim->length(), 6);
+	alternate_on_and_dim->printIR();
+}
 // HANDLE LOG 10 VALUES, PRINT 10 VALUES, EQUIV DELAYS
 // HANDLE LOG 10 VALUES, PRINT 10 VALUES, NON_EQUIV DELAYS
 

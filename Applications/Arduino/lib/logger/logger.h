@@ -23,6 +23,7 @@ public:
     Logger(uint16_t, uint16_t, uint16_t);
     void init();
     boolean log(uint16_t);/* 16-bit aesthetic */
+    boolean log(uint16_t, unsigned long timestamp);/* 16-bit aesthetic */
     void printIR();
     void print();
     boolean clear();

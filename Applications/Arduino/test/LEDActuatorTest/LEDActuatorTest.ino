@@ -1,5 +1,6 @@
 #include "ArduinoUnit.h"
 #include "Logger.h"
+#include "Behavior.h"
 #include "Actuator.h"
 // assertLess(arg1,arg2)
 // assertLessOrEqual(arg1,arg2)
@@ -17,6 +18,7 @@
 
 Logger *logger;
 Actuator *led;
+Actuator *led2;
 
 void setup() {
   Serial.begin(9600);
@@ -76,17 +78,65 @@ test(storage){
 	Serial.print("Start time: ");
 	Serial.println(t0);
 	led->playable(true);
-	led->next(t0);
-	led->next(t0);
-	led->next(t0);
-	led->next(t0);
-	led->next(t0);
-	led->next(t0);
+	// led->next(t0);
+	// led->next(t0);
 	// led->next(t0);
 	// led->next(t0);
 	// led->next(t0);
 	// led->next(t0);
 
+	logger->printIR();
+	// led->next(t0);
+	// led->next(t0);
+	// led->next(t0);
+	// led->next(t0);
+
+}
+
+test(blink_increasing){
+	led = new Actuator(LED_PIN + 1, 0, 255);
+	led2 = new Actuator(LED_PIN, 0, 255);
+	getLog();
+	blink_increasing->print();
+	assertEqual(blink_increasing->length(), 11);
+	
+	// Serial.println(alternate_on_and_dim->get(0)->timestamp);
+	// Serial.println(alternate_on_and_dim->get(1)->timestamp);
+	// Serial.println(alternate_on_and_dim->getIR(0).delay);
+	// assertEqual(alternate_on_and_dim->getIR(0).delay, 200);
+	
+	blink_increasing->printIR();
+	
+	led2->set(blink_increasing);
+	led->set(blink_increasing);
+
+	unsigned long t0 = micros();
+	Serial.print("Start time: ");
+	Serial.println(t0);
+	led->playable(true);
+	led2->playable(true);
+	
+	led->next(t0);
+	led2->next(t0);
+	led->next(t0);
+	led2->next(t0);
+	led->next(t0);
+	led2->next(t0);
+	led->next(t0);
+	led2->next(t0);
+	led->next(t0);
+	led2->next(t0);
+	led->next(t0);
+	led2->next(t0);
+	led->next(t0);
+	led2->next(t0);
+	led->next(t0);
+	led2->next(t0);
+	led->next(t0);
+	led2->next(t0);
+	led->next(t0);
+	led2->next(t0);
+	
 }
 
 void loop() {
