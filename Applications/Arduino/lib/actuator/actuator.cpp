@@ -9,8 +9,6 @@
 #include "Actuator.h"
 #include "Logger.h"
 
-void Actuator::playable(boolean _play){ play = _play; }
-void Actuator::repeatable(boolean _repeat){ repeat = _repeat;}
 
 Actuator::Actuator(unsigned int _pin, unsigned int _vmin, unsigned int _vmax){
   pin = _pin;
@@ -68,10 +66,10 @@ void Actuator::next(unsigned long t0){
 	if(!play) return;
 	if(repeat && pos >= length()){
 		go_to_pos(0);
-        } else if (!repeat && pos >= length()) {
-		playable(false);
-		go_to_pos(0);
-		return;
+  } else if (!repeat && pos >= length()) {
+  	playable(false);
+  	go_to_pos(0);
+  	return;
 	}
   temp = active_behavior->getIR(pos);
 
