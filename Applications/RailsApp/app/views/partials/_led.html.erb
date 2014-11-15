@@ -1,5 +1,5 @@
 <script> 
-	function changeColor(value){
+	function changeColor(behaviorName, value){
 		// Value 0-1
 		// Range 0-255
 		value *= 2;
@@ -10,8 +10,10 @@
 		// // Hexify
 		// value = value.toString(16);
 
-		// $('svg').children('#LEDColor').children().attr('fill', "#" + value + value + value);
-		$('svg').children('#LEDColor').children().attr('fill-opacity', value);
+		// bad $('svg').children('#LEDColor').children().attr('fill', "#" + value + value + value);
+		// $('svg').children('#LEDColor').children().attr('fill-opacity', value);
+		$('div[data="' + behaviorName + '"] svg').children('#LEDColor')
+			.children().attr('fill-opacity', value);
 	}
 </script>
 
