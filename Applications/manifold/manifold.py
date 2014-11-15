@@ -99,11 +99,9 @@ def compact(values):
     compacted = []
     # remove extraneous values
     prev = None
-    upto = None
     for i, v in enumerate(values):
         if v != prev:
             prev = v
-            upto = i
             compacted.append((i, v))
     # add end, needed for looping values
     compacted.append((len(values), compacted[-1][1]))
