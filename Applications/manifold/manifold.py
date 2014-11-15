@@ -104,7 +104,7 @@ def compact(values):
             prev = v
             compacted.append((i, v))
     # add end, needed for looping values
-    compacted.append((len(values), compacted[-1][1]))
+    compacted.append((len(values), None))
     return compacted, len(compacted) / len(values)
 
 
