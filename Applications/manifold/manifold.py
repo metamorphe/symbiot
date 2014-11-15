@@ -18,6 +18,8 @@ command = a.get_commands(values)
 [(0, 1), (1, 0.75), (3, 0)]
 """
 
+
+
 from __future__ import division # use python3 style division
 
 class Actuator(object):
@@ -48,12 +50,22 @@ class Actuator(object):
             return 0.0
         return (desired_delta - delta_low) / (delta_high - delta_low)
 
+    def adjust_software_impedance(self, values):
+        """ adjusts values to software delays
+        """
+        pass
+    def adjust_perceptual_impedance(self, values):
+        """ adjusts values to perceptual magnitudes
+        """
+        pass
 
-    def get_commands(self, values):
-        cv = compact(values)
+    def adjust_mechanical_impedance(self, values):
+        """ adjusts values to mechanical magnitudes
+        """
         commands = []
         current_strength = 0
         current_output = cv[0][1]
+        
         for i in xrange(len(cv) - 1): # iterate through each difference
             cmd_pair = (cv[i], cv[i + 1])
             current_time = cmd_pair[0][0]
@@ -66,16 +78,37 @@ class Actuator(object):
                 current_strength = strength
         return commands
 
+   
+
+    def get_commands(self, values):
+        # FIRST, GET VALUES INTO SPARSE FORMAT
+        commands, sparse_ratio = compact(values)
+        # THEN, CORRECT FOR THE SMP PROFILE
+        # commands, sft_ratio = adjust_software_impedance(commands)
+        # commands, mech_ratio = adjust_mechanical_impedance(commands)
+        # commands, perp_ratio = adjust_perceptual_impedance(commands)
+
+        compression_ratio = len(commands)/len(values)
+        return commands, compression_ratio
+
 def compact(values):
     """compact takes an array of integer values and expresses them as a series of
     (time, value) instructions
-    e.g. [10, 10, 10, 10, 10, 50, 10] -> [(0, 10), (5, 50), (6, 10)]
+    e.g. [10, 10, 10, 10, 10, 50, 10, 10, 10] -> [(0, 10), (5, 50), (6, 10), (9, 10)]
     """
     compacted = []
     # remove extraneous values
     prev = None
+    upto = None
     for i, v in enumerate(values):
         if v != prev:
             prev = v
+            upto = i
             compacted.append((i, v))
-    return compacted
+    # add end, needed for looping values
+    compacted.append((len(values), compacted[-1][1]))
+    return compacted, len(compacted) / len(values)
+
+
+
+
