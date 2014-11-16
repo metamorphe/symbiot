@@ -15,11 +15,14 @@
 
 class Actuator {
   public:
-      Actuator(unsigned int, unsigned int, unsigned int) ;
+      // name, pin, vmin, max
+      Actuator(String, unsigned int, unsigned int, unsigned int) ;
+      
+
       void init();
       void print();
       void set(Logger*);
-      
+      void evaluate( SDLogger& _sd);
       /* Function: actuate(value, delay)
        * @params value integer value from 1 - 1000
        * @params # of milliseconds to delay
@@ -55,6 +58,8 @@ class Actuator {
 
     boolean play;
     boolean repeat;
+    Logger* internal_log;
+    String name;
 
 };
 

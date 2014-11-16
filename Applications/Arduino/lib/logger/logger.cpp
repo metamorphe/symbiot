@@ -23,6 +23,15 @@ Logger::Logger(uint16_t _size, uint16_t _min, uint16_t _max){
   if (_log == NULL) Serial.println("OUT_OF_MEMORY - LOG ALLOC");
   init();
 } 
+Logger::Logger( const Logger& other ) :
+   size( other.size ), max_cap( other.max_cap ), min_cap( other.min_cap )
+  {
+    state = READY;
+    pos = 0;
+    _log = (Record*) calloc(sizeof(Record*), size);
+    if (_log == NULL) Serial.println("OUT_OF_MEMORY - LOG ALLOC");
+    init();
+  }
 
 void Logger::init(){
   clear();
@@ -106,8 +115,28 @@ boolean Logger::log(uint16_t value, unsigned long timestamp){
   return true;
 }
 
-boolean Logger::write(char* filename){
-}
 
 boolean Logger::read(char* filename){
+  return true;
+}
+
+void Logger::write(String name, SDLogger& sd){
+  String intensity = "";
+  String timestr = "";
+  String delimiter = "";
+
+
+    // print to SD card internal log (CSV)
+  Record* r;  
+  for(uint8_t i = 0; i < length(); i++){
+    r = get(i);
+
+    intensity += delimiter;
+    timestr += delimiter;
+    intensity += r-> value;
+    timestr += r-> timestamp;
+    delimiter = ",";
+  }
+  sd.write(name, intensity);
+  sd.write(name, timestr);
 }

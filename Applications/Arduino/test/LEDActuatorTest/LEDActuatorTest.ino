@@ -1,4 +1,6 @@
 #include "ArduinoUnit.h"
+#include <SD.h>
+#include "SDLogger.h"
 #include "Logger.h"
 #include "Behavior.h"
 #include "Actuator.h"
@@ -25,7 +27,7 @@ void setup() {
 }
 
 test(init){
-	led = new Actuator(LED_PIN, 0, 255);
+	led = new Actuator("led", LED_PIN, 0, 255);
 	assertEqual(led->bound(MIN), 0);
 	assertEqual(led->bound(MAX), 255);
 }
@@ -69,7 +71,7 @@ test(storage){
 	assertEqual(logger->get(4)->value, 255);
 
 
-	led = new Actuator(LED_PIN, 0, 255);
+	led = new Actuator("led", LED_PIN, 0, 255);
 	led->set(logger);
 
 	assertEqual(led->length(), 5);
@@ -94,8 +96,8 @@ test(storage){
 }
 
 test(blink_increasing){
-	led = new Actuator(LED_PIN + 1, 0, 255);
-	led2 = new Actuator(LED_PIN, 0, 255);
+	led = new Actuator("led1", LED_PIN + 1, 0, 255);
+	led2 = new Actuator("led2", LED_PIN, 0, 255);
 	getLog();
 	blink_increasing->print();
 	assertEqual(blink_increasing->length(), 11);

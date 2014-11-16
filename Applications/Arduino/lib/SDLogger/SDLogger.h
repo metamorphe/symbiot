@@ -10,6 +10,7 @@
 #define __Expresso__sdlogger__
 #include <Arduino.h>
 #include <SD.h>
+#include "string.h"
 // const int chipSelect = 4;
 
 class SDLogger{
@@ -17,8 +18,9 @@ public:
     // CS
     SDLogger(uint8_t);
     void init();
-    void write(int);
+    void write(String, String);
     void read();
+    uint8_t open();
 private:
   uint8_t cs; 
 };

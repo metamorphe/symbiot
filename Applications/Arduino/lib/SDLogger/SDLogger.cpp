@@ -19,26 +19,28 @@ void SDLogger::init(){
     return;
   }
   Serial.println("card initialized.");
-
-  SD.remove("datalog.txt");
+  
+  char charBuf[50];
+  String filename = "datalog.txt";
+  filename.toCharArray(charBuf, 50);
+  SD.remove(charBuf);
 
 }
 
-void SDLogger::write(int num){
-
-  String dataString = "";
-  dataString += String(num);
-
+void SDLogger::write(String name, String value){
   
-  
-  File dataFile = SD.open("datalog.txt", FILE_WRITE);
+  char charBuf[name.length()];
+  name.toCharArray(charBuf, name.length());
+
+  File dataFile = SD.open(charBuf, FILE_WRITE);
   if (dataFile) {
-    dataFile.println(dataString);
+    dataFile.println(value);
     dataFile.close();
-    Serial.println(dataString);
+    Serial.println(value);
   }  
   else {
-    Serial.println("error opening datalog.txt");
+    Serial.print("Error: Cannot open ");
+    Serial.println(name);
   } 
 
 }
