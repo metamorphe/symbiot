@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Behavior:</strong>
+  <%= @actuation.behavior_id %>
+</p>
+
+<p>
+  <strong>Actuator:</strong>
+  <%= @actuation.actuator_id %>
+</p>
+
+<%= link_to 'Edit', edit_actuation_path(@actuation) %> |
+<%= link_to 'Back', actuations_path %>

@@ -11,7 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140627093003) do
+ActiveRecord::Schema.define(version: 20141101221004) do
+
+  create_table "actuations", force: true do |t|
+    t.integer  "actuator_id"
+    t.integer  "behavior_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "actuators", force: true do |t|
+    t.string   "name"
+    t.float    "alpha"
+    t.string   "img"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "behavior_links", force: true do |t|
     t.integer  "position"
@@ -33,6 +48,16 @@ ActiveRecord::Schema.define(version: 20140627093003) do
     t.text     "states"
     t.boolean  "is_smooth",    default: false
     t.boolean  "is_library",   default: false
+  end
+
+  create_table "experiments", force: true do |t|
+    t.integer  "actuator_id"
+    t.string   "physical_mag"
+    t.string   "subjective_mag"
+    t.string   "stimulus_cond"
+    t.string   "continuum"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "schemes", force: true do |t|

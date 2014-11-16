@@ -26,7 +26,7 @@ LP.prototype = {
 	channel: function(val){
 		this.states[this.index] = val;
 		$(".led-value").css('opacity', 1 - val);
-		changeColor(1 - val);
+		changeColor(this.name, 1 - val);
 		// console.log(val);
 	},
 	//return the document object representation

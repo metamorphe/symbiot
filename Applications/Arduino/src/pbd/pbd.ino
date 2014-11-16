@@ -1,11 +1,11 @@
 #include <Arduino.h>
 #include "Wire.h"
 
-#include "button.h"
-#include "logger.h"
-#include "sensor.h"
-#include "actuator.h"
-#include "blinkm.h"
+#include "Button.h"
+#include "Logger.h"
+#include "Sensor.h"
+#include "Actuator.h"
+#include "BlinkMActuator.h"
 #include <Adafruit_GFX.h>    // Core graphics library
 #include <Adafruit_ST7735.h> // Hardware-specific library
 #include <SPI.h>
@@ -15,7 +15,7 @@
     #define F(string_literal) string_literal
 #endif
 
-#include "screen.h"
+#include "Screen.h"
 
 
 #define RECORD_PIN 2
@@ -39,16 +39,18 @@ Screen *s;
 
 void setup() {
   Serial.begin(9600);
+
   Serial.println("Expresso");
   record = new Button("record", RECORD_PIN, NO_DEBOUNCE);
   playback = new Button("playback", PLAYBACK_PIN, NO_DEBOUNCE);
-  logger = new Logger();
   pot = new Sensor(SENSOR_PIN, 0, 500);
+ 
   Serial.println("Setting up BlinkM");
+  logger = new Logger(1000, 0, 100);
   led = new BlinkMActuator(0, 0, 100);
   led->init();
   Serial.println("Done setting up BlinkM");
-//  led = new Actuator(LED_PIN, 0, 255);
+  //  led = new Actuator(LED_PIN, 0, 255);
   s = new Screen(SCREEN_CS, SCREEN_DC, SCREEN_RST, SCREEN_CSSD);
   
   s->println("Expresso", 1);

@@ -14,13 +14,6 @@
 //= require jquery.ui.draggable
 //= require jquery.ui.sortable
 //= require jquery_ujs
-//= require turbolinks
-//= require numeric-1.2.6.min
-//= require paper-full.min
-// require d3
-// require dat.gui.min
-//= require bootstrap-slider
-//= require bootstrap/modal
 
 function DOM(){}
 DOM.tag = function(tag, single){

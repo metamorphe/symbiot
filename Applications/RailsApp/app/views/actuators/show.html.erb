@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @actuator.name %>
+</p>
+
+<p>
+  <strong>Alpha:</strong>
+  <%= @actuator.alpha %>
+</p>
+
+<p>
+  <strong>Img:</strong>
+  <%= image_tag(@actuator.img_url, :width => 200) if @actuator.img.present? %>
+</p>
+
+<p>
+	<strong>Behaviors usable with this actuator:</strong>
+	<ul>
+	<% @actuator.behaviors.each do |behavior| %>
+		<li><%= link_to behavior.name.humanize, behavior %></li>
+	<% end %>
+	</ul>
+</p>
+
+<p>
+	<strong>Experimental Data:</strong>
+	<%= @actuator.experiment %>
+</p>
+
+<%= link_to 'Edit', edit_actuator_path(@actuator) %> |
+<%= link_to 'Back', actuators_path %>

@@ -6,12 +6,11 @@
  *  For now, a behavior is defined as a sequence of integers [0, 1000]
  *  It regulates its own voltage thresholds
  */ 
-#include "actuator.h"
+#include "Actuator.h"
+#include "Logger.h"
 
-void Actuator::playable(boolean _play){ play = _play; }
-void Actuator::repeatable(boolean _repeat){ repeat = _repeat;}
 
-Actuator::Actuator(unsigned int _pin, unsigned int _vmin, unsigned int _vmax){
+Actuator::Actuator(String _name, unsigned int _pin, unsigned int _vmin, unsigned int _vmax){
   pin = _pin;
   vmin = _vmin; // Arduino 0 --> always off load
   vmax = _vmax; // Arduino 255 --> always on load
@@ -23,12 +22,14 @@ Actuator::Actuator(unsigned int _pin, unsigned int _vmin, unsigned int _vmax){
   Serial.print(vmin);
   Serial.print(" ");
   Serial.println(vmax);
+  name = _name;
   init();
 } 
 
 void Actuator::init(){
-  pinMode(pin, OUTPUT);  
+  pinMode(pin, OUTPUT);
 }
+
 
 void Actuator::print(){
   Serial.print("Actuator ");
@@ -37,33 +38,50 @@ void Actuator::print(){
   Serial.println("}");
 }
 
-void Actuator::set(unsigned int* _behavior, unsigned int size){
+void Actuator::evaluate( SDLogger& sd){
+  // internal_log->write(name, sd);
+  active_behavior->write(name, sd);
+}
+
+void Actuator::set(Logger* _behavior){
   playable(false);
   active_behavior = _behavior;
-  active_size = size;
+  internal_log = new Logger(*_behavior); 
   go_to_pos(0);
 }
 
-void Actuator::actuate(int _value){
-  value = map(_value, 0, 1000, vmin, vmax);
-  analogWrite(pin, value);    
-}
+void Actuator::actuate(unsigned int value, unsigned long delay_t){
+  Serial.print("Actuating ");
+  Serial.print(value);
+  Serial.print(" delayed ");
+  Serial.println(delay_t);
+  Serial.print(" @ ");
+  Serial.println(delay_t);
 
+  value = map(value, 0, 1000, vmin, vmax);
+  analogWrite(pin, value);
+  internal_log->log(value);  
+  delay(delay_t);  
+}
 
 void  Actuator::go_to_pos(int _pos){ 
-	if(_pos < 0) _pos = active_size + _pos; 
+	if(_pos < 0) _pos = length() + _pos; 
 	pos = _pos;
 }
+
+InterruptRecord temp;
 // TODO: Add x # of repeats; currently inf. repeats
-void Actuator::next(){
+void Actuator::next(unsigned long t0){
 	if(!play) return;
-	if(repeat && pos >= active_size){
+	if(repeat && pos >= length()){
 		go_to_pos(0);
-        } else if (!repeat && pos >= active_size) {
-		playable(false);
-		go_to_pos(0);
-		return;
+  } else if (!repeat && pos >= length()) {
+  	playable(false);
+  	go_to_pos(0);
+  	return;
 	}
-	actuate(active_behavior[pos]);
+  temp = active_behavior->getIR(pos);
+
+	actuate(temp.curr, temp.delay);
 	pos++;
 }

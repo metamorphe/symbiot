@@ -14,7 +14,7 @@
 		$.ajax({
 			type : "GET",
 			dataType : "json",
-			data : { 'name' : "<%= @behavior.name %>" },
+			data : { 'name' : "<%= @behavior.id %>" },
 			url : "/behaviors/get_states",
 			success : function(data, textStatus, jqXHR) {
 				var waveStates = data["states"];
@@ -36,11 +36,18 @@
 <h1><%= @behavior.name.humanize %></h1>
 <br/>
 
-<div id="graph"></div>
+<div id="graph" style="display:inline-block;"></div>
 <div class="led-box">
 	<%= render 'partials/led' %>
 </div>
 <br/>
+
+<strong>Usable on these actuators:</strong>
+<ul>
+<% @behavior.actuators.each do |actuator| %>
+	<li><%= link_to actuator.name.humanize, actuator %>
+<% end %>
+</ul>
 
 <div id="meta-btns" class="btn-group">
 	<button id="export-button" class="btn btn-info" data-toggle="modal" data-target="#save-modal">
@@ -89,7 +96,7 @@
 	</p>
 
 	<p>
-		<strong>Part of the Light Behavior Libraray?</strong>
+		<strong>Part of the Light Behavior Library?</strong>
 		<%= @behavior.is_library %>
 	</p>
 

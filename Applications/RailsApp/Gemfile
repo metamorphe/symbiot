@@ -52,3 +52,7 @@ end
 gem 'mysql2'
 gem 'ruby-mysql'
 gem 'activerecord-mysql-adapter'
+
+# Image upload dependencies
+gem 'carrierwave'
+gem 'carrierwave_backgrounder'
