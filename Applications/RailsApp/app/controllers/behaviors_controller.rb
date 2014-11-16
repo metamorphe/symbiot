@@ -37,8 +37,9 @@ class BehaviorsController < ApplicationController
 	end
 
 	def create
-		variables = {"name" => params["behavior"]["name"], "states" => params["behavior"]["states"]};
+		variables = behavior_params.clone
 		variables["name"] = dehumanize variables["name"]
+		variables["states"] = params["behavior"]["states"]
 
 		@behavior = Behavior.new(variables)
 		@behavior_attributes = Behavior.attribute_names
@@ -46,7 +47,7 @@ class BehaviorsController < ApplicationController
 		if @behavior.save
 			redirect_to @behavior
 		else
-			render	:json => { :error => @behavior.errors.full_messages.to_sentence }, 
+			render :json => { :error => @behavior.errors.full_messages.to_sentence, :vars => params }, 
 							:status => :unprocessable_entity
 		end
 	end

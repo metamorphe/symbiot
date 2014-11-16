@@ -15,21 +15,29 @@
 
 class Actuator {
   public:
-      Actuator(unsigned int, unsigned int, unsigned int) ;
+      // name, pin, vmin, max
+      Actuator(String, unsigned int, unsigned int, unsigned int) ;
+      
+
       void init();
       void print();
       void set(Logger*);
+      void evaluate( SDLogger& _sd);
       /* Function: actuate(value, delay)
        * @params value integer value from 1 - 1000
        * @params # of milliseconds to delay
        */
+
       void actuate(unsigned int, unsigned long);
       void go_to_pos(int);
+
+      inline void playable(boolean _play){ play = _play; }
+      inline void repeatable(boolean _repeat){ repeat = _repeat;}
+
+      inline bool hasNext(){ return repeat || pos >= length() - 1; };
       void next(unsigned long);
-      void playable(boolean);
-      void repeatable(boolean);
-      boolean play;
-      boolean repeat;
+
+
 
       inline uint16_t bound(boolean min){ 
         if(min) return vmin;
@@ -47,6 +55,12 @@ class Actuator {
     uint16_t vmin;
     uint16_t value;
     uint16_t pos;
+
+    boolean play;
+    boolean repeat;
+    Logger* internal_log;
+    String name;
+
 };
 
 #endif /* defined(__Expresso__actuator__) */

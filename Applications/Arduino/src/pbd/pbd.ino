@@ -5,7 +5,7 @@
 #include "Logger.h"
 #include "Sensor.h"
 #include "Actuator.h"
-#include "Blinkm.h"
+#include "BlinkMActuator.h"
 #include <Adafruit_GFX.h>    // Core graphics library
 #include <Adafruit_ST7735.h> // Hardware-specific library
 #include <SPI.h>
@@ -15,7 +15,7 @@
     #define F(string_literal) string_literal
 #endif
 
-#include "screen.h"
+#include "Screen.h"
 
 
 #define RECORD_PIN 2

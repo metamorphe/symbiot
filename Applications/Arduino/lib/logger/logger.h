@@ -6,6 +6,8 @@
 #define OUT_OF_MEMORY 0
 // #define NULL 0x0000
 #include <Arduino.h>
+#include "SDLogger.h"
+#include "String.h"
 
 typedef struct {    
     uint16_t value;
@@ -21,8 +23,10 @@ typedef struct {
 class Logger {
 public:
     Logger(uint16_t, uint16_t, uint16_t);
+    Logger(const Logger&);
     void init();
     boolean log(uint16_t);/* 16-bit aesthetic */
+    boolean log(uint16_t, unsigned long timestamp);/* 16-bit aesthetic */
     void printIR();
     void print();
     boolean clear();
@@ -50,15 +54,15 @@ public:
         }
         return ir;
     }
-    boolean write(char*);
+  
     boolean read(char*);
+    void write(String,  SDLogger&);
     
 private:
     uint16_t size;
 	unsigned int max_cap;
 	unsigned int min_cap;
     Record* _log;
-
 };
 
 #endif /* defined(__Expresso__logger__) */
