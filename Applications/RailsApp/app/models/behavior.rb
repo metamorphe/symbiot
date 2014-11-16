@@ -79,105 +79,26 @@ class Behavior < ActiveRecord::Base
 			.map{ |behavior| behavior.name }.to_json.html_safe
 	end
 
-	def self.json_to_cpp(json_data)
-		name = json_data["behavior"]["name"]
-		values = json_data["behavior"]["states"]
-		values = values.map(&:to_f)
-		self.array2cpp(name, values);
+	# ouputs tuple array #[[time, value]]
+	def sparse
+		states = self.states
+		data = normalize(states).to_json
+		cmd = "python bin/manifold/manifold.py compact \"#{data}\""
+		result = `#{cmd}`
+		arr = JSON.parse(result)
+		return arr
 	end
 
-	def self.compress(name, values, duration=1)
-		self.array2cpp(name, values, duration=1)
+	# normalizes values into an array of ints from 0 to 255
+	def normalize values
+		# normalize to [0,1] float array
+		min = values.min
+		values.map!{ |v| (v - min)}
+		max = values.max
+		values.map!{ |v| max != 0 ? v / max : 1}
+
+		# convert to uint8 array
+		values.map!{ |v| (v * 255) }
+		values
 	end
-
-	# TODO: make metamethod to get to_actuator methods to turn pure
-	# Behaviors into actuator-adjusted Behavior subclasses
-	# !ACTUATORS.each do |actuator|
-	# 	define_method("to_#{actuator}") do
-	# 		#code body goes here
-	# 	end
-	# end
-
-	private
-
-		def self.array2cpp(name, values, duration=1)
-			self.generate_arduino_code(name, values, duration)
-		end
-
-		def self.generate_arduino_code(name, values, duration=1)
-			File.open(name + "_lb.h", 'w') do |file| 
-				values = clean_values(values)
-				values = optimize_commands(values, duration)
-
-				# convert to hex code
-				values.map!{ |v, d| ["0x%02x" % v, d]; }
-				
-				# GENERATE ARDUINO CPP HEADER FILE
-					last = values.pop
-					header(name, file)
-					file.write "blinkm_script_line #{name}[] = {\n"
-					values.each do |v, d|
-						file.write "{ #{d}, { 'n', #{hexify(v)}}},\n"
-					end
-					file.write "	{ #{last[1]}, { 'n', #{hexify(last[0])}}}\n"
-					file.write "};\n"
-					file.write "int script_#{name.downcase}_len = #{values.length};  // number of script lines above\n"
-					footer(name, file);
-				# END HEADER FILE
-			end
-			return IO.read(name + "_lb.h")
-		end
-
-		def self.unparseName b
-			"/lb/LB_#{b}.svg"
-		end
-
-		def self.parseName b
-			b.split('/lb/LB_')[1].split('.')[0]
-		end
-
-		def self.hexify(v)
-			[v,v,v].join(',')
-		end
-
-		# takes in a values array of uint8 and output tuple array #[[time, value]]
-		# duration is a scaling factor - use 1
-		def self.optimize_commands(values, duration)
-			cmd = 'python bin/manifold/manifold.py compact "#{values.to_s}"'
-			result = `#{cmd}`
-			arr = JSON.parse(result)
-			return arr
-		end
-
-		def self.clean_values values
-			# normalize to [0,1] float array
-			min = values.min
-			values.map!{ |v| (v - min)}
-			max = values.max
-			values.map!{ |v| max != 0 ? v / max : 1}
-
-			# convert to uint8 array
-			values.map!{ |v| (v * 255) }
-			values
-		end
-
-		def self.header (name, file)
-			file.write "//\n"
-			file.write "//  #{name}_lb.h\n"
-			file.write "//  Flixels - #{name} Light Behavior\n"
-			file.write "//\n"
-			file.write "//  Created by Cesar Torres on 7/2/14.\n"
-			file.write "//  Copyright (c) 2014 Cesar Torres. All rights reserved.\n"
-			file.write "//\n"
-			file.write "\n"
-			file.write "#ifndef __#{name}__flixel__\n"
-			file.write "#define __#{name}__flixel__\n"
-			file.write "\n"
-			file.write "#include \"BlinkM_funcs.h\"\n"
-		end
-
-		def self.footer(name, file)
-			file.write "#endif /* defined(__#{name}__flixel__) */"
-		end
-
 end

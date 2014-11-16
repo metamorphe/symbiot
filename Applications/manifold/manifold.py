@@ -114,7 +114,7 @@ def main():
         return
     if sys.argv[1] == 'compact':
         result = compact(json.loads(sys.argv[2]))
-        print json.dumps(result[0])
+        print(json.dumps(result[0])),
         return
 
 if __name__ == '__main__':
