@@ -16,4 +16,8 @@ class ApplicationController < ActionController::Base
 		return behavior_array
 	end
 
+	def clean_data(param_hash)
+		param_hash.attributes.except "id", "created_at", "updated_at"
+	end
+
 end
