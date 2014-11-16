@@ -140,41 +140,13 @@ class Behavior < ActiveRecord::Base
 			[v,v,v].join(',')
 		end
 
-		# takes in a values array of uint8 and output tuple array #[[value, duration]]
+		# takes in a values array of uint8 and output tuple array #[[time, value]]
 		# duration is a scaling factor - use 1
 		def self.optimize_commands(values, duration)
-			start = values.length
-			last_value = values[0];
-			time_since_switch = 0;
-			values = values.each_with_index.collect do |v,i|
-				v = v.to_i
-				uniqueness = last_value != v
-				last_value = uniqueness ? v : last_value
-				
-				# if last element, output value and duration 
-				if i == values.length - 1
-					r = [last_value, (time_since_switch + 1) * duration]
-					time_since_switch = 0
-					r
-				else
-					# skip repeated values
-					if !uniqueness 
-						time_since_switch = time_since_switch + 1
-						next
-					else
-						r = [last_value, (time_since_switch + 1) * duration]
-						time_since_switch = 0
-						r
-					end
-				end
-			end
-			# SPARSIFY
-			values.compact!
-			
-			# CALCULATE COMPRESSION
-				# optimized = values.length
-				# p "Start-End: #{start}-#{optimized} // #{"%0.2f" % ((start - optimized).to_f / start)} %"
-			return values
+			cmd = 'python bin/manifold/manifold.py compact "#{values.to_s}"'
+			result = `#{cmd}`
+			arr = JSON.parse(result)
+			return arr
 		end
 
 		def self.clean_values values
