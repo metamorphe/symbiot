@@ -100,9 +100,10 @@ class BehaviorsController < ApplicationController
 	end
 
 	def sparse
-		@sparse = Behavior.find_by_id(params[:behavior_id]).sparse
+		sparse = Behavior.find_by_id(params[:behavior_id]).sparse
+		data =  {"sparse_commands" => sparse }
 		respond_to do |format|
-			format.json {render json: @sparse}
+			format.json {render json: data}
 		end
 	end
 
