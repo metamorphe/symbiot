@@ -99,6 +99,13 @@ class BehaviorsController < ApplicationController
 		end
 	end
 
+	def sparse
+		@sparse = Behavior.find_by_id(params[:behavior_id]).sparse
+		respond_to do |format|
+			format.json {render json: @sparse}
+		end
+	end
+
 	private
 		def behavior_params
 			params.require(:behavior).permit(:name, :notification, :active,

@@ -21,6 +21,7 @@ command = a.get_commands(values)
 
 
 from __future__ import division # use python3 style division
+import sys, json
 
 class Actuator(object):
     """Actuator is a representation of an actuator's physical characteristics
@@ -106,6 +107,18 @@ def compact(values):
     # add end, needed for looping values
     compacted.append((len(values), None))
     return compacted, len(compacted) / len(values)
+
+def main():
+    if len(sys.argv) == 1:
+        print 'this is manifold.py'
+        return
+    if sys.argv[1] == 'compact':
+        result = compact(json.loads(sys.argv[2]))
+        print(json.dumps(result[0])),
+        return
+
+if __name__ == '__main__':
+    main()
 
 
 
