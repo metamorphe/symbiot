@@ -85,7 +85,7 @@ class Behavior < ActiveRecord::Base
 		data = normalize(states).to_json
 		cmd = "python bin/manifold/manifold.py compact \"#{data}\""
 		result = `#{cmd}`
-		arr = JSON.parse(result)
+		arr = {"data": {"sparse_commands": JSON.parse(result)}}
 		return arr
 	end
 
