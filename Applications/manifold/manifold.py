@@ -82,9 +82,11 @@ class Actuator(object):
     def perceptual_to_physical(self, commands):
         """ adjusts commands to physical magnitudes
         """
+        # scaling factor for regularization
+        scaling_factor = 255 / (255 ** (1 / self.alpha))
         def apply_stevens_power_law(cmd):
             if cmd[1]:
-                return (cmd[0], int(cmd[1] ** (1 / self.alpha)))
+                return (cmd[0], int( (cmd[1] ** (1 / self.alpha)) * scaling_factor))
             else:
                 return cmd
         return map(apply_stevens_power_law, commands), 1

@@ -34,7 +34,7 @@ class TestSequenceFunctions(unittest.TestCase):
         commands, compression = led.get_commands(self.simple_edge)
         # TIME CORRESPONDENCE
         verbose = to_verbose(commands)
-        self.assertEqual(verbose, map(lambda x: int(x ** (1 / alpha)), self.simple_edge))
+        self.assertEqual(verbose, map(lambda x: int(x ** (1 / alpha) * 255 / 255 ** (1 / alpha)), self.simple_edge))
 
     def test_compact_complex(self):
         """ Test complex sparse format compression 
