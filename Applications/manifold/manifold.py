@@ -22,13 +22,18 @@ command = a.get_commands(values)
 
 from __future__ import division # use python3 style division
 import sys, json
+import numpy as np
 
 class Actuator(object):
     """Actuator is a representation of an actuator's physical characteristics
     """
-    def __init__(self, dh, dl):
-        self.delta_high = tuple(dh)
-        self.delta_low = tuple(dl)
+    def __init__(self, dh, dl, alpha = 1.0):
+        """ Deltas are 256 long tuples of an actuator's ability to change intensity,
+        in units of output per millisecond
+        """
+        self.delta_high = tuple(dh) # actuator's ability to increase intensity
+        self.delta_low = tuple(dl) # actuator's ability to decrease intensity
+        self.alpha = alpha # actuator's alpha on Steven's power curve
 
     @staticmethod
     def linear(speed = 1):
@@ -51,22 +56,17 @@ class Actuator(object):
             return 0.0
         return (desired_delta - delta_low) / (delta_high - delta_low)
 
-    def adjust_software_impedance(self, values):
-        """ adjusts values to software delays
+    def adjust_software_impedance(self, commands):
+        """ adjusts commands to software delays
         """
-        pass
-    def adjust_perceptual_impedance(self, values):
-        """ adjusts values to perceptual magnitudes
-        """
-        pass
+        return commands, 1
 
-    def adjust_mechanical_impedance(self, values):
-        """ adjusts values to mechanical magnitudes
+    def adjust_mechanical_impedance(self, commands):
+        """ adjusts commands to mechanical magnitudes
         """
         commands = []
         current_strength = 0
         current_output = cv[0][1]
-        
         for i in xrange(len(cv) - 1): # iterate through each difference
             cmd_pair = (cv[i], cv[i + 1])
             current_time = cmd_pair[0][0]
@@ -79,17 +79,25 @@ class Actuator(object):
                 current_strength = strength
         return commands
 
-   
+    def perceptual_to_physical(self, commands):
+        """ adjusts commands to physical magnitudes
+        """
+        def apply_stevens_power_law(cmd):
+            if cmd[1]:
+                return (cmd[0], int(cmd[1] ** (1 / self.alpha)))
+            else:
+                return cmd
+        return map(apply_stevens_power_law, commands), 1
 
     def get_commands(self, values):
         # FIRST, GET VALUES INTO SPARSE FORMAT
         commands, sparse_ratio = compact(values)
         # THEN, CORRECT FOR THE SMP PROFILE
-        # commands, sft_ratio = adjust_software_impedance(commands)
-        # commands, mech_ratio = adjust_mechanical_impedance(commands)
-        # commands, perp_ratio = adjust_perceptual_impedance(commands)
+        commands, perp_ratio = self.perceptual_to_physical(commands)
+        # commands, mech_ratio = self.adjust_mechanical_impedance(commands)
+        commands, sft_ratio = self.adjust_software_impedance(commands)
 
-        compression_ratio = len(commands)/len(values)
+        compression_ratio = len(commands) / len(values)
         return commands, compression_ratio
 
 def compact(values):
