@@ -9,7 +9,10 @@ class Experiment:
 		# Experiment.participantNumber += 1 #change participant counter
 		self.actuators = ["LED", "heatpad"]
 		print "Press 'r' to start the first actuator" #runs actuator_setup
-
+		self.ranges = []
+		self.values = []
+		for i in range(0, 1001):
+			self.values.append(i)
 
 	#sets up new actuator
 	def actuator_setup(self):
@@ -89,7 +92,11 @@ class Experiment:
 		if lower != False and upper != False:
 			self.jnd_range = [lower, upper]
 			print "JND RANGE ", self.jnd_range
+
+			#ranges are appending correctly
 			self.ranges.append([self.query, self.jnd_range])
+			
+			#values isn't updating correctly
 			self.values = self.update_values()
 			print "Range added"
 
