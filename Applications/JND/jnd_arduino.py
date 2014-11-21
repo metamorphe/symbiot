@@ -2,7 +2,7 @@ import serial
 
 class JNDArduino:
 	def __init__(self):
-		self.ser = serial.Serial("/dev/tty.usbmodem1451", 9600)
+		self.ser = serial.Serial("/dev/tty.usbmodem1411", 9600)
 		self.connected = False
 
 	def open(self):
@@ -12,7 +12,7 @@ class JNDArduino:
 			self.connected = True
 			
 	""" 
-		Actuates an actuator at address with value[0, 100]
+		Actuates an actuator at address with value[0, 1000]
 		Ex. actuate(1, 1000) => Turn on LED at location 1
 	"""
 	def actuate(self, address, value):
