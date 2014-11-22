@@ -1,7 +1,8 @@
-from pylab import *
+# from pylab import *
 import random, os
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
+import numpy as np
 
 class Experiment:
 	
@@ -168,12 +169,34 @@ class Experiment:
 		# popt, pcov = curve_fit(self.func, self.x, self.y, [100,400,0.001,0])
 		# print popt
 
-		# self.x=linspace(0,1000,5) # (smallest x-value, largest x-value, #points)
-		# plot(self.x,self.func(0.5, 1))
-		# show()
 
-	def func(self, x, a, b):
-		return x^a + b
 
-experiment = Experiment()
-print experiment.func(1)
+""" THESE SHOULD NOT BE EXPERIMENT CLASS FUNCTIONS """
+
+def fit_model(x, y, func):
+	popt, pcov = curve_fit(func, x, y)
+	return popt, pcov
+
+def stephen_power_law(x, k, a, c):
+    return k * np.power(x, a) + c
+
+def plot(x, y, y_predicted):
+	plt.figure()
+	plt.plot(x, y, 'ko', label="Original Pyshcophysics Data")
+	plt.plot(x, y_predicted, 'r-', label="Stephen's Power Curve")
+	plt.legend()
+	plt.show()
+
+""" YOUR EXPERIMENT SHOULD RETURN THE FOLLOWING: """
+# five ranges identified, upperbounds used
+magnitude =  [0, 100, 300, 400, 800, 1000]
+brightness = [0, 1, 2, 3, 4, 5]
+
+model, error = fit_model(magnitude, brightness, stephen_power_law)
+plot(magnitude, brightness, stephen_power_law(magnitude, *model))
+# => a = 0.19490441, error = 0.00044376
+
+
+
+# experiment = Experiment()
+# print experiment.func(1, 0.5, 0)
