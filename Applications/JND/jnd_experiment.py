@@ -13,6 +13,7 @@ class Experiment:
 		self.values = []
 		for i in range(0, 1001):
 			self.values.append(i)
+		self.query = random.choice(self.values)
 
 	#sets up new actuator
 	def actuator_setup(self):
@@ -27,6 +28,7 @@ class Experiment:
 			print "Experiment complete!"
 			#remove current actuator from list of actuators
 			self.actuators.remove(self.actuator)
+
 
 	#creates file structure Actuator/participantNumber
 	def new_actuator(self, participantNumber):
@@ -48,8 +50,8 @@ class Experiment:
 			self.lower_limit = self.upper_limit = False
 			self.jnd_range = []
 			print "Start next range"
-			print "Actuating to ", self.query
-
+			print "Query is actuating to ", self.query
+			return self.query
 
 
 	#change actuated value by specified change
@@ -95,16 +97,16 @@ class Experiment:
 
 			#ranges are appending correctly
 			self.ranges.append([self.query, self.jnd_range])
-			
+
 			#values isn't updating correctly
 			self.values = self.update_values()
 			print "Range added"
+			print "Press 'n' to start next range "
 
 	def update_values(self):
-		print "Pre: ", self.values
+		# print "Pre: ", self.values
 		down, up = self.fifty()
-		#Cesar - this range isn't being removed
-		print "Range that should be removed ", up, down
+		# print "Range that should be removed ", down, up
 		up += 1 #correcting limits
 		for j in range(down, up):
 			#index of the candidate value
@@ -112,20 +114,25 @@ class Experiment:
 				self.values.remove(j)
 			except ValueError:
 				pass
-		print "Post: ", self.values
+		# print "Post: ", self.values
 		return self.values
 
 
 	def fifty(self):
 		down = self.jnd_range[0]
+		# print "jnd range[0] ", down
 		up = self.jnd_range[1]
-		fifty_up = (self.query - up) / 2
+		# print "jnd range[1] ", up
+
+		fifty_up = (up - self.query) / 2
 		fifty_up += self.query
-		print "fifty up ", fifty_up
-		fifty_down = (self.query - down) / 2
+		# print "fifty up ", fifty_up
+		fifty_down = (down - self.query) / 2
 		fifty_down += self.query
-		print "fifty down ", fifty_down
+		# print "fifty down ", fifty_down
+
 		fifty_range = [fifty_down, fifty_up]
+		# print "fifty range ", fifty_range
 		return fifty_range
 
 
