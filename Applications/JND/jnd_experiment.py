@@ -1,4 +1,7 @@
+from pylab import *
 import random, os
+from scipy.optimize import curve_fit
+import matplotlib.pyplot as plt
 
 class Experiment:
 	
@@ -52,6 +55,11 @@ class Experiment:
 			print "Start next range"
 			print "Query is actuating to ", self.query
 			return self.query
+		else:
+			print "Current actuator complete"
+			self.ranges = sorted(self.ranges, key=itemgetter(0))
+			#visualization
+			self.visualize()
 
 
 	#change actuated value by specified change
@@ -103,6 +111,7 @@ class Experiment:
 			print "Range added"
 			print "Press 'n' to start next range "
 
+
 	def update_values(self):
 		# print "Pre: ", self.values
 		down, up = self.fifty()
@@ -136,3 +145,35 @@ class Experiment:
 		return fifty_range
 
 
+	def visualize(self):
+		self.values = [[100, [80, 120]], [500, [121, 1000]]]
+		self.x = []
+		self.y = []
+		for i in range(len(self.values)):
+			#upper limits of ranges
+			self.x.append(self.values[i][1][1])
+			#intensity levels
+			self.y.append(i)
+		# for x in self.x:
+		# 	self.results = self.func(self.x, self.y)
+		# print self.results
+
+		plt.scatter(self.x, self.y)
+		plot.xticks
+		plt.show()
+
+		# self.x = np.array(self.x)
+		# self.y = np.array(self.y)
+
+		# popt, pcov = curve_fit(self.func, self.x, self.y, [100,400,0.001,0])
+		# print popt
+
+		# self.x=linspace(0,1000,5) # (smallest x-value, largest x-value, #points)
+		# plot(self.x,self.func(0.5, 1))
+		# show()
+
+	def func(self, x, a, b):
+		return x^a + b
+
+experiment = Experiment()
+print experiment.func(1)

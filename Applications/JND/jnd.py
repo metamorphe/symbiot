@@ -93,21 +93,21 @@ def newActuator(actuatorName, participantNumber):
 # 	fifty_down = (comparison - down)/2
 # 	return fifty_up, fifty_down
 
-# def find_threshold(point, alpha):
-# 	noticed = false #jnd noticed
-# 	up = down = point
-# 	while (!noticed):
-# 		up+=1
-# 		actuate(up)
-# 	noticed = false
-# 	while (!noticed):
-# 		down-=1
-# 		actuate(down)
-# 	return range(down, up)
+def find_threshold(point, alpha):
+	# noticed = false #jnd noticed
+	# up = down = point
+	# while (!noticed):
+	# 	up+=1
+	# 	actuate(up)
+	# noticed = false
+	# while (!noticed):
+	# 	down-=1
+	# 	actuate(down)
+	# return range(down, up)
 
-	# up_k = k_value(up, point)
-	# down_k = k_value(down, point)
-	# return [up_k, down_k]
+	up_k = k_value(up, point)
+	down_k = k_value(down, point)
+	return [up_k, down_k]
 
 def k_value(just_noticed, original):
 	if just_noticed < original:

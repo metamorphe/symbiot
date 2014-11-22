@@ -13,8 +13,6 @@ def func(x, a, b, c, d):
 popt, pcov = curve_fit(func, x, y, [100,400,0.001,0])
 print popt
 
-x=linspace(400,6000,5) # (smallest x-value, largest x-value, #points)
+x=linspace(400,6000,15) # (smallest x-value, largest x-value, #points)
 plot(x,func(x,*popt))
 show()
-
-
