@@ -6,7 +6,10 @@ class Video:
 		return self
 
 	def query(self):
-		return self.cap.read()[1]
+		return self.cap.read()
+
+	def isOpened(self):
+		return self.cap.isOpened()
 
 	def close(self):
 		self.cap.release()
