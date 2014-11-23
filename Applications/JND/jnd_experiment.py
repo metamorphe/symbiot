@@ -175,6 +175,7 @@ class Experiment:
 		plt.plot(self.x, self.func(self.x, *popt), label="Fitted Curve") #same as line above \/
 		#plt.plot(x, popt[0]*x**3 + popt[1]*x**2 + popt[2]*x + popt[3], label="Fitted Curve") 
 
+
 		plt.legend(loc='upper left')
 		plt.show()
 
@@ -184,3 +185,21 @@ class Experiment:
 
 experiment = Experiment()
 experiment.visualize()
+
+
+# <<<<<<< HEAD
+# def plot(x, y, y_predicted):
+# 	plt.figure()
+# 	plt.plot(x, y, 'ko', label="Original Pyshcophysics Data")
+# 	plt.plot(x, y_predicted, 'r-', label="Stephen's Power Curve")
+# 	plt.legend()
+# 	plt.show()
+
+# """ YOUR EXPERIMENT SHOULD RETURN THE FOLLOWING: """
+# # five ranges identified, upperbounds used
+# magnitude =  [0, 100, 300, 400, 800, 1000]
+# brightness = [0, 1, 2, 3, 4, 5]
+
+# model, error = fit_model(magnitude, brightness, stephen_power_lawn)
+# plot(magnitude, brightness, stephen_power_law(magnitude, *model))
+# # => a = 0.19490441, error = 0.00044376
