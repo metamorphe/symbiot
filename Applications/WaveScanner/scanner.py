@@ -1,7 +1,7 @@
 import cv2
 from munkres import Munkres
 import video
-
+import numpy as np
 
 
 class Scanner():
