@@ -1,35 +1,6 @@
-<script> 
-	function Preview() {
-		this.actuators = {led : new LEDRep(), motor: new MotorRep()};
-		switchRep("led"){
-			this.active_actuator = this.actuators.motor;
-
-		}
-		channel(val){
-			this.active_actuator.changeColor(val)
-		}
-	}
-
-	function LEDRep(){
-
-	}
-
-	LEDRep.prototype = {
-		init: function(){
-			this.dom =  $("#led .template").clone()
-		},
-		changeColor: function(value){
-		value *= 2;
-			this.dom.children('#LEDColor').children().attr('fill-opacity', value);
-		}
-	}
-	function 
-</script>
-
-
 <% 1.times do %>
 
-<svg id="led" class="template" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100px"
+<svg class="led template" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100px"
 	 height="100px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
 <g id="Calque_1">
 	<g>
