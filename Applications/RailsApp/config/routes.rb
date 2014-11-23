@@ -31,6 +31,9 @@ FlixelLights::Application.routes.draw do
     resources :actuators, :defaults => { :format => 'json'}
     resources :behaviors, :defaults => { :format => 'json'} do
       get 'sparse'
+      collection do
+        post 'scanner'
+      end
     end
   end
 

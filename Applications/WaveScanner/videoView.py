@@ -5,13 +5,10 @@ import datetime
 import math
 import matplotlib.pyplot as plt
 from munkres import Munkres
-import json
-import urllib2
 import scanner
 
 h_threshold = 14
 cluster_thresh = 10
-url = 'http://expresso.cearto.com/api/behaviors'
 
 
 def cost(A,B):
@@ -48,22 +45,7 @@ def playVideo(videoName):
         if k == 20:
             break
 
-    json_data = json.dumps({
-        'behavior': {
-        'name': 'TestArray2',
-        'notification': 0,
-        'active': 0,
-        'unable': 0,
-        'low_energy': 0,
-        'turning_on': 0,
-        'states': wave
-        }
-    })
-    req = urllib2.Request(url)
-    req.add_header('Content-Type', 'application/json')
-    print "Request", req
-    print "Data", json_data
-    response = urllib2.urlopen(url, json_data)
+   
     cap.release()
     cv2.destroyAllWindows()
 
