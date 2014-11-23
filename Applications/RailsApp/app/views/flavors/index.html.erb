@@ -1,0 +1,27 @@
+<h1>Listing flavors</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Alpha</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @flavors.each do |flavor| %>
+      <tr>
+        <td><%= flavor.alpha %></td>
+        <td><%= link_to 'Show', flavor %></td>
+        <td><%= link_to 'Edit', edit_flavor_path(flavor) %></td>
+        <td><%= link_to 'Destroy', flavor, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Flavor', new_flavor_path %>

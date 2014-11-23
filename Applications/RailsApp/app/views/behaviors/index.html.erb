@@ -31,6 +31,7 @@
 
 	<table class="table table-striped">
 		<tr>
+			<th>ID</th>
 			<th></th>
 			<th>Name</th>
 			<th>Waveform</th>
@@ -40,6 +41,7 @@
 
 		<% @behaviors.each do |behavior| %>
 		<tr>
+			<td><%= behavior.id %></td>
 			<td><div class="btn btn-primary play-btn" onclick="behaviorHash['<%= behavior.name %>'].sample(function() {})">Play</div></td>
 			<td><%= behavior.name.humanize %></td>
 			<td class='view' id='<%= behavior.name %>'></td>

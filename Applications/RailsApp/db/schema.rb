@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141101221004) do
+ActiveRecord::Schema.define(version: 20141123110758) do
 
   create_table "actuations", force: true do |t|
     t.integer  "actuator_id"
@@ -56,6 +56,13 @@ ActiveRecord::Schema.define(version: 20141101221004) do
     t.string   "subjective_mag"
     t.string   "stimulus_cond"
     t.string   "continuum"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "flavors", force: true do |t|
+    t.integer  "actuator_id"
+    t.float    "alpha"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
