@@ -6,12 +6,12 @@ import math
 
 
 def get_max(array):
-    mean = np.mean(array, axis=1)
-    var = np.var(array, axis=1)
-    waveline = var.index(max(var))
-    if waveline = 0:
+    mean = np.mean(array, axis=0)
+    var = np.var(array, axis=0)
+    waveline = np.argmax(var)
+    if waveline == 0:
         return abs(mean[1]-mean[2])*2, waveline
-    elif waveline = 1:
+    elif waveline == 1:
         return abs(mean[0]-mean[2])*2, waveline
     else:
         return abs(mean[1]-mean[0])*2, waveline
@@ -74,10 +74,6 @@ class Scanner():
         points = [0,0,0]
         for row, column in indexes:
             points[column] = candidatePoints[row][1]
-            x1 = candidatePoints[row][2]
-            y1 = candidatePoints[row][3]
-            x2 = candidatePoints[row][4]
-            y2 = candidatePoints[row][5]
         j = 0
         # for value in points:
         #     if value == 0:                

@@ -6,8 +6,7 @@ url = 'http://expresso.cearto.com/api/behaviors'
 def playVideo(videoName):
     scan = scanner.Scanner(videoName)
     pts = scan.get_wave()
-    for pt in pts:
-        print pt
+    print pts
 
     # plt.hist(range(n), myLines)
     # plt.show
