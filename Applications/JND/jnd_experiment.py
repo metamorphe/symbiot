@@ -1,8 +1,7 @@
-# from pylab import *
+from pylab import *
 import random, os
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
-import numpy as np
 
 class Experiment:
 	
@@ -147,56 +146,60 @@ class Experiment:
 
 
 	def visualize(self):
-		self.values = [[100, [80, 120]], [500, [121, 1000]]]
+		self.values = [[40, [0, 79]], [100, [80, 120]], [200, [121, 300]], [400, [301, 589]], [690, [590, 800]], [900, [801, 1000]]]
 		self.x = []
 		self.y = []
 		for i in range(len(self.values)):
-			#upper limits of ranges
+		# 	#upper limits of ranges
 			self.x.append(self.values[i][1][1])
-			#intensity levels
+		# 	#intensity levels
 			self.y.append(i)
-		# for x in self.x:
-		# 	self.results = self.func(self.x, self.y)
-		# print self.results
 
-		plt.scatter(self.x, self.y)
-		plot.xticks
+		#plot points
+		# plt.scatter(self.x, self.y)
+		# plt.show()
+
+		self.x = np.array(self.x)
+		# self.x = np.linspace(0, 3, 50)
+		self.y = np.array(self.y)
+
+		plt.plot(self.x, self.y, 'ro',label="Original Data")
+
+		self.x = [float(xn) for xn in self.x] #every element (xn) in x becomes a float
+		self.y = [float(yn) for yn in self.y] #every element (yn) in y becomes a float
+		self.x = np.array(self.x) #transform your data in a numpy array, 
+		self.y = np.array(self.y) #so the curve_fit can work
+
+		popt, pcov = curve_fit(self.func, self.x, self.y)
+
+		plt.plot(self.x, self.func(self.x, *popt), label="Fitted Curve") #same as line above \/
+		#plt.plot(x, popt[0]*x**3 + popt[1]*x**2 + popt[2]*x + popt[3], label="Fitted Curve") 
+
+
+		plt.legend(loc='upper left')
 		plt.show()
 
-		# self.x = np.array(self.x)
-		# self.y = np.array(self.y)
 
-		# popt, pcov = curve_fit(self.func, self.x, self.y, [100,400,0.001,0])
-		# print popt
+	def func(self, x, a, b):
+		return x**a + b
 
-
-
-""" THESE SHOULD NOT BE EXPERIMENT CLASS FUNCTIONS """
-
-def fit_model(x, y, func):
-	popt, pcov = curve_fit(func, x, y)
-	return popt, pcov
-
-def stephen_power_law(x, k, a, c):
-    return k * np.power(x, a) + c
-
-def plot(x, y, y_predicted):
-	plt.figure()
-	plt.plot(x, y, 'ko', label="Original Pyshcophysics Data")
-	plt.plot(x, y_predicted, 'r-', label="Stephen's Power Curve")
-	plt.legend()
-	plt.show()
-
-""" YOUR EXPERIMENT SHOULD RETURN THE FOLLOWING: """
-# five ranges identified, upperbounds used
-magnitude =  [0, 100, 300, 400, 800, 1000]
-brightness = [0, 1, 2, 3, 4, 5]
-
-model, error = fit_model(magnitude, brightness, stephen_power_lawn)
-plot(magnitude, brightness, stephen_power_law(magnitude, *model))
-# => a = 0.19490441, error = 0.00044376
+experiment = Experiment()
+experiment.visualize()
 
 
+# <<<<<<< HEAD
+# def plot(x, y, y_predicted):
+# 	plt.figure()
+# 	plt.plot(x, y, 'ko', label="Original Pyshcophysics Data")
+# 	plt.plot(x, y_predicted, 'r-', label="Stephen's Power Curve")
+# 	plt.legend()
+# 	plt.show()
 
-# experiment = Experiment()
-# print experiment.func(1, 0.5, 0)
+# """ YOUR EXPERIMENT SHOULD RETURN THE FOLLOWING: """
+# # five ranges identified, upperbounds used
+# magnitude =  [0, 100, 300, 400, 800, 1000]
+# brightness = [0, 1, 2, 3, 4, 5]
+
+# model, error = fit_model(magnitude, brightness, stephen_power_lawn)
+# plot(magnitude, brightness, stephen_power_law(magnitude, *model))
+# # => a = 0.19490441, error = 0.00044376
