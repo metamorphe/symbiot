@@ -2,7 +2,19 @@ import cv2
 from munkres import Munkres
 import video
 import numpy as np
+import math
 
+
+def get_max(array):
+    mean = np.mean(array, axis=0)
+    var = np.var(array, axis=0)
+    waveline = np.argmax(var)
+    if waveline == 0:
+        return abs(mean[1]-mean[2])*2, waveline
+    elif waveline == 1:
+        return abs(mean[0]-mean[2])*2, waveline
+    else:
+        return abs(mean[1]-mean[0])*2, waveline
 
 class Scanner():
     step = 20
@@ -11,18 +23,16 @@ class Scanner():
 
 
     def __init__(self, videoName):
-        self.video = Video().open(videoName)
+        self.video = video.Video().open(videoName)
         self.munkres = Munkres()
-        self.heights = []
+        self.heights = [[0,0,0]]
         self.n = 0
 
+    def __cost(self, A,B):
+        return math.floor(math.sqrt((B[0]-A[0])**2 + (B[1]-A[1])**2))
+
     def segment(self, frame):
-        shape = frame.shape
-        sliver = frame[0:shape[0],shape[1]/2:shape[1]/2+step]
-        sliver2 = sliver.copy()
-        edges = cv2.Canny(sliver,50,150,apertureSize = 3)
-        color = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR)
-        return cv2.HoughLines(edges,1,np.pi/180,h_threshold)[0]
+        return cv2.HoughLines(frame,1,np.pi/180,self.h_threshold)[0]
 
     def extract(self, lines):
         cost_matrix = []
@@ -43,7 +53,7 @@ class Scanner():
             broken = False
             while i < (len(seen)):
                 point, counts = seen[i]
-                if abs(my - point) < cluster_thresh:
+                if abs(my - point) < self.cluster_thresh:
                     seen[i] = [(point*counts + my)//(counts+1),counts+1]
                     broken = True
                     break
@@ -56,30 +66,41 @@ class Scanner():
                 else:
                     slope = (y2-y1)//(x2-x1)
                 candidatePoints.append([mx,my,x1,y1,x2,y2])
-                cost_matrix.append([cost([0, self.heights[self.n][0]], [mx,my]), cost([0, self.heights[self.n][1]], [mx,my]) + slope, cost([0, self.heights[self.n][2]], [mx,my])])
+                cost_matrix.append([self.__cost([0, self.heights[self.n][0]], [mx,my]),
+                                    self.__cost([0, self.heights[self.n][1]], [mx,my]) + slope,
+                                    self.__cost([0, self.heights[self.n][2]], [mx,my])])
                 seen.append([my,1])
-        indexes = m.compute(cost_matrix)
+        indexes = self.munkres.compute(cost_matrix)
         points = [0,0,0]
         for row, column in indexes:
             points[column] = candidatePoints[row][1]
-            x1 = candidatePoints[row][2]
-            y1 = candidatePoints[row][3]
-            x2 = candidatePoints[row][4]
-            y2 = candidatePoints[row][5]
-            cv2.line(sliver,(x1,y1),(x2,y2),(255,0,0),5)
         j = 0
-        for value in points:
-            if value == 0:                
-                points[j] = self.heights[self.n-1][column]
-            j+=1
+        # for value in points:
+        #     if value == 0:                
+        #         points[j] = self.heights[self.n-1][column]
+        #     j+=1
         return points
 
     def process_frame(self, frame):
         # print len(lines[0])
-        lines = self.segment(frame)
-        points = self.extract(lines)
-        self.n += 1
+        shape = frame.shape
+        sliver = frame[0:shape[0],shape[1]/2:shape[1]/2+self.step]
+        edges = cv2.Canny(sliver,50,150,apertureSize = 3)
+        return edges
 
     def get_wave(self):
-        # return self.heights
-        return np.cos(np.linspace(0, 6 *np.pi, 50))
+        while(self.video.isOpened()):
+            ret, frame = self.video.query()
+            if not ret:
+                break;
+            canny = self.process_frame(frame)
+            lines = self.segment(canny)
+            frame_points = self.extract(lines)
+            self.heights.append(frame_points)
+            self.n += 1
+        wave = []
+        max_h, waveline = get_max(self.heights)
+        for pts in self.heights:
+            wave.append(pts[waveline]/max_h)
+        return wave
+        # return np.cos(np.linspace(0, 6 *np.pi, 50))
