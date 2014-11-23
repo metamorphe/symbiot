@@ -26,6 +26,14 @@ FlixelLights::Application.routes.draw do
   post "behaviors/create"
   resources :behaviors
 
+  # Create scope for API calls
+  scope '/api' do
+    resources :actuators, :defaults => { :format => 'json'}
+    resources :behaviors, :defaults => { :format => 'json'} do
+      get 'sparse'
+    end
+  end
+
   post "sequences/json_to_cpp"
   post "sequences/create"
   resources :sequences

@@ -5,6 +5,14 @@ class ActuatorsController < ApplicationController
   # GET /actuators.json
   def index
     @actuators = Actuator.all
+    clean_entries = []
+    @actuators.each do |actuator|
+      clean_entries.push(clean_data actuator)
+    end
+    respond_to do |format|
+      format.html
+      format.json { render json: clean_entries }
+    end
   end
 
   # GET /actuators/1
@@ -24,6 +32,7 @@ class ActuatorsController < ApplicationController
   # POST /actuators
   # POST /actuators.json
   def create
+    actuator_params["name"] = dehumanize actuator_params["name"]
     @actuator = Actuator.new(actuator_params)
 
     respond_to do |format|
@@ -40,6 +49,7 @@ class ActuatorsController < ApplicationController
   # PATCH/PUT /actuators/1
   # PATCH/PUT /actuators/1.json
   def update
+    puts actuator_params
     respond_to do |format|
       if @actuator.update(actuator_params)
         format.html { redirect_to @actuator, notice: 'Actuator was successfully updated.' }

@@ -37,8 +37,9 @@ class BehaviorsController < ApplicationController
 	end
 
 	def create
-		variables = {"name" => params["behavior"]["name"], "states" => params["behavior"]["states"]};
+		variables = behavior_params.clone
 		variables["name"] = dehumanize variables["name"]
+		variables["states"] = params["behavior"]["states"]
 
 		@behavior = Behavior.new(variables)
 		@behavior_attributes = Behavior.attribute_names
@@ -46,7 +47,7 @@ class BehaviorsController < ApplicationController
 		if @behavior.save
 			redirect_to @behavior
 		else
-			render	:json => { :error => @behavior.errors.full_messages.to_sentence }, 
+			render :json => { :error => @behavior.errors.full_messages.to_sentence, :vars => params }, 
 							:status => :unprocessable_entity
 		end
 	end
@@ -95,6 +96,14 @@ class BehaviorsController < ApplicationController
 		@states = Behavior.find(params[:name])
 		respond_to do |format|
 			format.json { render :json => @states }
+		end
+	end
+
+	def sparse
+		sparse = Behavior.find_by_id(params[:behavior_id]).sparse
+		data =  {"sparse_commands" => sparse }
+		respond_to do |format|
+			format.json {render json: data}
 		end
 	end
 
