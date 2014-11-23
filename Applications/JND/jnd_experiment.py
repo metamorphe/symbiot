@@ -192,7 +192,7 @@ def plot(x, y, y_predicted):
 magnitude =  [0, 100, 300, 400, 800, 1000]
 brightness = [0, 1, 2, 3, 4, 5]
 
-model, error = fit_model(magnitude, brightness, stephen_power_law)
+model, error = fit_model(magnitude, brightness, stephen_power_lawn)
 plot(magnitude, brightness, stephen_power_law(magnitude, *model))
 # => a = 0.19490441, error = 0.00044376
 
