@@ -1,5 +1,16 @@
-class BehaviorsController < ApplicationController
+require 'digest/md5'
 
+class BehaviorsController < ApplicationController
+	skip_before_filter :verify_authenticity_token, :only => :scanner
+	before_filter :verify_custom_authenticity_token, :only => :scanner
+
+def verify_custom_authenticity_token
+	# checks whether the request comes from a trusted source
+	python_password = "potatoes123"
+	password = Digest::MD5.hexdigest(python_password)
+	passed = params["auth"] == password
+	return passed
+end
 	def new
 		@behavior_attributes = Behavior.attribute_names
 		@array_attributes = Behavior.get_array_attrs.to_json.html_safe
@@ -34,6 +45,20 @@ class BehaviorsController < ApplicationController
 	end
 
 	def record_wave	
+	end
+
+
+	def scanner
+		states = params["behavior"]["states"]
+		@behavior = Behavior.new(behavior_params)
+		@behavior.states = states
+		
+		if @behavior.save
+			render :json => @behavior
+		else
+			render :json => { :error => @behavior.errors.full_messages.to_sentence, :vars => params }, 
+							:status => :unprocessable_entity
+		end
 	end
 
 	def create
@@ -99,10 +124,17 @@ class BehaviorsController < ApplicationController
 		end
 	end
 
+	def sparse
+		sparse = Behavior.find_by_id(params[:behavior_id]).sparse
+		data =  {"sparse_commands" => sparse }
+		respond_to do |format|
+			format.json {render json: data}
+		end
+	end
+
 	private
 		def behavior_params
-			params.require(:behavior).permit(:name, :notification, :active,
-				:unable, :low_energy, :turning_on, :is_smooth)
+			params.require(:behavior).permit(:name, :notification, :active, :unable, :low_energy, :turning_on, :is_smooth, :states)
 		end
 
 end
