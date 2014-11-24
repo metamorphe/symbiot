@@ -1,5 +1,5 @@
 
-import requests, md5, json 
+import requests, md5, json, requests_cache
 base = "http://localhost:3000"
 password = "potatoes123"
 # base = "http://expresso.cearto.com"
@@ -44,4 +44,5 @@ def send_behavior(name, wave):
 			}
 	post(url, data)
  
-
+requests_cache.install_cache("api_cache")
+# requests_cache.disabled()
