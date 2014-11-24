@@ -4,6 +4,8 @@ class BehaviorsController < ApplicationController
 	skip_before_filter :verify_authenticity_token, :only => :scanner
 	before_filter :verify_custom_authenticity_token, :only => :scanner
 
+	before_action :authenticate_user!, :only => :edit
+
 def verify_custom_authenticity_token
 	# checks whether the request comes from a trusted source
 	python_password = "potatoes123"

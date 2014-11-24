@@ -1,9 +1,15 @@
-import serial
+import serial, sys, glob
 
 class JNDArduino:
 	def __init__(self):
-		self.ser = serial.Serial("/dev/tty.usbmodem1411", 9600)
+		avail_ports = serial_ports()
+		if(len(avail_ports) == 0):
+			raise EnvironmentError("No ports detected. Plug in the Arduino! >:(");
+
+		self.ser = serial.Serial(avail_ports[0], 9600)
 		self.connected = False
+		# Make sure its closed
+		self.close()
 
 	def open(self):
 		# print self.connected
@@ -24,8 +30,38 @@ class JNDArduino:
 
 
 	def close(self):
-		# if self.connected:
 		self.ser.close()
 
+
+def serial_ports():
+    """Lists serial ports
+
+    :raises EnvironmentError:
+        On unsupported or unknown platforms
+    :returns:
+        A list of available serial ports
+    """
+    if sys.platform.startswith('win'):
+        ports = ['COM' + str(i + 1) for i in range(256)]
+
+    elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
+        # this is to exclude your current terminal "/dev/tty"
+        ports = glob.glob('/dev/tty.usb[A-Za-z]*')
+
+    elif sys.platform.startswith('darwin'):
+        ports = glob.glob('/dev/tty.usb*')
+
+    else:
+        raise EnvironmentError('Unsupported platform')
+
+    result = []
+    for port in ports:
+        try:
+            s = serial.Serial(port)
+            s.close()
+            result.append(port)
+        except (OSError, serial.SerialException):
+            pass
+    return result
 
 

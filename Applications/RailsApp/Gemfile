@@ -57,3 +57,6 @@ gem 'activerecord-mysql-adapter'
 # Image upload dependencies
 gem 'carrierwave'
 gem 'carrierwave_backgrounder'
+
+
+gem 'devise'
