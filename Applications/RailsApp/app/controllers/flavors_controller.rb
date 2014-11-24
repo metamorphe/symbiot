@@ -69,6 +69,6 @@ class FlavorsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def flavor_params
-      params.require(:flavor).permit(:alpha)
+      params.require(:flavor).permit(:alpha, :name, :img)
     end
 end

@@ -1,9 +1,17 @@
-<h1>Listing flavors</h1>
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="active"><a href="/flavors">Flavors</a></li>
+    <li><a href="/actuators">Actuators</a></li>
+    <li><a href="/behaviors">Behaviors</a></li>
+  </ul>
+
+<h3>Listing flavors</h3>
 
 <table>
   <thead>
     <tr>
+      <th>Name</th>
       <th>Alpha</th>
+      <th>Img</th>
       <th></th>
       <th></th>
       <th></th>
@@ -13,7 +21,9 @@
   <tbody>
     <% @flavors.each do |flavor| %>
       <tr>
+        <td><%= flavor.name %></td>
         <td><%= flavor.alpha %></td>
+        <td><%= image_tag(flavor.img_url, :width => 100) if flavor.img.present? %></td>
         <td><%= link_to 'Show', flavor %></td>
         <td><%= link_to 'Edit', edit_flavor_path(flavor) %></td>
         <td><%= link_to 'Destroy', flavor, method: :delete, data: { confirm: 'Are you sure?' } %></td>

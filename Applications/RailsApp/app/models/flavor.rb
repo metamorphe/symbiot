@@ -1,3 +1,4 @@
 class Flavor < ActiveRecord::Base
-	has_one :actuator
+	belongs_to :actuator
+	mount_uploader :img, PictureUploader
 end

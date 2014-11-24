@@ -16,12 +16,11 @@
     <%= f.text_field :name %>
   </div>
   <div class="field">
-    <%= f.label :alpha %><br>
-    <%= f.text_field :alpha %>
-  </div>
-  <div class="field">
-    <%= f.label :img %><br>
-    <%= f.file_field :img %>
+    <%= f.label :flavors %><br>
+    <% @flavors.each do |flavor| %>
+      <%= check_box_tag(:flavor) %>
+      <%= label_tag(:flavor, flavor.name.humanize) %>
+    <% end %>
   </div>
   <div class="actions">
     <%= f.submit %>
