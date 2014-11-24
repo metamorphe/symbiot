@@ -1,4 +1,6 @@
 FlixelLights::Application.routes.draw do
+  resources :flavors
+
   resources :actuations
 
   resources :experiments

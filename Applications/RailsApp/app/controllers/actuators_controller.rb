@@ -27,6 +27,7 @@ class ActuatorsController < ApplicationController
 
   # GET /actuators/1/edit
   def edit
+    @flavors = Flavor.all
   end
 
   # POST /actuators
@@ -34,6 +35,7 @@ class ActuatorsController < ApplicationController
   def create
     actuator_params["name"] = dehumanize actuator_params["name"]
     @actuator = Actuator.new(actuator_params)
+    @flavors = Flavor.all
 
     respond_to do |format|
       if @actuator.save
@@ -79,6 +81,6 @@ class ActuatorsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def actuator_params
-      params.require(:actuator).permit(:name, :alpha, :img)
+      params.require(:actuator).permit(:name)
     end
 end

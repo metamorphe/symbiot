@@ -1,4 +1,5 @@
 <%= javascript_include_tag 'light' %>
+<%= javascript_include_tag 'preview' %>
 <%= javascript_include_tag 'experimental2' %>
 
 <script>
@@ -17,12 +18,20 @@
 			behaviorHash[name] = behavior;
 			behavior.load($(el));
 		});
+		// Set up dropdowns to listen to representation changes
+		$('select').change(function() {
+			var newRep = $(this).find(':selected').text().toLowerCase();
+			var selBehavior = $(this).attr('id').slice(0, -1);
+			behaviorHash[selBehavior].preview.switchRep(newRep);
+
+		});
 	});
 </script>
 
 <div class='row'>
 
 	<ul class="nav nav-tabs" role="tablist">
+		<li><a href="/flavors">Flavors</a></li>
 		<li><a href="/actuators">Actuators</a></li>
 		<li class="active"><a href="/behaviors">Behaviors</a></li>
 	</ul>
@@ -31,6 +40,7 @@
 
 	<table class="table table-striped">
 		<tr>
+			<th>ID</th>
 			<th></th>
 			<th>Name</th>
 			<th>Waveform</th>
@@ -40,16 +50,18 @@
 
 		<% @behaviors.each do |behavior| %>
 		<tr>
+			<td><%= behavior.id %></td>
 			<td><div class="btn btn-primary play-btn" onclick="behaviorHash['<%= behavior.name %>'].sample(function() {})">Play</div></td>
 			<td><%= behavior.name.humanize %></td>
 			<td class='view' id='<%= behavior.name %>'></td>
 			<td>
-				<div class="led-box" data="<%= behavior.name %>">
-					<%= render 'partials/led' %>
+				<div class="led-box" data-name="<%= behavior.name %>">
+					
 				</div>
 				<div class="field">
 				 	Select a preview actuator<br>
-				    <%= select("actuation", "actuator_id", Actuator.all.collect {|p| [ p.name.humanize, p.id ] }, {include_blank: 'None'}) %>
+				 	<!--TODO: change to select actuator, not flavor -->
+				    <%= select(behavior.name, "", Actuator.all.collect {|p| [ p.name.humanize, p.id ] }, {include_blank: 'None'}) %>
 				</div>
 			</td>
 			<td>
@@ -64,7 +76,12 @@
 		</tr>
 		<% end %>
 	</table>
-	<%= link_to 'New Behavior', new_behavior_path , {:role => "button", :class => "btn btn-primary"}%>
-	<%= link_to 'Mix Behaviors', '/behaviors/new_wave' , {:role => "button", :class => "btn btn-default"}%>
 
 </div>
+
+<style type="text/css">
+	.template{
+		display: none;
+	}
+</style>
+<%= render 'partials/led' %>

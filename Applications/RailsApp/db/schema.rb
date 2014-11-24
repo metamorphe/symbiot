@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141101221004) do
+ActiveRecord::Schema.define(version: 20141124031055) do
 
   create_table "actuations", force: true do |t|
     t.integer  "actuator_id"
@@ -22,8 +22,6 @@ ActiveRecord::Schema.define(version: 20141101221004) do
 
   create_table "actuators", force: true do |t|
     t.string   "name"
-    t.float    "alpha"
-    t.string   "img"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -58,6 +56,15 @@ ActiveRecord::Schema.define(version: 20141101221004) do
     t.string   "continuum"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "flavors", force: true do |t|
+    t.float    "alpha"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "img"
+    t.integer  "actuator_id"
+    t.string   "name"
   end
 
   create_table "schemes", force: true do |t|

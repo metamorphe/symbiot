@@ -18,6 +18,7 @@ function LP(wave, isSVG){
 	this.index = 0;
 	this.states = [];
 	this.linked = { next: null, prev: null };
+	this.preview = new Preview($('.led-box[data-name="' + this.name + '"]'));
 }
 
 LP.prototype = {
@@ -26,7 +27,7 @@ LP.prototype = {
 	channel: function(val){
 		this.states[this.index] = val;
 		$(".led-value").css('opacity', 1 - val);
-		changeColor(this.name, 1 - val);
+		this.preview.channel(1 - val);
 		// console.log(val);
 	},
 	//return the document object representation

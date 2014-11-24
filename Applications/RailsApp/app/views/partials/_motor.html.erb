@@ -1,0 +1,15 @@
+<script>
+	function motorRep() {
+		this.DOM = null;
+	}
+
+	motorRep.prototype = {
+		init: function() {
+			this.DOM =  $("#motor .template").clone();
+		},
+		changeColor: function(value) {
+			value *= 2;
+			this.DOM.children('#LEDColor').children().attr('fill-opacity', value);
+		}
+	}
+</script>
