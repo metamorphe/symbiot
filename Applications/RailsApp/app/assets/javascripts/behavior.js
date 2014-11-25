@@ -7,7 +7,7 @@ var hitOptions = {
 	tolerance: 5
 };
 
-function LP(wave, isSVG){
+function Behavior(wave, isSVG){
 	if(typeof isSVG === "undefined") isSVG = false;
 	this.name = wave.name;
 	this.wave = wave;
@@ -21,7 +21,7 @@ function LP(wave, isSVG){
 	this.preview = new Preview($('.led-box[data-name="' + this.name + '"]'));
 }
 
-LP.prototype = {
+Behavior.prototype = {
 	// an output channel event - onSample event -- 
 	// TODO - turn this into a binder
 	channel: function(val){
@@ -66,12 +66,12 @@ LP.prototype = {
 		
 		this.height = this.paper.view.size.height;
 		this.width = this.paper.view.size.width;
-		this.tracker = this.draw(LP.trackerLine);
-		this.axis = this.draw(LP.axis);
+		this.tracker = this.draw(Behavior.trackerLine);
+		this.axis = this.draw(Behavior.axis);
 
 		if(!this.isSVG){
 			this.states = this.wave.dataPts(this.paper.view.size);
-			this.path = this.draw(LP.plot, {points: this.states, isSmooth: this.wave.isSmooth });
+			this.path = this.draw(Behavior.plot, {points: this.states, isSmooth: this.wave.isSmooth });
 			var scope = this;
 			this._boundinterval = setInterval(function(){ scope.bound()}, 50);
 			// console.log(this.states);
@@ -144,7 +144,7 @@ LP.prototype = {
 }
 
 
-LP.plot = function(paper, params, isSmooth){
+Behavior.plot = function(paper, params, isSmooth){
 	var path = new paper.Path({
 		segments: params.points,
 		strokeColor: 'black',
@@ -158,7 +158,7 @@ LP.plot = function(paper, params, isSmooth){
 	
 }
 
-LP.axis = function(paper){
+Behavior.axis = function(paper){
 	axis = new paper.Path();
 	axis.strokeColor = '#CCC';
 	axis.add(new paper.Point(0, paper.view.size.height/2.0));
@@ -167,7 +167,7 @@ LP.axis = function(paper){
 	return axis;
 }
 
-LP.trackerLine = function(paper){
+Behavior.trackerLine = function(paper){
 	var path = new paper.Path();
 	path.strokeColor = 'blue';
 	path.add(new paper.Point(0, 0));

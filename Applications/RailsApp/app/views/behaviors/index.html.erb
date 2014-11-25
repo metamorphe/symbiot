@@ -1,6 +1,3 @@
-<%= javascript_include_tag 'light' %>
-<%= javascript_include_tag 'preview' %>
-<%= javascript_include_tag 'experimental2' %>
 
 <script>
 	var waveStates = {};
@@ -14,7 +11,7 @@
 		$.map($('.view'), function(el, idx) {
 			var name = $(el).attr('id');
 			var wave = new Wave(name, waveStates[name], waveIsSmooths[name]);
-			var behavior = new LP(wave, false);
+			var behavior = new Behavior(wave, false);
 			behaviorHash[name] = behavior;
 			behavior.load($(el));
 		});

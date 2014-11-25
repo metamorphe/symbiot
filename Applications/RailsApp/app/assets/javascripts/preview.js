@@ -7,7 +7,7 @@ function Preview(container) {
 
 Preview.prototype = {
 	init: function() {
-		this.actuators = { led: new LEDRep(), motor: new motorRep() };
+		this.actuators = { light: new LEDRep(), motor: new motorRep() };
 		this.active_actuator = this.actuators.led;
 	},
 	switchRep: function(newRep) {
