@@ -42,6 +42,11 @@ class Actuator(object):
         dl = (-speed,) * 256
         return Actuator(dh, dl)
 
+    @staticmethod
+    def ideal():
+        """ Returns an actuator that can do anything. """
+        return Actuator.linear(256)
+
     def calc_strength(self, current_output, desired_delta):
         """ calculates the strength that should be output
         """
@@ -124,6 +129,12 @@ def main():
         return
     if sys.argv[1] == 'compact':
         result = compact(json.loads(sys.argv[2]))
+        print(json.dumps(result[0])),
+        return
+    if sys.argv[1] == 'compactwithalpha':
+        a = Actuator.ideal()
+        a.alpha = float(sys.argv[2])
+        result = a.get_commands(json.loads(sys.argv[3]))
         print(json.dumps(result[0])),
         return
 
