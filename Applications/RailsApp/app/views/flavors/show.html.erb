@@ -7,7 +7,7 @@
 <p>
   <strong>Type of Actuator:</strong>
   <% if @flavor.actuator %>
-	  <%= @flavor.actuator.name %>
+  	<%= link_to @flavor.actuator.name, actuator_path(@flavor.actuator) %>
   <% end %>
 </p>
 <p>

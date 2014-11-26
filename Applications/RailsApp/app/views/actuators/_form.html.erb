@@ -18,8 +18,8 @@
   <div class="field">
     <%= f.label :flavors %><br>
     <% @flavors.each do |flavor| %>
-      <%= check_box_tag(:flavor) %>
-      <%= label_tag(:flavor, flavor.name.humanize) %>
+      <%= check_box_tag("flavor_ids[]", flavor.id) %>
+      <%= label_tag(flavor.id, flavor.name.humanize) %>
     <% end %>
   </div>
   <div class="actions">

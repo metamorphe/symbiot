@@ -23,6 +23,7 @@ class ActuatorsController < ApplicationController
   # GET /actuators/new
   def new
     @actuator = Actuator.new
+    @flavors = Flavor.all
   end
 
   # GET /actuators/1/edit
@@ -35,7 +36,7 @@ class ActuatorsController < ApplicationController
   def create
     actuator_params["name"] = dehumanize actuator_params["name"]
     @actuator = Actuator.new(actuator_params)
-    @flavors = Flavor.all
+    update_flavors
 
     respond_to do |format|
       if @actuator.save
@@ -51,7 +52,7 @@ class ActuatorsController < ApplicationController
   # PATCH/PUT /actuators/1
   # PATCH/PUT /actuators/1.json
   def update
-    puts actuator_params
+    update_flavors
     respond_to do |format|
       if @actuator.update(actuator_params)
         format.html { redirect_to @actuator, notice: 'Actuator was successfully updated.' }
@@ -81,6 +82,13 @@ class ActuatorsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def actuator_params
-      params.require(:actuator).permit(:name)
+      params.require(:actuator).permit(:name, :flavor_id)
+    end
+
+    def update_flavors
+      flavor_ids = params["flavor_ids"]
+      flavor_ids.each do |id|
+      Flavor.find(id).update(actuator_id: @actuator.id)
+    end
     end
 end
