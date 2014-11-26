@@ -31,13 +31,13 @@ Track.prototype = {
 }
 
 /**
- * Given lpIndex, samples the LP whose index is referenced at
- * canvasIndices[lpIndex].
+ * Given behaviorIndex, samples the Behavior whose index is referenced at
+ * canvasIndices[behaviorIndex].
  */
 function recursiveSample(behavior) {
 	behavior.sample(function() {
-		if (lpIndex + 1 < this.behaviors.length) {
-			recursiveSample(lpIndex + 1);
+		if (behaviorIndex + 1 < this.behaviors.length) {
+			recursiveSample(behaviorIndex + 1);
 		}
 	});
 }

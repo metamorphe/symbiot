@@ -4,15 +4,15 @@ const CLEAR = 'rgba(0, 0, 0, 0)';
 const DEFAULT_LEN = 300;
 
 var currWave;
-var currLP;
+var currBehavior;
 var mixedWave;
-var mixedLP;
+var mixedBehavior;
 
 /* Utility functions */
 
 /**
  * Finds the behavior with behaviorName in the database and loads the
- * newly-constructed LP to target. e is the event passed by a handler.
+ * newly-constructed Behavior to target. e is the event passed by a handler.
  */
 function getWave(e, behaviorName, target) {
 	e.preventDefault();
@@ -33,7 +33,7 @@ function getWave(e, behaviorName, target) {
 			});
 			waveStates = data["states"];
 			currWave = new Wave(behaviorName, waveStates, data["is_smooth?"]);
-			currLP = new LP(currWave, false).load(target);
+			currBehavior = new Behavior(currWave, false).load(target);
 		} ,
 		error: function(jqXHR, textStatus, errorThrown) {
 			return errorThrown;
@@ -42,11 +42,11 @@ function getWave(e, behaviorName, target) {
 }
 
 /**
- * Given lpIndex, samples the LP whose index is referenced at
+ * Given lpIndex, samples the Behavior whose index is referenced at
  * canvasIndices[lpIndex].
  */
 function recursiveSample(lpIndex) {
-	getNthLP(lpIndex).sample(function() {
+	getNthBehavior(lpIndex).sample(function() {
 		if (lpIndex + 1 < canvasIndices.length) {
 			recursiveSample(lpIndex + 1);
 		}
@@ -72,7 +72,7 @@ function activateWrapper(wrapperEl) {
 }
 
 /**
- * Sequentially samples all LPs on the track.
+ * Sequentially samples all Behaviors on the track.
  */
 function play() {
 	if (patterns.length == 0) { return; }
@@ -82,7 +82,7 @@ function play() {
 
 /**
  * Ressign the values of canvasIndices based on the current arrangement
- * of LPs on the track.
+ * of Behaviors on the track.
  */
 function redoIndices() {
 	canvasIndices = $.map($('.track').children(), function(el, i) {
@@ -92,15 +92,15 @@ function redoIndices() {
 
 /**
  * Adds a light pattern to the track based on the current value of the
- * variable addedLP. If there is one track on the page, adds to the
+ * variable addedBehavior. If there is one track on the page, adds to the
  * end of the track. If there are are two tracks, the function adds
- * the LP to an empty track. Does not add an LP when both tracks are
+ * the Behavior to an empty track. Does not add an Behavior when both tracks are
  * full. NOTE: undefined behavior for documents with more than two
  * tracks.
  */
 var wrapper;
-function addToTrack(addedLP) {
-	if (currLP == null) { return; }
+function addToTrack(addedBehavior) {
+	if (currBehavior == null) { return; }
 	if ($('.track').length > 1) {
 		var trackName;
 		if ($('#track-0').children().length == 0) {
@@ -111,22 +111,22 @@ function addToTrack(addedLP) {
 			alert("Both tracks are full.");
 			return;
 		}
-		placeLP(addedLP, $(trackName));
+		placeBehavior(addedBehavior, $(trackName));
 	} else {
-		placeLP(addedLP, $('.track'));
+		placeBehavior(addedBehavior, $('.track'));
 	}
 }
 
-function placeLP(addedLP, target) {
-	// $(addedLP).attr('index', patterns.length);
-	console.log(addedLP,target.attr('class'));
+function placeBehavior(addedBehavior, target) {
+	// $(addedBehavior).attr('index', patterns.length);
+	console.log(addedBehavior,target.attr('class'));
 	var wrapper = $('<div class="wrapper"></div>').appendTo(target);
 	wrapper.attr('index', patterns.length);
-	// wrapper.append(currLP.canvas);
-	addedLP.load(wrapper);
+	// wrapper.append(currBehavior.canvas);
+	addedBehavior.load(wrapper);
 	activateWrapper(wrapper);
-	patterns.push(addedLP);
-	currLP = null;
+	patterns.push(addedBehavior);
+	currBehavior = null;
 }
 
 /* Returns an array with string FIELD from each LB on the track */
@@ -150,10 +150,10 @@ function clearAll() {
 }
 
 /**
- * Returns the nth LP from the left of the screen. E.g. getNthLP(0)
- * returns the leftmost LP visible.
+ * Returns the nth Behavior from the left of the screen. E.g. getNthBehavior(0)
+ * returns the leftmost Behavior visible.
  */
-function getNthLP(n) {
+function getNthBehavior(n) {
 	return patterns[canvasIndices[n]];
 }
 
@@ -161,12 +161,12 @@ function apply(lp1, lp2, operator) {
 	var newData = lp1.wave[operator](lp2.wave, false);
 	currWave = new Wave("Wave", newData, false);
 	mixedWave = currWave;
-	currLP = new LP(currWave, false).load($('#output'));
-	mixedLP = currLP;
-	saver.sources.behavior = currLP; //NOTE: for OO implementation
+	currBehavior = new Behavior(currWave, false).load($('#output'));
+	mixedBehavior = currBehavior;
+	saver.sources.behavior = currBehavior; //NOTE: for OO implementation
 }
 
-/* Arrays for canvas-to-LP matching */
+/* Arrays for canvas-to-Behavior matching */
 var patterns = [];
 var canvasIndices = [];
 
@@ -178,11 +178,11 @@ $(document).ready(function() {
 		if (!($('.modal').hasClass('in'))) {
 			switch (e.charCode) {
 				case 13: // ENTER for entering forms to a track
-					addToTrack(currLP);
+					addToTrack(currBehavior);
 					break;
 				case 97: // 'a' for add
 					$('#output').empty();
-					apply(getNthLP(0), getNthLP(1), "add");
+					apply(getNthBehavior(0), getNthBehavior(1), "add");
 					break;
 				case 115: // 's' for subtract
 					// TODO
@@ -191,7 +191,7 @@ $(document).ready(function() {
 					play();
 					break;
 				case 100: // 'd' for delete
-					/* Note: inactive LPs are retained in patterns.
+					/* Note: inactive Behaviors are retained in patterns.
 					 * This eliminates the need for reindexing, but
 					 * is a potential memory leak. */
 					removeMarked();
@@ -237,7 +237,7 @@ $(document).ready(function() {
 	});
 
 	$('#enter-button').click(function() {
-		addToTrack(currLP);
+		addToTrack(currBehavior);
 	});
 
 	$('#delete-button').click(function() {
@@ -256,7 +256,7 @@ $(document).ready(function() {
 		$('#output').empty();
 		var operator = $(this).attr('id');
 		redoIndices();
-		apply(getNthLP(0), getNthLP(1), operator);
+		apply(getNthBehavior(0), getNthBehavior(1), operator);
 	});
 
 });

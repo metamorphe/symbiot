@@ -1,17 +1,29 @@
 FlixelLights::Application.routes.draw do
+  resources :study do
+   
+  end
+  resources :library do
+    collection do
+      get "/", :to => "behaviors#index"
+    end
+  end
+     
+  devise_for :users
+  resources :flavors
+
   resources :actuations
 
   resources :experiments
 
   resources :actuators
 
-  root "light#index"
+  root "application#index", :as => "home"
 
+  
   get "light/view"
   get "light/wave"
   get "light/lb"
   get "light/index"
-  get "light/library"
   get "light/synthesize"
   get "light/sequence"
   get "light/blinkm"
@@ -31,6 +43,9 @@ FlixelLights::Application.routes.draw do
     resources :actuators, :defaults => { :format => 'json'}
     resources :behaviors, :defaults => { :format => 'json'} do
       get 'sparse'
+      collection do
+        post 'scanner'
+      end
     end
   end
 

@@ -1,8 +1,4 @@
-  <ul class="nav nav-tabs" role="tablist">
-    <li class="active"><a href="/actuators">Actuators</a></li>
-    <li><a href="/behaviors">Behaviors</a></li>
-  </ul>
-
+<%= render "library/tabs" %>
 
 <h3>Actuator Library</h3>
 
@@ -10,8 +6,6 @@
   <thead>
     <tr>
       <th>Name</th>
-      <th>Alpha</th>
-      <th>Img</th>
       <th></th>
       <th></th>
       <th></th>
@@ -22,8 +16,6 @@
     <% @actuators.each do |actuator| %>
       <tr>
         <td><%= actuator.name %></td>
-        <td><%= actuator.alpha %></td>
-        <td><%= image_tag(actuator.img_url, :width => 100) if actuator.img.present? %></td>
         <td><%= link_to 'Show', actuator %></td>
         <td><%= link_to 'Edit', edit_actuator_path(actuator) %></td>
         <td><%= link_to 'Destroy', actuator, method: :delete, data: { confirm: 'Are you sure?' } %></td>

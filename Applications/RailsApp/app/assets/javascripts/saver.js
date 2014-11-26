@@ -29,7 +29,7 @@ Saver.prototype = {
 					saveBehavior($('#name-field').val(), mixedWave.getData());
 					break;
 				case "sequence":
-					saveSequence($('#name-field').val(), getLBData("name")); // the Behaviors for the LP
+					saveSequence($('#name-field').val(), getLBData("name")); // the Behaviors
 					break;
 				case "scheme":
 					saveScheme();

@@ -4,17 +4,14 @@
   <strong>Name:</strong>
   <%= @actuator.name %>
 </p>
-
 <p>
-  <strong>Alpha:</strong>
-  <%= @actuator.alpha %>
+	<strong>Flavors of this actuator:</strong>
+	<ul>
+	<% @actuator.flavors.each do |flavor| %>
+		<li><%= link_to flavor.name.humanize, flavor %></li>
+	<% end %>
+	</ul>
 </p>
-
-<p>
-  <strong>Img:</strong>
-  <%= image_tag(@actuator.img_url, :width => 200) if @actuator.img.present? %>
-</p>
-
 <p>
 	<strong>Behaviors usable with this actuator:</strong>
 	<ul>

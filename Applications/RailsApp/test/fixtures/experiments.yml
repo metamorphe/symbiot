@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  actuator_id: 
+  physical_mag: MyString
+  subjective_mag: MyString
+  stimulus_cond: MyString
+  continuum: MyString
+
+two:
+  actuator_id: 
+  physical_mag: MyString
+  subjective_mag: MyString
+  stimulus_cond: MyString
+  continuum: MyString
