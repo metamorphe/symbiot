@@ -3,11 +3,9 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 //= require numeric-1.2.6.min
 //= require paper-full.min
-//= require environment
-//= require led
-//= require gui
-//= require rAF
 //= require wave
+//= require behavior
+//= require preview
 
 
 

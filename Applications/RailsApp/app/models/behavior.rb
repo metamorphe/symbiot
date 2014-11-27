@@ -81,9 +81,10 @@ class Behavior < ActiveRecord::Base
 
 	# ouputs tuple array #[[time, value]]
 	def sparse
+		alpha = params[:alpha] || 1
 		states = self.states
 		data = normalize(states).to_json
-		cmd = "python bin/manifold/manifold.py compact \"#{data}\""
+		cmd = "python bin/manifold/manifold.py compactwithalpha #{alpha} \"#{data}\""
 		result = `#{cmd}`
 		arr = JSON.parse(result)
 		return arr

@@ -1,4 +1,13 @@
 FlixelLights::Application.routes.draw do
+  resources :study do
+   
+  end
+  resources :library do
+    collection do
+      get "/", :to => "behaviors#index"
+    end
+  end
+     
   devise_for :users
   resources :flavors
 
@@ -8,13 +17,13 @@ FlixelLights::Application.routes.draw do
 
   resources :actuators
 
-  root "light#index"
+  root "application#index", :as => "home"
 
+  
   get "light/view"
   get "light/wave"
   get "light/lb"
   get "light/index"
-  get "light/library"
   get "light/synthesize"
   get "light/sequence"
   get "light/blinkm"
