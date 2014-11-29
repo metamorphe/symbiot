@@ -1,5 +1,6 @@
 from pylab import *
-import random, os
+import random, os, unittest
+from operator import itemgetter
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 
@@ -8,12 +9,13 @@ class Experiment:
 	participantNumber = 0
 
 	def __init__(self):
-		# self.participant = participantNumber
-		# Experiment.participantNumber += 1 #change participant counter
+		self.participantNumber += 1 #change participant counter
 		self.actuators = ["LED", "heatpad"]
 		print "Press 'r' to start the first actuator" #runs actuator_setup
 		self.ranges = []
 		self.values = []
+		self.jnd_range = []
+		self.actuator = 0
 		for i in range(0, 1001):
 			self.values.append(i)
 		self.query = random.choice(self.values)
@@ -21,7 +23,7 @@ class Experiment:
 	#sets up new actuator
 	def actuator_setup(self):
 		if len(self.actuators) != 0:
-			# self.new_actuator(self.participant)
+			self.new_actuator(self.participantNumber)
 			self.ranges = []
 			self.values = []
 			for i in range(0, 1001):
@@ -29,19 +31,17 @@ class Experiment:
 			self.next_range()
 		else:
 			print "Experiment complete!"
-			#remove current actuator from list of actuators
-			self.actuators.remove(self.actuator)
 
 
 	#creates file structure Actuator/participantNumber
 	def new_actuator(self, participantNumber):
-		self.actuator = random.choice(actuators)
-		if not os.path.exists(actuator):
-			os.makedirs(actuator)
-		participant = 'Participant'
-		participant += str(self.participantNumber)
-		participantFolder = actuator + '/' + participant + '/'
-		os.makedirs(participantFolder)
+		self.actuator = random.choice(self.actuators)
+		if not os.path.exists(self.actuator):
+			os.makedirs(self.actuator)
+			participant = 'Participant'
+			participant += str(self.participantNumber)
+			participantFolder = self.actuator + '/' + participant + '/'
+			os.makedirs(participantFolder)
 
 
 
@@ -49,17 +49,18 @@ class Experiment:
 	def next_range(self):
 		#choose random query
 		if len(self.values) != 0:
-			self.query = random.choice(self.values) #NOT WORKING
+			self.query = random.choice(self.values)
 			self.lower_limit = self.upper_limit = False
 			self.jnd_range = []
 			print "Start next range"
-			print "Query is actuating to ", self.query
+			# print "Query is actuating to ", self.query
 			return self.query
 		else:
 			print "Current actuator complete"
 			self.ranges = sorted(self.ranges, key=itemgetter(0))
+			self.actuators.remove(self.actuator) #remove current actuator from list of actuators
 			#visualization
-			self.visualize()
+			# self.visualize()
 
 
 	#change actuated value by specified change
@@ -69,7 +70,7 @@ class Experiment:
 			actuate = 0
 		elif actuate > 1000:
 			actuate = 1000
-		print "Actuating to ", actuate
+		# print "Actuating to ", actuate
 		return actuate
 
 
@@ -77,16 +78,17 @@ class Experiment:
 	#set/reset limits
 	def set_lower_limit(self, value):
 		self.lower_limit = value
-		print "lower limit set to ", value
+		# print "lower limit set to ", value
 	def set_upper_limit(self, value):
 		self.upper_limit = value
-		print "upper limit set to ", value
+		# print "upper limit set to ", value
 
 
 
 	#get values of limits
 	def get_lower_limit(self):
 		return self.lower_limit
+
 	def get_upper_limit(self):
 		return self.upper_limit
 
@@ -99,16 +101,16 @@ class Experiment:
 	def remove_jnd_range(self):
 		lower = self.get_lower_limit()
 		upper = self.get_upper_limit()
-		if lower != False and upper != False:
+		if (lower != False or lower == 0) and upper != False:
 			self.jnd_range = [lower, upper]
-			print "JND RANGE ", self.jnd_range
+			# print "JND RANGE ", self.jnd_range
 
 			#ranges are appending correctly
 			self.ranges.append([self.query, self.jnd_range])
 
 			#values isn't updating correctly
 			self.values = self.update_values()
-			print "Range added"
+			# print "Range added"
 			print "Press 'n' to start next range "
 
 
@@ -146,60 +148,117 @@ class Experiment:
 
 
 	def visualize(self):
-		self.values = [[40, [0, 79]], [100, [80, 120]], [200, [121, 300]], [400, [301, 589]], [690, [590, 800]], [900, [801, 1000]]]
-		self.x = []
-		self.y = []
+		magnitude = []
+		brightness = []
 		for i in range(len(self.values)):
-		# 	#upper limits of ranges
-			self.x.append(self.values[i][1][1])
-		# 	#intensity levels
-			self.y.append(i)
+			#upper limits of ranges
+			magnitude.append(self.values[i][1][1])
+			#intensity levels
+			brightness.append(i)
 
-		#plot points
-		# plt.scatter(self.x, self.y)
-		# plt.show()
+		magnitude = np.array(magnitude)
+		brightness = np.array(brightness)
 
-		self.x = np.array(self.x)
-		# self.x = np.linspace(0, 3, 50)
-		self.y = np.array(self.y)
+		plt.plot(magnitude, brightness, 'ro',label="Original Data")
 
-		plt.plot(self.x, self.y, 'ro',label="Original Data")
+		magnitude = [float(xn) for xn in magnitude] #every element (xn) in x becomes a float
+		brightness = [float(yn) for yn in brightness] #every element (yn) in y becomes a float
+		magnitude = np.array(magnitude) #transform your data in a numpy array, 
+		brightness = np.array(brightness) #so the curve_fit can work
 
-		self.x = [float(xn) for xn in self.x] #every element (xn) in x becomes a float
-		self.y = [float(yn) for yn in self.y] #every element (yn) in y becomes a float
-		self.x = np.array(self.x) #transform your data in a numpy array, 
-		self.y = np.array(self.y) #so the curve_fit can work
+		popt, pcov = curve_fit(self.func, magnitude, brightness)
 
-		popt, pcov = curve_fit(self.func, self.x, self.y)
-
-		plt.plot(self.x, self.func(self.x, *popt), label="Fitted Curve") #same as line above \/
+		plt.plot(magnitude, self.func(magnitude, *popt), label="Fitted Curve") #same as line above \/
 		#plt.plot(x, popt[0]*x**3 + popt[1]*x**2 + popt[2]*x + popt[3], label="Fitted Curve") 
 
-
+		# magnitude [79, 120, 300, 589, 800, 1000]
+		# brightness [0, 1, 2, 3, 4, 5]
 		plt.legend(loc='upper left')
 		plt.show()
+
+		# plot(magnitude, brightness)
 
 
 	def func(self, x, a, b):
 		return x**a + b
 
-experiment = Experiment()
-experiment.visualize()
+	def y_predicted(brightness, actuators):
+		y = [brightness.length]
 
 
-# <<<<<<< HEAD
-# def plot(x, y, y_predicted):
-# 	plt.figure()
-# 	plt.plot(x, y, 'ko', label="Original Pyshcophysics Data")
-# 	plt.plot(x, y_predicted, 'r-', label="Stephen's Power Curve")
-# 	plt.legend()
-# 	plt.show()
+def plot(x, y, y_predicted): # (magnitude, brightness, brightness_predicted)
+	plt.figure()
+	plt.plot(x, y, 'ko', label="Original Pyshcophysics Data")
+	plt.plot(x, y_predicted, 'r-', label="Stephen's Power Curve")
+	plt.legend()
+	plt.show()
 
-# """ YOUR EXPERIMENT SHOULD RETURN THE FOLLOWING: """
-# # five ranges identified, upperbounds used
-# magnitude =  [0, 100, 300, 400, 800, 1000]
-# brightness = [0, 1, 2, 3, 4, 5]
-
-# model, error = fit_model(magnitude, brightness, stephen_power_lawn)
+# model, error = fit_model(magnitude, brightness, stephen_power_law)
 # plot(magnitude, brightness, stephen_power_law(magnitude, *model))
-# # => a = 0.19490441, error = 0.00044376
+# => a = 0.19490441, error = 0.00044376
+
+
+
+class JNDTestCases(unittest.TestCase):
+
+    def test_init(self):
+        """Is init method working setting up properly?"""
+        experiment = Experiment()
+        self.assertTrue(experiment.participantNumber == 1) # participant 1
+        self.assertTrue(len(experiment.values) == 1001) #values has [0, 1000]
+        self.assertTrue(len(experiment.ranges) == 0) # ranges is empty
+        self.assertTrue(experiment.query in experiment.values) # a random number from self.values is set as query
+
+    def test_actuator_and_nextrange(self):
+    	experiment = Experiment()
+    	old_query = experiment.query
+    	self.assertTrue(len(experiment.actuators) != 0)
+    	experiment.actuator_setup() # test if case of actuator_setup()
+    	self.assertTrue(experiment.actuator in experiment.actuators) # assigned an actuator
+    	self.assertTrue(experiment.query != old_query) # new query assigned in next_range()
+
+    def test_change_value(self):
+    	experiment = Experiment()
+    	add_value = subtract_value = experiment.query
+    	self.assertTrue(experiment.change_value(add_value, 100) == (experiment.query + 100)) # test addition
+    	self.assertTrue(experiment.change_value(subtract_value, -100) == (experiment.query - 100)) # test subtraction
+
+    def test_setters_and_getters(self):
+    	experiment = Experiment()
+    	# tests if getters return right value
+    	experiment.set_lower_limit(0)
+    	self.assertTrue(experiment.get_lower_limit() == 0)
+    	experiment.set_upper_limit(1000)
+    	self.assertTrue(experiment.get_upper_limit() == 1000)
+    	self.assertTrue(experiment.get_query() == experiment.query)
+
+    def test_remove_jnd_range(self):
+    	experiment = Experiment()
+    	experiment.set_lower_limit(0)
+    	experiment.set_upper_limit(1000)
+    	experiment.jnd_range = [0, 1000]
+    	experiment.remove_jnd_range()
+    	self.assertTrue(len(experiment.ranges) != 0) #jnd range added
+    	self.assertTrue(len(experiment.values) != 1001) #jnd range removed from values
+    	self.assertTrue(len(experiment.values) == 500) # fifty() and update_values() are removing 50% of range
+
+    def test_new_actuator(self):
+    	#tests when values is empty and a new actuator needs to be used
+    	experiment = Experiment()
+    	experiment.actuator_setup()
+    	experiment.values = []
+    	experiment.next_range() # should print "Current actuator complete"
+
+    def test_experiment_complete(self):
+    	#tests when actuators are empty if the experiment ends
+    	experiment = Experiment()
+    	experiment.actuators = []
+    	experiment.actuator_setup() #s hould print "Experiment complete!"
+
+    def test_visualize(self):
+    	experiment = Experiment()
+    	experiment.values = [[40, [0, 79]], [100, [80, 120]], [200, [121, 300]], [400, [301, 589]], [690, [590, 800]], [900, [801, 1000]]]
+    	experiment.visualize()
+
+if __name__ == '__main__':
+    unittest.main()
