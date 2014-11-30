@@ -5,13 +5,11 @@ class ActuatorsController < ApplicationController
   # GET /actuators.json
   def index
     @actuators = Actuator.all
-    clean_entries = []
-    @actuators.each do |actuator|
-      clean_entries.push(clean_data actuator)
-    end
+    clean_actuators = @actuators.collect{|a| {name: a.name.humanize, id: a.id}}
+
     respond_to do |format|
       format.html
-      format.json { render json: clean_entries }
+      format.json { render json: clean_actuators}
     end
   end
 

@@ -28,15 +28,15 @@
 			return data;
 		},
 		get_actuators : function(callback){
-			return this.get("/actuators.json", callback);
+			return this.get("/api/actuators.json", callback);
 		},
 		get_flavors : function(actuator_id, callback){
-			return this.get("/actuators/"+ actuator_id +"/flavors.json", callback);
+			return this.get("/api/actuators/"+ actuator_id +"/flavors.json", callback);
 		},
 		get_behaviors : function(flavor_id, callback){
-			return this.get("/flavors/"+ flavor_id +"/behaviors.json", callback);
+			return this.get("/api/flavors/"+ flavor_id +"/behaviors.json", callback);
 		},
 		count: function(type){
-			return this.get_async("/"+ type + "/counts.json");
+			return this.get_async("/api/"+ type + "/counts.json");
 		}
 	}

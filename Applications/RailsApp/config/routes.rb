@@ -20,27 +20,14 @@ FlixelLights::Application.routes.draw do
      
   devise_for :users
 
-  resources :flavors do
-    collection do 
-      get "counts"
-    end
-    member do
-      get "behaviors"
-    end
-  end
+  resources :flavors
 
   resources :actuations
 
   resources :experiments
 
-  resources :actuators do 
-    collection do 
-      get "counts"
-    end
-    member do 
-      get "flavors"
-    end
-  end
+  resources :actuators
+
 
 
   root "application#index", :as => "home"
@@ -66,13 +53,28 @@ FlixelLights::Application.routes.draw do
 
   # Create scope for API calls
   scope '/api' do
-    resources :actuators, :defaults => { :format => 'json'}
+    resources :actuators, :defaults => { :format => 'json'} do
+      collection do 
+        get "counts"
+      end
+      member do 
+        get "flavors"
+      end
+    end
     resources :behaviors, :defaults => { :format => 'json'} do
       get 'sparse'
       collection do
         post 'scanner'
       end
     end
+    resources :flavors, :defaults => { :format => 'json'} do
+      collection do 
+        get "counts"
+      end
+      member do
+        get "behaviors"
+      end
+    end 
   end
 
   post "sequences/json_to_cpp"
