@@ -159,43 +159,51 @@ class Experiment:
 		magnitude = np.array(magnitude)
 		brightness = np.array(brightness)
 
-		plt.plot(magnitude, brightness, 'ro',label="Original Data")
+		plt.figure()
+		plt.plot(magnitude, brightness, 'ko', label="Original Psychophysics Data")
 
 		magnitude = [float(xn) for xn in magnitude] #every element (xn) in x becomes a float
 		brightness = [float(yn) for yn in brightness] #every element (yn) in y becomes a float
 		magnitude = np.array(magnitude) #transform your data in a numpy array, 
 		brightness = np.array(brightness) #so the curve_fit can work
 
+		# brightness_predicted = np.array(self.y_predicted(magnitude)) # creates power curve using expected y values
+		
 		popt, pcov = curve_fit(self.func, magnitude, brightness)
+		plt.plot(magnitude, self.func(magnitude, *popt), 'r-', label="Steven's Power Curve") #same as line above \/ 
+		#returns index out of bounds error
+		# plt.plot(magnitude, popt[0]*magnitude**3 + popt[1]*magnitude**2 + popt[2]*magnitude + popt[3], label="Fitted Curve")
+		
+		# plt.plot(magnitude, self.func(magnitude, *self.fit_model(magnitude)), 'r-', label="Expected Curve")
 
-		plt.plot(magnitude, self.func(magnitude, *popt), label="Fitted Curve") #same as line above \/
-		#plt.plot(x, popt[0]*x**3 + popt[1]*x**2 + popt[2]*x + popt[3], label="Fitted Curve") 
-
-		# magnitude [79, 120, 300, 589, 800, 1000]
-		# brightness [0, 1, 2, 3, 4, 5]
+		# magnitude [79, 120, 300, 589, 800, 1000]; brightness [0, 1, 2, 3, 4, 5]
 		plt.legend(loc='upper left')
 		plt.show()
+	
+	#generates expected y values for actuator used to plot Steven's power curve
+	def y_predicted(self, magnitude):
+		#
+		y_predicted = [0.5, 1, 1.5, 2, 2.5, 3]
+		return y_predicted
 
-		# plot(magnitude, brightness)
-
-
-	def func(self, x, a, b):
-		return x**a + b
-
-	def y_predicted(brightness, actuators):
-		y = [brightness.length]
-
-
-def plot(x, y, y_predicted): # (magnitude, brightness, brightness_predicted)
-	plt.figure()
-	plt.plot(x, y, 'ko', label="Original Pyshcophysics Data")
-	plt.plot(x, y_predicted, 'r-', label="Stephen's Power Curve")
-	plt.legend()
-	plt.show()
+	def fit_model(self, magnitude, brightness, steven_power_law):
+		#
+		popt, pcov = curve_fit(self.func, magnitude, y_predicted)
+		return popt
 
 # model, error = fit_model(magnitude, brightness, stephen_power_law)
 # plot(magnitude, brightness, stephen_power_law(magnitude, *model))
 # => a = 0.19490441, error = 0.00044376
+
+# The model has a couple of parameters it can change, in your case k and a
+# The algorithm tries to find the k and a that minimize the models error 
+# It does this by choosing an arbitrary a and k, running it through all xs and comparing how far it was to the expected Ys
+# It then tweaks one of its parameters.  If choosing a smaller a yields a better result, it'll keep making the a smaller 
+# Until it's found an a and k that gets u the best error
+# In the end u should be able to plot all of these. ( xs. Ys. And the power law on the same plot*
+
+	def func(self, x, a, b):
+		return x**a + b
 
 
 
