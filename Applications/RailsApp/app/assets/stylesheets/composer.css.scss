@@ -3,8 +3,11 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 body{
+	background-image: url("/interface.png");
 	background-color: rgb(26, 26, 26) !important;
 	color: rgb(153, 153, 153) !important;
+	background-size: auto 100%;
+	background-repeat: no-repeat;
 }
 
 /* LIBRARY SELECTOR START */
