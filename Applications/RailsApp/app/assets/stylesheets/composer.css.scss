@@ -31,7 +31,8 @@ body{
 	overflow-x: hidden;
     overflow: -moz-scrollbars-none; 
     border-right: #333 1px solid;
-
+    padding-left: 0 !important;
+	padding-right: 0 !important;
 }
 	.column_list::-webkit-scrollbar { width: 0 !important }
 
