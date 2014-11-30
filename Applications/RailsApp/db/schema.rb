@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141129221800) do
+ActiveRecord::Schema.define(version: 20141130201900) do
 
   create_table "actuations", force: true do |t|
     t.integer  "flavor_id"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20141129221800) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "picture"
   end
 
   create_table "behavior_links", force: true do |t|
