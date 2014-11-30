@@ -2,13 +2,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Expressive Actuation - <%= params[:action].capitalize %></title>	
-	<%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
-
-	<%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+	<title>Expressive Actuation - <%= params[:action].capitalize %></title>
+	<%= stylesheet_link_tag "application", params[:controller], :media => "all", "data-turbolinks-track" => true %>
 	<%= javascript_include_tag "application", params[:controller] %>
-	<%= stylesheet_link_tag "application", params[:controller], :media => "all" %>
-	
+	<%= javascript_include_tag "application", "data-turbolinks-track" => true %>
 	<%= csrf_meta_tags %>
 	<script>
 	try { Typekit.load(); } catch (e) {}
@@ -20,9 +17,8 @@
 </script>
 </head>
 
-
 <body class='gray'>
-	<%= render "layouts/navbar" %>
+	<% render "layouts/navbar" %>
 
 	<div class="container">
 		<% if notice %>
@@ -31,7 +27,8 @@
 		<% if alert %>
 		  <p class="alert alert-danger"><%= alert %></p>
 		<% end %>
-		<%= yield %>
+
 	</div>
+	<%= yield %>
 </body>
 </html>

@@ -1,0 +1,70 @@
+// Place all the styles related to the composer controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+body{
+	background-image: url("/interface.png");
+	background-color: rgb(26, 26, 26) !important;
+	color: rgb(153, 153, 153) !important;
+	background-size: auto 100%;
+	background-repeat: no-repeat;
+}
+
+/* LIBRARY SELECTOR START */
+.disabled{
+	color: rgb(100, 100, 100);
+}
+.noselect {
+	cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.table{
+	font-size: 8pt;
+	background: #262626;
+}
+.column_list{
+	height: 300px;
+	background: #262626;
+	overflow-y: scroll;
+	overflow-x: hidden;
+    overflow: -moz-scrollbars-none; 
+    border-right: #333 1px solid;
+    padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+	.column_list::-webkit-scrollbar { width: 0 !important }
+
+
+.table > thead > tr > th, .table > thead > tr > td, .table > tbody > tr > th, .table > tbody > tr > td, .table > tfoot > tr > th, .table > tfoot > tr > td{
+	padding: 3px 4%;
+	border: none;
+}
+.no-padding{
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+.decoration-right{ text-align: right; }
+
+.selected{
+	color: white !important;
+	background: #3D3d3d;
+}
+.selected2{
+	color: white !important;
+	background: #2c4672; /* Old browsers */
+	background: -moz-linear-gradient(top, #2c4672 0%, #27477c 6%, #27477c 8%, #27477c 10%, #1e3760 99%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2c4672), color-stop(6%,#27477c), color-stop(8%,#27477c), color-stop(10%,#27477c), color-stop(99%,#1e3760)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #2c4672 0%,#27477c 6%,#27477c 8%,#27477c 10%,#1e3760 99%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #2c4672 0%,#27477c 6%,#27477c 8%,#27477c 10%,#1e3760 99%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #2c4672 0%,#27477c 6%,#27477c 8%,#27477c 10%,#1e3760 99%); /* IE10+ */
+	background: linear-gradient(to bottom, #2c4672 0%,#27477c 6%,#27477c 8%,#27477c 10%,#1e3760 99%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2c4672', endColorstr='#1e3760',GradientType=0 ); /* IE6-9 */
+
+}
+
+/* LIBRARY SELECTOR END */

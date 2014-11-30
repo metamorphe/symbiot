@@ -12,6 +12,27 @@ class FlavorsController < ApplicationController
   def show
   end
 
+  # GET /flavors/1/behaviors
+  # GET /flavors/1/behaviors.json
+  def behaviors
+     flavor = Flavor.find(params[:id]);
+     clean_behaviors = flavor.behaviors.collect{|a| {name: a.name.humanize, id: a.id}}
+
+     respond_to do |format|
+       format.html { render json: clean_behaviors }
+       format.json { render json: clean_behaviors }
+     end
+  end
+  # GET /flavors/1/behaviors
+  # GET /flavors/1/behaviors.json
+  def counts
+     counts = Flavor.counts
+     respond_to do |format|
+       format.html { render json: counts }
+       format.json { render json: counts }
+     end
+  end
+
   # GET /flavors/new
   def new
     @flavor = Flavor.new
@@ -69,6 +90,6 @@ class FlavorsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def flavor_params
-      params.require(:flavor).permit(:alpha, :name, :img)
+      params.require(:flavor).permit(:alpha, :name, :img, :actuator_id)
     end
 end

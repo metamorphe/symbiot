@@ -15,6 +15,6 @@
 function DOM(){}
 DOM.tag = function(tag, single){
 	if(single) return $("<" + tag + "/>");
-	else if(typeof single === "undefined") return $("<" + tag + ">" + "<" + tag + "/>")
-	else return $("<" + tag + ">" + "<" + tag + "/>")
+	else if(typeof single === "undefined") return $("<" + tag + ">" + "</" + tag + ">")
+	else return $("<" + tag + ">" + "</" + tag + ">")
 }

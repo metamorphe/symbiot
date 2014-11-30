@@ -4,7 +4,7 @@ class Behavior < ActiveRecord::Base
 	has_many :sequences, through: :behavior_links
 
 	has_many :actuations
-	has_many :actuators, through: :actuations
+	has_many :flavors, through: :actuations
 
 	has_many :experiments
 
@@ -80,8 +80,7 @@ class Behavior < ActiveRecord::Base
 	end
 
 	# ouputs tuple array #[[time, value]]
-	def sparse
-		alpha = params[:alpha] || 1
+	def sparse(alpha)
 		states = self.states
 		data = normalize(states).to_json
 		cmd = "python bin/manifold/manifold.py compactwithalpha #{alpha} \"#{data}\""

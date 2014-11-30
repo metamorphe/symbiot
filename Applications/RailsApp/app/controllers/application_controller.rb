@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
 	end
 
 	def clean_data(param_hash)
-		param_hash.attributes.except "id", "created_at", "updated_at"
+		param_hash.attributes.except "created_at", "updated_at"
 	end
 
 	def index
