@@ -1,0 +1,150 @@
+<% default_actuator = @library[1] %>
+<% default_flavor = default_actuator.flavors.first %>
+
+<script>
+	var lib_contents = <%= @library.to_json.html_safe %>;
+
+	$(function(){
+		var lib = new Library(lib_contents);
+	});
+	Library.cache = {actuators: {}, flavors: {}, behaviors: {}}
+
+	function Library(lib_c){
+		this.actuators = lib_c;
+		
+		this.current_actuator = <%= default_actuator.id %>;
+		this.current_flavor = <%= default_flavor.id %>;
+		Library.count("flavors");
+		Library.count("actuators");
+
+		this.init();
+	};
+
+	Library.prototype = {
+		init: function(){
+			var self = this;
+			Library.set_actuators();
+			// $('#actuator-list td').click(function(){
+			// 	var id = parseInt($(this).attr('data-id'));
+			// 	console.log(id, this);
+			// 	Library.set_flavors(id);
+			// 	Library.selected(this);
+			// });
+		}
+	}
+	Library.selected = function(el){
+		$('.selected2').removeClass('selected2').addClass('selected');
+		$(el).parent().addClass('selected2').siblings().removeClass('selected selected2')
+	}
+
+	Library.get_actuators = function(data_function){
+		var data = Library.cache.actuators["all"];
+		
+		if(typeof data !== "undefined") data_function(data); 
+		else
+			$.getJSON("/actuators.json", function(data){
+				Library.cache.actuators["all"] = data;
+				data_function(data);
+			});
+	}
+
+	Library.get_flavors = function(actuator_id, data_function){
+		var data = Library.cache.flavors[actuator_id];
+		if(typeof data !== "undefined") data_function(data); 
+		else
+			$.getJSON("/actuators/"+ actuator_id +"/flavors.json", function(data){
+				Library.cache.flavors[actuator_id] = data;
+				data_function(data);
+			});
+	}
+	Library.count = function(type){
+		$.getJSON("/"+ type + "/counts.json", function(data){
+			Library.cache[type]["count"] = data;
+		});
+	}
+
+	Library.get_behaviors = function(flavor_id, data_function){
+		var data = Library.cache.behaviors[flavor_id];
+		if(typeof data !== "undefined") data_function(data); 
+		else
+			$.getJSON("/flavors/"+ flavor_id +"/behaviors.json", function(data){
+				Library.cache.behaviors[flavor_id] = data;
+				data_function(data);
+			});
+	}
+	Library.set_flavors = function(actuator_id){
+		console.log("QUERY: behaviors for actuators" + actuator_id);
+		if(actuator_id == this.current_actuator) return;
+		
+		this.current_actuator = actuator_id;
+		
+		$('#flavor-list table').html('');
+		$('#behavior-list table').html('');
+		this.current_flavor = undefined;
+		Library.get_flavors(actuator_id, function(data){
+			$('#flavor-list table').append(Library.listify(data, true, Library.set_behaviors, "flavors"));
+		});
+	}
+	Library.set_behaviors = function(flavor_id){			
+		console.log("QUERY: behaviors for flavor" + flavor_id);
+		if(flavor_id == this.current_flavor) return;
+		
+		this.current_flavor = flavor_id;
+		$('#behavior-list table').html('');
+		Library.get_behaviors(flavor_id, function(data){
+			$('#behavior-list table').append(Library.listify(data, false, function(){}, null));
+		});	
+	}
+	Library.set_actuators = function(){			
+		$('#actuator-list table').html('');
+		Library.get_actuators(function(data){
+			$('#actuator-list table').append(Library.listify(data, true, Library.set_flavors, "actuators"));
+		});	
+	}
+	Library.listify = function(els, with_decor, get, type){
+		
+		// If no behaviors are found, disable the caller;
+		return $.map(els, function(el, i){
+			console.log(type, el.id, Library.cache[type]);
+
+			var count = type ? "(" + Library.cache[type].count[el.id] + ")" : "";
+			var nullify = count  == "(undefined)";
+			var count = nullify ? "" : count;
+
+			var play = DOM.tag("span").addClass("glyphicon glyphicon-play").attr("aria-hidden","true");
+			var decoration = DOM.tag("td").addClass('decoration-right').attr('data-id', el.id).html(play);
+			var name = DOM.tag("td").addClass('noselect')
+									.attr('data-id', el.id)
+									.html(el.name + " "+ count)
+									.click(function(){
+										var id = parseInt($(this).attr('data-id'));
+										get(id);
+										Library.selected(this);
+									});
+
+			if(nullify) name.addClass("disabled").unbind("click");
+
+			return with_decor && !nullify ? DOM.tag("tr").html([name, decoration]) : DOM.tag("tr").html(name);
+			
+		});
+	} 
+</script>
+
+
+<div class="col-xs-6">
+<div id="actuator-list" class="col-xs-4 column_list no-padding">
+	<%=content_tag "table", :class => "table" do %>
+	<% end %>
+</div>
+
+<div id="flavor-list" class="col-xs-4 column_list no-padding">
+	<%=content_tag "table", :class => "table" do %>
+	<% end %>
+</div>
+
+
+<div id="behavior-list" class="col-xs-4 column_list no-padding">
+	<%=content_tag "table", :class => "table" do %>
+	<% end %>
+</div>
+</div>

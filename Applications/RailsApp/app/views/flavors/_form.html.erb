@@ -17,7 +17,7 @@
   </div>
   <div class="field">
     <%= f.label :actuator_id %><br>
-    <%= select("actuation", "actuator_id", Actuator.all.collect {|p| [ p.name.humanize, p.id ] }, {include_blank: 'None'}) %>
+    <%= select("flavor", "actuator_id", Actuator.all.collect {|p| [ p.name.humanize, p.id ]}) %>
   </div>
   <div class="field">
     <%= f.label :alpha %><br>

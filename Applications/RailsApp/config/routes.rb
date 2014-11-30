@@ -1,6 +1,16 @@
 FlixelLights::Application.routes.draw do
-  resources :study do
-   
+  resource :composer, only: :index do
+    get "/", :to =>  "composer#index"
+    
+    collection do 
+      get "library_selector", :to => "composer#library_selector"
+      get "task", :to => "composer#task"
+    end
+    # get "diary"
+  end
+  namespace :study do
+      get "index"
+      get "info"
   end
   resources :library do
     collection do
@@ -9,13 +19,29 @@ FlixelLights::Application.routes.draw do
   end
      
   devise_for :users
-  resources :flavors
+
+  resources :flavors do
+    collection do 
+      get "counts"
+    end
+    member do
+      get "behaviors"
+    end
+  end
 
   resources :actuations
 
   resources :experiments
 
-  resources :actuators
+  resources :actuators do 
+    collection do 
+      get "counts"
+    end
+    member do 
+      get "flavors"
+    end
+  end
+
 
   root "application#index", :as => "home"
 

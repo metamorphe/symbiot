@@ -22,6 +22,9 @@
 				<li class="<%= params[:controller] == "study" ? "active" : "" %>">
 					<%= link_to "Study", study_index_path %>
 				</li>
+				<li class="<%= params[:controller] == "study" ? "active" : "" %>">
+					<%= link_to "Composer", composer_path %>
+				</li>
 			</ul>
 			<p class="navbar-text pull-right">
 			<% if user_signed_in? %>

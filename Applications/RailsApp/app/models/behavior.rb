@@ -4,7 +4,7 @@ class Behavior < ActiveRecord::Base
 	has_many :sequences, through: :behavior_links
 
 	has_many :actuations
-	has_many :actuators, through: :actuations
+	has_many :flavors, through: :actuations
 
 	has_many :experiments
 

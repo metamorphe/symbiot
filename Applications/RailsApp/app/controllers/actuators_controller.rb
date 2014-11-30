@@ -19,7 +19,26 @@ class ActuatorsController < ApplicationController
   # GET /actuators/1.json
   def show
   end
+  
+  # GET /actuators/flavors/1
+  # GET /actuators/flavors/1.json
+  def flavors
+    actuator = Actuator.find(params[:id])
+    respond_to do |format|
+      format.html { render json: actuator.flavors}
+      format.json { render json: actuator.flavors}
+    end
+  end
 
+  # GET /actuators/counts
+  # GET /actuators/counts.json
+  def counts
+    counts = Actuator.counts
+    respond_to do |format|
+      format.html { render json: counts}
+      format.json { render json: counts}
+    end
+  end
   # GET /actuators/new
   def new
     @actuator = Actuator.new

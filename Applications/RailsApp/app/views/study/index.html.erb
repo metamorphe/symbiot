@@ -8,7 +8,11 @@
 	html{
 		overflow-y: scroll;
 	}
+	.btn{
+		margin-bottom: 20px;
+	}
 </style>
+<div class="col-xs-12">
 <h1>CONSENT TO PARTICIPATE IN RESEARCH </h1>
 <h2>Designing Behaviors for Interactive Devices<h2>
 <h3>University of California at Berkeley</h3>
@@ -44,7 +48,6 @@ Your study data will be handled as confidentially as possible. If results of thi
 To minimize the risks to confidentiality, we will do the following:
 <ul>
 	<li>The data will be collected with a key-value system. A single physical document (key) will link the research data to your identifiable information.</li>
-CPHS 2014-03-6134 Page !2 of !4
 	<li>Personal identifiers (email addresses, phone number, and the key) will be destroyed a month after the end of this study.</li>
 	<li>Your research records, including computer-based data, will be stored in a locked cabinet (physical materials), in a secured building and/or in an encrypted, password-protected computer (digital materials).</li>
 	<li>Only I/the researcher(s) will have access to your study records.</li>
@@ -70,5 +73,8 @@ The research data will be maintained for possible use in future research by myse
  
 <p>If you agree to take part in the screening survey, please print a copy of this page to keep for future reference, then click on the “Accept” button below.</p>
 
-<%= link_to "ACCEPT", "https://www.surveymonkey.com/s/SS3HTZD", :class=> "btn btn-success btn-lg" %>
+<%= link_to "ACCEPT", study_info_path, :class=> "btn btn-success btn-lg" %>
+<%= link_to "DECLINE", home_path, :class=> "btn btn-danger btn-lg" %>
 <br>
+
+</div>
