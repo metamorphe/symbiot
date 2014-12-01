@@ -3,11 +3,11 @@ class Behavior < ActiveRecord::Base
 	has_many :behavior_links, dependent: :destroy
 	has_many :sequences, through: :behavior_links
 
-	has_many :actuations
+	has_many :actuations, dependent: :destroy
 	has_many :flavors, through: :actuations
 
-	has_many :tags
-	has_many :experiments
+	has_many :tags, dependent: :destroy
+	has_many :experiments, dependent: :destroy
 
 	def states
 		if self[:states]

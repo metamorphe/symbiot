@@ -1,4 +1,8 @@
 FlixelLights::Application.routes.draw do
+  resources :tasks
+
+  resources :commands
+
   resources :tags 
   
 
@@ -7,13 +11,14 @@ FlixelLights::Application.routes.draw do
     
     collection do 
       get "library_selector", :to => "composer#library_selector"
-      get "task", :to => "composer#task"
     end
     # get "diary"
   end
   namespace :study do
       get "index"
       get "info"
+      get "task"
+      post "save_info"
   end
   resources :library do
     collection do

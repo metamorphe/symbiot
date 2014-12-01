@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141130205843) do
+ActiveRecord::Schema.define(version: 20141201061652) do
 
   create_table "actuations", force: true do |t|
     t.integer  "flavor_id"
@@ -25,6 +25,14 @@ ActiveRecord::Schema.define(version: 20141130205843) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "picture"
+  end
+
+  create_table "assignments", force: true do |t|
+    t.integer  "task_id"
+    t.integer  "user_id"
+    t.boolean  "completed",  default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "behavior_links", force: true do |t|
@@ -47,6 +55,14 @@ ActiveRecord::Schema.define(version: 20141130205843) do
     t.text     "states"
     t.boolean  "is_smooth",    default: false
     t.boolean  "is_library",   default: false
+  end
+
+  create_table "commands", force: true do |t|
+    t.integer  "task_id"
+    t.integer  "user_id"
+    t.text     "code",       limit: 2147483647
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "experiments", force: true do |t|
@@ -88,6 +104,13 @@ ActiveRecord::Schema.define(version: 20141130205843) do
   create_table "tags", force: true do |t|
     t.integer  "behavior_id"
     t.string   "label"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tasks", force: true do |t|
+    t.string   "title"
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
