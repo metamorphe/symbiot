@@ -65,7 +65,7 @@ Library.prototype = {
 		console.log("setting_behaviors");
 		api.get_behaviors_via_tags(flavor_id, label, function(data){
 			console.log(data);
-			$('#behavior-list .header').after(Library.listify(data, false, Library.set_wave, null));
+			$('#behavior-list .header').after(Library.listify(data, false, Library.set_wave, null, null, true));
 		});	
 	}
 	Library.set_wave = function(behavior_id){
@@ -79,7 +79,7 @@ Library.selected = function(el){
 }
 
 Library.listify = function(els, has_decor, get, type, id, has_icon){
-
+	console.log("iconed", type, has_icon)
 	return $.map(els, function(el, i){
 		// If no <next_order_semantic>  found, disable the caller;
 		var count = type ? "(" + api.count(type, id)[el.id] + ")" : "";

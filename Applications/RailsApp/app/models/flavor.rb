@@ -26,8 +26,8 @@ class Flavor < ActiveRecord::Base
 				  .select(:label);
 		length = results.length
 		results = results.inject(Hash.new(0)) { |total, e| total[e[:label]] += 1 ;total}
-				  .collect{|x, t| {name: x, count: t, id: x}}
-		results.unshift({name: "all", count: length,  id: "all"})
+				  .collect{|x, t| {name: x.humanize, count: t, id: x}}
+		results.unshift({name: "All", count: length,  id: "all"})
 		return results
 	end
 	def tag_counts

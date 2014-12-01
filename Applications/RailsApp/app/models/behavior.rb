@@ -83,6 +83,7 @@ class Behavior < ActiveRecord::Base
 		duration = self.states.length
 		r = self.attributes.extract!("name", "id") 
 		r["duration"] = duration;
+		r["picture"] = "/wave.png";
 		return r
 	end
 	# ouputs tuple array #[[time, value]]
