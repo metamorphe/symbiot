@@ -1,4 +1,5 @@
 class Actuator < ActiveRecord::Base
+	mount_uploader :picture, PictureUploader
 	has_one :experiment
 	has_many :actuations
 	has_many :behaviors, through: :flavors

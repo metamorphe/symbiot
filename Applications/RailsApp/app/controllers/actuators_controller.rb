@@ -5,13 +5,11 @@ class ActuatorsController < ApplicationController
   # GET /actuators.json
   def index
     @actuators = Actuator.all
-    clean_entries = []
-    @actuators.each do |actuator|
-      clean_entries.push(clean_data actuator)
-    end
+    clean_actuators = @actuators.collect{|a| {name: a.name.humanize, id: a.id}}
+
     respond_to do |format|
       format.html
-      format.json { render json: clean_entries }
+      format.json { render json: clean_actuators}
     end
   end
 
@@ -101,13 +99,15 @@ class ActuatorsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def actuator_params
-      params.require(:actuator).permit(:name, :flavor_id)
+      params.require(:actuator).permit(:name, :flavor_id, :picture)
     end
 
     def update_flavors
       flavor_ids = params["flavor_ids"]
-      flavor_ids.each do |id|
-      Flavor.find(id).update(actuator_id: @actuator.id)
-    end
+      if flavor_ids
+        flavor_ids.each do |id|
+          Flavor.find(id).update(actuator_id: @actuator.id)
+        end
+      end
     end
 end

@@ -1,10 +1,10 @@
-<%= stylesheet_link_tag "application", params[:controller], :media => "all", "data-turbolinks-track" => true %>
-<%= javascript_include_tag "application", params[:controller] %>
 
 <!DOCTYPE html>
 <html>
 <head>
 	<title>Expressive Actuation - <%= params[:action].capitalize %></title>
+	<%= stylesheet_link_tag "application", params[:controller], :media => "all", "data-turbolinks-track" => true %>
+	<%= javascript_include_tag "application", params[:controller] %>
 	<%= javascript_include_tag "application", "data-turbolinks-track" => true %>
 	<%= csrf_meta_tags %>
 	<script>

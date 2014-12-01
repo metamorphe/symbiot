@@ -6,6 +6,7 @@ class Behavior < ActiveRecord::Base
 	has_many :actuations
 	has_many :flavors, through: :actuations
 
+	has_many :tags
 	has_many :experiments
 
 	def states
@@ -78,7 +79,12 @@ class Behavior < ActiveRecord::Base
 		self.where("is_smooth", true).order("is_smooth DESC")
 			.map{ |behavior| behavior.name }.to_json.html_safe
 	end
-
+	def metadata
+		duration = self.states.length
+		r = self.attributes.extract!("name", "id") 
+		r["duration"] = duration;
+		return r
+	end
 	# ouputs tuple array #[[time, value]]
 	def sparse(alpha)
 		states = self.states
