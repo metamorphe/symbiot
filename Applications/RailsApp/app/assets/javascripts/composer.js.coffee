@@ -5,3 +5,10 @@
 
 //= require composer/api
 //= require composer/library
+//= require composer/wave_view
+
+//= require numeric-1.2.6.min
+//= require paper-full.min
+//= require wave
+//= require behavior
+//= require preview
