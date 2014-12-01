@@ -5,9 +5,16 @@ base = "http://localhost:3000"
 password = "potatoes123"
 # base = "http://expresso.cearto.com"
 
-def get(url):
-	print url
-	resp = requests.get(base + url)
+def get(url, cached=True):
+	print url, cached
+
+	if cached: 
+		with requests_cache.enabled('api_cache'):
+			resp = requests.get(base + url)
+	else:
+		with requests_cache.disabled():
+			resp = requests.get(base + url)
+	
 	return resp.json()
 
 def post(url, payload):
@@ -32,6 +39,13 @@ def get_behavior(id):
 	url = "/api/behaviors/" + str(id)
 	return get(url)
 
+def get_active_schedule(user_id, task_id):
+	url = "/api/tasks/" + str(task_id) + "/schedule.json?user_id=" + str(user_id)
+	schedule = get(url, False)
+	# schedule["code"] = schedule["code"].json();
+	return schedule
+
+	
 def get_commands(id, velocity = 1):
 	url = "/api/behaviors/" + str(id) + "/sparse.json"
 	commands = get(url)["sparse_commands"]
@@ -56,4 +70,4 @@ def send_behavior(name, wave):
 	post(url, data)
  
 requests_cache.install_cache("api_cache")
-# requests_cache.disabled()
+

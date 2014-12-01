@@ -9,6 +9,11 @@ Library.prototype = {
 		Library.set_actuators();
 	},
 	preload: function(){
+		api.get_flavors(13);
+		api.get_flavors(14);
+		api.get_flavors(15);
+		api.get_flavors(16);
+		api.get_flavors(17);
 		api.count("flavors");
 		api.count("actuators");
 	},
@@ -71,6 +76,7 @@ Library.prototype = {
 	Library.set_wave = function(behavior_id){
 		if(behavior_id == this.current_behavior) return;
 		this.current_behavior = behavior_id;
+		Library.on_behavior_click();
 	}
 
 Library.selected = function(el){
@@ -92,11 +98,12 @@ Library.listify = function(els, has_decor, get, type, id, has_icon){
 								.attr('data-id', el.id)
 								.html(el.name + " "+ count)
 								.click(function(){
+									Library.selected(this);
 									var elid = $(this).attr('data-id');
 									
 									if(id) get(id, elid);
 									else get(elid);
-									Library.selected(this);
+									
 								});
 
 		if(nullify) name.addClass("disabled").unbind("click");
@@ -121,3 +128,12 @@ Library.listify = function(els, has_decor, get, type, id, has_icon){
 		return row;
 	});
 } 
+
+Library.on_behavior_click = function(){
+	selected = lib.get_selected();
+	code = JSON.stringify({addr: 3, behavior_id: selected.behavior, flavor_id: selected.flavor});
+	payload = {command: {user_id: user_id, task_id: 3, code: code}};
+	$.post("commands", payload, function(data){
+		console.log(data);
+	});
+}

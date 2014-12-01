@@ -61,6 +61,7 @@ FlixelLights::Application.routes.draw do
 
   # Create scope for API calls
   scope '/api' do
+
     resources :actuators, :defaults => { :format => 'json'} do
       collection do 
         get "counts"
@@ -88,6 +89,9 @@ FlixelLights::Application.routes.draw do
         collection do 
           get 'behaviors' 
         end
+    end
+    namespace :tasks, :defaults => { :format => 'json'}  do
+        get 'schedule', :path => "/:id/schedule"
     end
   end
 

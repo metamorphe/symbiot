@@ -1,6 +1,11 @@
 class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:schedule]
 
+  def schedule
+    c = Command.select(:id, :code).where({task_id: params[:id], user_id: params["user_id"]}).last;
+    render :json => c
+  end
   # GET /tasks
   # GET /tasks.json
   def index

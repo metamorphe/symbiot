@@ -128,10 +128,10 @@ def calc_error(base, logs = []):
 		error.append(sum(base - l))
 	return error
 
-def send(ard, addr, behavior, speed):
+def send(ard, behavior, speed):
 	commands = []
 	for i in range(0, 10):
-		commands.append((3, i))
+		commands.append((behavior, i))
 
 	q = microbenchmark(commands, speed)
 	base = []
@@ -142,11 +142,10 @@ def send(ard, addr, behavior, speed):
 
 
 def main():
+	active = api.get_active_schedule(1, 3)["code"]
+	print active 
+	active_behavior = active["behavior_id"]
 
-	# and of course you can read/write the named
-	# attributes you just created, add others, del
-	# some of them, etc, etc:
-	
 	velocity = 6
 	mc = Bunch(master=jnd.JNDArduino())
 	behaviors = Bunch(transmission=23, ekg=8, raindrops=18, lighthouse=12, easy=3)
@@ -164,7 +163,7 @@ def main():
 	# synchronous = send_behavior(mc.master, actuators.green_led, behaviors.easy, velocity)
 	mc.master.flush()
 
-	print send(mc.master, actuators.green_led, behaviors.easy, 3)
+	print send(mc.master, active_behavior, 3)
 	
 	time.sleep(1)
 	mc.master.close()

@@ -23,12 +23,13 @@ class KeyEventThread(threading.Thread):
 				self.experiment.actuator_setup()
 				self.value = self.experiment.get_query()
 				print "new value ", self.value
+				# self.controller.actuate(3, self.value);
 				# self.controller.actuate(6, self.value);
 
 			#Change actuated values
 			if ord(z) == ord('h'):
 				self.value = self.experiment.change_value(self.value, 10)
-				# self.controller.actuate(6, self.value);
+				self.controller.actuate(6, self.value);
 			if ord(z) == ord('g'):
 				self.value = self.experiment.change_value(self.value, 5)
 				# self.controller.actuate(6, self.value);
@@ -77,7 +78,7 @@ class KeyEventThread(threading.Thread):
 
 
 # ard = jnd.JNDArduino();
-# ard.close();
+
 
 kethread = KeyEventThread()
 kethread.start() #automatically start script
