@@ -2,12 +2,12 @@
 
 <p>
   <strong>Behavior:</strong>
-  <%= @actuation.behavior_id %>
+  <%= Behavior.find @actuation.behavior_id %>
 </p>
 
 <p>
-  <strong>Actuator:</strong>
-  <%= @actuation.actuator_id %>
+  <strong>Flavor:</strong>
+  <%= Flavor.find @actuation.flavor_id %>
 </p>
 
 <%= link_to 'Edit', edit_actuation_path(@actuation) %> |

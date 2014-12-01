@@ -2,12 +2,23 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+$bootstrapBlack: #333333;
+$bootstrapGrey: rgb(153, 153, 153);
+
 body{
-	background-image: url("/interface.png");
-	background-color: rgb(26, 26, 26) !important;
-	color: rgb(153, 153, 153) !important;
+	// background-image: url("/interface.png");
+	// background-color: rgb(26, 26, 26) !important;
+	color: $bootstrapGrey !important;
 	background-size: auto 100%;
 	background-repeat: no-repeat;
+}
+
+h1 {
+	color: $bootstrapBlack;
+}
+
+p {
+	color: $bootstrapBlack;
 }
 
 /* LIBRARY SELECTOR START */
@@ -68,3 +79,9 @@ body{
 }
 
 /* LIBRARY SELECTOR END */
+
+/* CURRENT WAVE BEGIN */
+
+.current-wave {
+	background-color: $bootstrapGrey;
+}

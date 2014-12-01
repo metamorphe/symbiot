@@ -15,7 +15,7 @@
     <% @actuations.each do |actuation| %>
       <tr>
         <td><%= actuation.behavior_id %></td>
-        <td><%= actuation.actuator_id %></td>
+        <td><%= actuation.flavor_id %></td>
         <td><%= link_to 'Show', actuation %></td>
         <td><%= link_to 'Edit', edit_actuation_path(actuation) %></td>
         <td><%= link_to 'Destroy', actuation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
