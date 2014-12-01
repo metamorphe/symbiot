@@ -16,9 +16,6 @@ def playVideo(videoName):
     print pts
 
 
-    cap.release()
-    cv2.destroyAllWindows()
-
 
 def main(argv):
     if len(argv) != 1:
