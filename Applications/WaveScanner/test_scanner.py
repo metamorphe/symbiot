@@ -37,8 +37,9 @@ def log_wave(name, wave):
 
 def print_wave(x, expected):
     baseLine = np.zeros(len(x))
-    baseLine.fill(-1)
+    baseLine.fill(0)
     midLine = np.zeros(len(x))
+    midLine.fill(0.5)
     plt.figure()
     plt.axis("off")
     plt.plot(x, expected, 'k-', label="Expected", linewidth=3)
@@ -51,6 +52,10 @@ def print_wave(x, expected):
 """ EXAMPLE USAGE """
 # x = np.linspace(0, 6 * np.pi,50)
 # y = func(x, 1, 0, 0)
+# y = [0,0,0,1,1,1,0,0,0,1,1,0,0,1,1,0,1]
+# x = np.linspace(0, 6 * np.pi,len(y))
+# x = np.zeros(len(y))
+# x.fill(1)
 # y = y / np.max(y)
 # yn = y + 0.2 * np.random.normal(size=len(x))
 
