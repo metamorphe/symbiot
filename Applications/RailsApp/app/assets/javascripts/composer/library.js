@@ -28,7 +28,7 @@ Library.prototype = {
 	Library.set_actuators = function(){
 		$('#actuator-list table tr').not(".header").remove();
 		api.get_actuators(function(data){
-			$('#actuator-list .header').after(Library.listify(data, true, Library.set_flavors, "actuators"));
+			$('#actuator-list .header').after(Library.listify(data, true, Library.set_flavors, "actuators", null, true));
 		});	
 	}
 	Library.set_flavors = function(actuator_id){
@@ -73,54 +73,12 @@ Library.prototype = {
 		this.current_behavior = behavior_id;
 	}
 
-Library.find_selected = function(list){
-	el = $(list).find('.selected2, .selected').children();
-	return  el.length > 0 ? parseInt(el.attr('data-id')) : undefined;
-}
-Library.set_flavors = function(actuator_id){
-	var self = this;	
-	if(actuator_id == this.current_actuator) return;
-	
-	this.current_actuator = actuator_id;
-	
-	$('#flavor-list table').html('');
-	$('#behavior-list table').html('');
-	this.current_flavor = undefined;
-	api.get_flavors(actuator_id, function(data){
-		$('#flavor-list table').append(Library.listify(data, true, Library.set_behaviors, "flavors"));
-	});
-}
-
-Library.set_actuators = function(){
-	var self = this;			
-	$('#actuator-list table').html('');
-	api.get_actuators(function(data){
-		$('#actuator-list table').append(Library.listify(data, true, Library.set_flavors, "actuators"));
-	});	
-}
-
-Library.set_behaviors = function(flavor_id){
-	var self = this;			
-	if(flavor_id == this.current_flavor) return;
-	
-	this.current_flavor = flavor_id;
-	$('#behavior-list table').html('');
-	api.get_behaviors(flavor_id, function(data){
-		$('#behavior-list table').append(Library.listify(data, false, Library.set_wave, null));
-	});	
-}
-
-Library.set_wave = function(behavior_id){
-	if(behavior_id == this.current_behavior) return;
-	this.current_behavior = behavior_id;
-}
-
 Library.selected = function(el){
 	$('.selected2').removeClass('selected2').addClass('selected');
 	$(el).parent().addClass('selected2').siblings().removeClass('selected selected2')
 }
 
-Library.listify = function(els, has_decor, get, type, id){
+Library.listify = function(els, has_decor, get, type, id, has_icon){
 
 	return $.map(els, function(el, i){
 		// If no <next_order_semantic>  found, disable the caller;
@@ -144,8 +102,12 @@ Library.listify = function(els, has_decor, get, type, id){
 		if(nullify) name.addClass("disabled").unbind("click");
 
 		// ROW LOGIC
-		var row = DOM.tag("tr").append(name);
-		
+		var row = DOM.tag("tr");
+		if(has_icon){
+			var icon = DOM.tag("img", true).attr("src", el.picture).addClass("icon");
+			name.prepend(icon);
+		}
+		row.append(name);
 		if(has_metadata){
 			var metadata = DOM.tag("td").attr('data-id', el.id).html(el.duration);
 			row.append(metadata);

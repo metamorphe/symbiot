@@ -99,7 +99,13 @@ p {
 	background: -ms-linear-gradient(top, #2c4672 0%,#27477c 6%,#27477c 8%,#27477c 10%,#1e3760 99%); /* IE10+ */
 	background: linear-gradient(to bottom, #2c4672 0%,#27477c 6%,#27477c 8%,#27477c 10%,#1e3760 99%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2c4672', endColorstr='#1e3760',GradientType=0 ); /* IE6-9 */
+}
 
+.icon{
+	width: 15px;
+
+	margin-right: 6px;
+	display: inline-block;
 }
 
 /* LIBRARY SELECTOR END */

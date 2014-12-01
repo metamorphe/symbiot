@@ -5,7 +5,7 @@ class ActuatorsController < ApplicationController
   # GET /actuators.json
   def index
     @actuators = Actuator.all
-    clean_actuators = @actuators.collect{|a| {name: a.name.humanize, id: a.id}}
+    clean_actuators = @actuators.collect{|a| {name: a.name.humanize, id: a.id, picture: a.picture_url}}
 
     respond_to do |format|
       format.html
