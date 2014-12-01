@@ -1,5 +1,28 @@
 FlixelLights::Application.routes.draw do
+  resources :tags 
+  
+
+  resource :composer, only: :index do
+    get "/", :to =>  "composer#index"
+    
+    collection do 
+      get "library_selector", :to => "composer#library_selector"
+      get "task", :to => "composer#task"
+    end
+    # get "diary"
+  end
+  namespace :study do
+      get "index"
+      get "info"
+  end
+  resources :library do
+    collection do
+      get "/", :to => "behaviors#index"
+    end
+  end
+     
   devise_for :users
+
   resources :flavors
 
   resources :actuations
@@ -8,13 +31,15 @@ FlixelLights::Application.routes.draw do
 
   resources :actuators
 
-  root "light#index"
 
+
+  root "application#index", :as => "home"
+
+  
   get "light/view"
   get "light/wave"
   get "light/lb"
   get "light/index"
-  get "light/library"
   get "light/synthesize"
   get "light/sequence"
   get "light/blinkm"
@@ -31,12 +56,33 @@ FlixelLights::Application.routes.draw do
 
   # Create scope for API calls
   scope '/api' do
-    resources :actuators, :defaults => { :format => 'json'}
+    resources :actuators, :defaults => { :format => 'json'} do
+      collection do 
+        get "counts"
+      end
+      member do 
+        get "flavors"
+      end
+    end
     resources :behaviors, :defaults => { :format => 'json'} do
       get 'sparse'
       collection do
         post 'scanner'
       end
+    end
+    resources :flavors, :defaults => { :format => 'json'} do
+      collection do 
+        get "counts"
+      end
+      member do
+        get "behaviors"
+        get "tags"
+      end
+    end 
+    resources :tags, :defaults => { :format => 'json'} do
+        collection do 
+          get 'behaviors' 
+        end
     end
   end
 

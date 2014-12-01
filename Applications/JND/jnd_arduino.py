@@ -7,26 +7,24 @@ class JNDArduino:
 			raise EnvironmentError("No ports detected. Plug in the Arduino! >:(");
 
 		self.ser = serial.Serial(avail_ports[0], 9600)
-		self.connected = False
+		self.connected = self.ser._isOpen
 		# Make sure its closed
 		self.close()
 
 	def open(self):
-		# print self.connected
-		if not self.connected:
-			self.ser.open()
-			self.connected = True
-			
+		self.ser.open()
+
+	def flush(self):
+		self.ser.flush();
 	""" 
 		Actuates an actuator at address with value[0, 1000]
 		Ex. actuate(1, 1000) => Turn on LED at location 1
 	"""
-	def actuate(self, address, value):
-		if self.connected:
-			self.ser.write(str(address))
-			self.ser.write(",")
-			self.ser.write(str(value))
-			self.ser.write("\n")
+	def actuate(self, address, value):	
+		self.ser.write(str(address))
+		self.ser.write(",")
+		self.ser.write(str(value))
+		self.ser.write("\n")
 
 
 	def close(self):

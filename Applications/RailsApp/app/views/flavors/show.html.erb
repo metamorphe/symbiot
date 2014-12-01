@@ -19,5 +19,14 @@
   <%= image_tag(@flavor.img_url, :width => 200) if @flavor.img.present? %>
 </p>
 
+<p>
+  <strong>Behaviors usable with this actuator:</strong>
+  <ul>
+  <% @flavor.behaviors.each do |behavior| %>
+    <li><%= link_to behavior.name.humanize, behavior %></li>
+  <% end %>
+  </ul>
+</p>
+
 <%= link_to 'Edit', edit_flavor_path(@flavor) %>
 <%= link_to 'Back', flavors_path %>

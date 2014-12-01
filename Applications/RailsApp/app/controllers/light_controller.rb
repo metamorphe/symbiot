@@ -6,15 +6,10 @@ class LightController < ApplicationController
 	end
 	def lb
 		@lp = Dir['public/lb/*.svg'].map{|e| "/" + e.split('/')[1..-1].join('/') };
-		
 		@lp = @lp.to_json.html_safe# render :json => @lb
 	end
-	def home
-	end
-	def library
-		@behaviors = Behavior.all
-		render "/behaviors/index"
-	end
+	
+	
 	def sequence
 		@layer = "Sequence"
 		@behaviors = Behavior.all

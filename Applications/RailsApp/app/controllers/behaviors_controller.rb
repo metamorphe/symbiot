@@ -127,7 +127,8 @@ end
 	end
 
 	def sparse
-		sparse = Behavior.find_by_id(params[:behavior_id]).sparse
+		alpha = params[:alpha] || 1
+		sparse = Behavior.find_by_id(params[:behavior_id]).sparse(alpha)
 		data =  {"sparse_commands" => sparse }
 		respond_to do |format|
 			format.json {render json: data}

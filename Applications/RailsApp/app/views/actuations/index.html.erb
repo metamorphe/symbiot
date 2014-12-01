@@ -1,10 +1,10 @@
 <h1>Listing actuations</h1>
 
-<table>
+<table class="table table-striped">
   <thead>
     <tr>
       <th>Behavior</th>
-      <th>Actuator</th>
+      <th>Flavor</th>
       <th></th>
       <th></th>
       <th></th>
@@ -14,8 +14,8 @@
   <tbody>
     <% @actuations.each do |actuation| %>
       <tr>
-        <td><%= actuation.behavior_id %></td>
-        <td><%= actuation.actuator_id %></td>
+        <td><%= (Behavior.find actuation.behavior_id).name.humanize %></td>
+        <td><%= (Flavor.find actuation.flavor_id).name %></td>
         <td><%= link_to 'Show', actuation %></td>
         <td><%= link_to 'Edit', edit_actuation_path(actuation) %></td>
         <td><%= link_to 'Destroy', actuation, method: :delete, data: { confirm: 'Are you sure?' } %></td>

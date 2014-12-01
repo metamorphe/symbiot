@@ -1,11 +1,12 @@
 
 import requests, md5, json, requests_cache
+import numpy as np
 base = "http://localhost:3000"
 password = "potatoes123"
 # base = "http://expresso.cearto.com"
 
 def get(url):
-	print base + url
+	print url
 	resp = requests.get(base + url)
 	return resp.json()
 
@@ -31,9 +32,19 @@ def get_behavior(id):
 	url = "/api/behaviors/" + str(id)
 	return get(url)
 
-def get_commands(id):
+def get_commands(id, velocity = 1):
 	url = "/api/behaviors/" + str(id) + "/sparse.json"
-	return get(url)["sparse_commands"]
+	commands = get(url)["sparse_commands"]
+	a = np.array(commands, dtype=np.float).T
+
+	base_velocity = 6 + velocity
+	a[0] = a[0] * base_velocity / 1000.
+
+	# NORMALIZING MAGNITUDES TO 0 - 1000
+	norm = np.nanmax( a[1])
+	a[1] =  a[1] / norm * 1000;
+
+	return a.T
 
 def send_behavior(name, wave):
 	url = '/api/behaviors/scanner'

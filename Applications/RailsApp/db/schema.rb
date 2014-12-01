@@ -11,10 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141124204503) do
+ActiveRecord::Schema.define(version: 20141130205843) do
 
   create_table "actuations", force: true do |t|
-    t.integer  "actuator_id"
+    t.integer  "flavor_id"
     t.integer  "behavior_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20141124204503) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "picture"
   end
 
   create_table "behavior_links", force: true do |t|
@@ -82,6 +83,13 @@ ActiveRecord::Schema.define(version: 20141124204503) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name"
+  end
+
+  create_table "tags", force: true do |t|
+    t.integer  "behavior_id"
+    t.string   "label"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|

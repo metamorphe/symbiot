@@ -16,8 +16,8 @@
     <%= select("actuation", "behavior_id", Behavior.all.collect {|p| [ p.name.humanize, p.id ] }, {include_blank: 'None'}) %>
   </div>
   <div class="field">
-    <%= f.label :actuator_id %><br>
-    <%= select("actuation", "actuator_id", Actuator.all.collect {|p| [ p.name.humanize, p.id ] }, {include_blank: 'None'}) %>
+    <%= f.label :flavor_id %><br>
+    <%= select("actuation", "flavor_id", Actuator.all.collect {|p| [ p.name.humanize, p.id ] }, {include_blank: 'None'}) %>
   </div>
   <div class="actions">
     <%= f.submit %>

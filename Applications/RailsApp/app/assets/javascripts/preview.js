@@ -42,8 +42,5 @@ motorRep.prototype = {
 	init: function() {
 		this.DOM =  $("#motor .template").clone();
 	},
-	changeColor: function(value) {
-		value *= 2;
-		this.DOM.children('#LEDColor').children().attr('fill-opacity', value);
-	}
+	//TODO: implement the rest
 }

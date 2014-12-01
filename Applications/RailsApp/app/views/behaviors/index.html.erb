@@ -1,4 +1,3 @@
-
 <script>
 	var waveStates = {};
 	var waveIsSmooths = {};
@@ -26,13 +25,7 @@
 </script>
 
 <div class='row'>
-
-	<ul class="nav nav-tabs" role="tablist">
-		<li><a href="/flavors">Flavors</a></li>
-		<li><a href="/actuators">Actuators</a></li>
-		<li class="active"><a href="/behaviors">Behaviors</a></li>
-	</ul>
-
+	<%= render "library/tabs" %>
 	<h3>Light Behavior Library</h3>
 
 	<table class="table table-striped">
@@ -40,6 +33,7 @@
 			<th>ID</th>
 			<th></th>
 			<th>Name</th>
+			<th>Tags</th>
 			<th>Waveform</th>
 			<th>Preview</th>
 			<th colspan="3"></th>
@@ -49,8 +43,13 @@
 		<tr>
 			<td><%= behavior.id %></td>
 			<td><div class="btn btn-primary play-btn" onclick="behaviorHash['<%= behavior.name %>'].sample(function() {})">Play</div></td>
-			<td><%= behavior.name.humanize %></td>
+			<td><%= behavior.name.humanize %></td> 
+			<td><% behavior.tags.collect{|t| t.label }.each do |t| %>
+					<span class="label label-primary"><%= t %></span>
+				<% end %>
+			</td> 
 			<td class='view' id='<%= behavior.name %>'></td>
+
 			<td>
 				<div class="led-box" data-name="<%= behavior.name %>">
 					

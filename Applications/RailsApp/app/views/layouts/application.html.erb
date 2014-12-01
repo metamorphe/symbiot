@@ -1,55 +1,28 @@
-<%= stylesheet_link_tag "application", params[:controller], :media => "all" %>
-<%= javascript_include_tag "application", params[:controller] %>
 
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Expressive Actuation - <%= params[:action].capitalize %></title>
+	<title>Expressive Actuation - <%= params[:action].capitalize %></title>	
 	<%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+
 	<%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+	<%= javascript_include_tag "application", params[:controller] %>
+	<%= stylesheet_link_tag "application", params[:controller], :media => "all" %>
+	
 	<%= csrf_meta_tags %>
 	<script>
 	try { Typekit.load(); } catch (e) {}
 	</script>
+	<script type="text/javascript">
+	$(function(){
+		$(".alert").delay(2000).slideUp();
+	});
+</script>
 </head>
 
+
 <body class='gray'>
-	<nav class="navbar navbar-default" role="navigation">
-	  <div class="container-fluid">
-		<!-- Brand and toggle get grouped for better mobile display -->
-		<div class="navbar-header">
-		  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-			<span class="sr-only">Toggle navigation</span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-		  </button>
-		  <a class="navbar-brand" href="/light/index"><%= image_tag "/expressive_actuation.png", :width => "200px" %> </a>
-		</div>
-
-		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-		  <ul class="nav navbar-nav">
-			<li class="<%= params[:action] == "index" ? "active" : "" %>">
-				<a href="/light/index"> Home</a>
-			</li>
-			<li class="<%= params[:action] == "library" ? "active" : "" %>">
-				<a href="/light/library"> Library</a>
-			</li>
-			</ul>
-			<p class="navbar-text pull-right">
-			<% if user_signed_in? %>
-			  Logged in as <strong><%= current_user.email %></strong>.
-			  <%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %> |
-			  <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
-			<% else %>
-			  <%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> |
-			  <%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
-			<% end %>
-			</p>
-		</div><!-- /.navbar-collapse -->
-
-	  </div><!-- /.container-fluid -->
-	</nav>
+	<%= render "layouts/navbar" %>
 
 	<div class="container">
 		<% if notice %>

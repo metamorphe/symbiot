@@ -1,5 +1,6 @@
 <p id="notice"><%= notice %></p>
 
+<%= image_tag @actuator.picture_url, :width => "200px" %>
 <p>
   <strong>Name:</strong>
   <%= @actuator.name %>
@@ -12,15 +13,6 @@
 	<% end %>
 	</ul>
 </p>
-<p>
-	<strong>Behaviors usable with this actuator:</strong>
-	<ul>
-	<% @actuator.behaviors.each do |behavior| %>
-		<li><%= link_to behavior.name.humanize, behavior %></li>
-	<% end %>
-	</ul>
-</p>
-
 <p>
 	<strong>Experimental Data:</strong>
 	<%= @actuator.experiment %>
