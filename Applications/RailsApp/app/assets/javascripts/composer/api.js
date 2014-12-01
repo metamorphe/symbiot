@@ -34,9 +34,23 @@
 			return this.get("/api/actuators/"+ actuator_id +"/flavors.json", callback);
 		},
 		get_behaviors : function(flavor_id, callback){
-			return this.get("/api/flavors/"+ flavor_id +"/behaviors.json", callback);
+			return this.get("/api/tags/"+ flavor_id +"/behaviors.json", callback);
 		},
-		count: function(type){
-			return this.get_async("/api/"+ type + "/counts.json");
+		get_tags: function(flavor_id, callback){
+			return this.get("/api/flavors/"+ flavor_id +"/tags.json", callback);
+		},
+		get_behaviors_via_tags: function(flavor_id, label, callback){
+			return this.get("/api/tags/behaviors.json?flavor_id="+ flavor_id + "&label=" + label, callback);
+		},
+		count: function(type, id){
+			if(type == "tags") {
+				tags = this.get_async("/api/flavors/"+ id + "/tags.json");
+				hash = {}
+				$.each(tags, function(i, e){
+					hash[e.id] = e.count;
+				});
+				return hash;
+			}
+			else return this.get_async("/api/"+ type + "/counts.json");
 		}
 	}

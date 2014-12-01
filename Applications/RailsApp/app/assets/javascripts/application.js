@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery_ujs
 
 function DOM(){}
 DOM.tag = function(tag, single){

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141130201900) do
+ActiveRecord::Schema.define(version: 20141130205843) do
 
   create_table "actuations", force: true do |t|
     t.integer  "flavor_id"
@@ -83,6 +83,13 @@ ActiveRecord::Schema.define(version: 20141130201900) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name"
+  end
+
+  create_table "tags", force: true do |t|
+    t.integer  "behavior_id"
+    t.string   "label"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|

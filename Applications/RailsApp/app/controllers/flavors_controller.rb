@@ -23,6 +23,14 @@ class FlavorsController < ApplicationController
        format.json { render json: clean_behaviors }
      end
   end
+  def tags
+     tags = Flavor.find(params[:id]).tags
+     respond_to do |format|
+       format.html { render json: tags }
+       format.json { render json: tags }
+     end
+  end
+
   # GET /flavors/1/behaviors
   # GET /flavors/1/behaviors.json
   def counts

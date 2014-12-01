@@ -1,4 +1,7 @@
 FlixelLights::Application.routes.draw do
+  resources :tags 
+  
+
   resource :composer, only: :index do
     get "/", :to =>  "composer#index"
     
@@ -73,8 +76,14 @@ FlixelLights::Application.routes.draw do
       end
       member do
         get "behaviors"
+        get "tags"
       end
     end 
+    resources :tags, :defaults => { :format => 'json'} do
+        collection do 
+          get 'behaviors' 
+        end
+    end
   end
 
   post "sequences/json_to_cpp"

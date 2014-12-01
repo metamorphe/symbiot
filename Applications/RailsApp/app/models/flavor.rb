@@ -20,4 +20,16 @@ class Flavor < ActiveRecord::Base
 	def self.counts
 		return  Actuation.group(:flavor_id).count
 	end
+	def tags
+		b_ids = self.behaviors.collect{|b| b.id}
+		results = Tag.where(:behavior_id => b_ids)
+				  .select(:label);
+		length = results.length
+		results = results.inject(Hash.new(0)) { |total, e| total[e[:label]] += 1 ;total}
+				  .collect{|x, t| {name: x, count: t, id: x}}
+		results.unshift({name: "all", count: length,  id: "all"})
+		return results
+	end
+	def tag_counts
+	end
 end

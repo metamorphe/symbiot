@@ -16,6 +16,7 @@
 			return {
 				actuator: Library.find_selected("#actuator-list"),
 				flavor: Library.find_selected("#flavor-list"),
+				tag: Library.find_selected("#tag-list"),
 				behavior: Library.find_selected("#behavior-list")
 			}
 		}
@@ -24,34 +25,47 @@
 			el = $(list).find('.selected2, .selected').children();
 			return  el.length > 0 ? parseInt(el.attr('data-id')) : undefined;
 		}
+		Library.set_actuators = function(){
+			$('#actuator-list table tr').not(".header").remove();
+			api.get_actuators(function(data){
+				$('#actuator-list .header').after(Library.listify(data, true, Library.set_flavors, "actuators"));
+			});	
+		}
 		Library.set_flavors = function(actuator_id){
-			var self = this;	
 			if(actuator_id == this.current_actuator) return;
 			
 			this.current_actuator = actuator_id;
 			
-			$('#flavor-list table').html('');
-			$('#behavior-list table').html('');
+			$('#flavor-list table tr').not(".header").remove();
+			$('#tag-list table tr').not(".header").remove();
 			this.current_flavor = undefined;
 			api.get_flavors(actuator_id, function(data){
-				$('#flavor-list table').append(Library.listify(data, true, Library.set_behaviors, "flavors"));
+				$('#flavor-list .header').after(Library.listify(data, true, Library.set_tags, "flavors"));
 			});
 		}
-		Library.set_actuators = function(){
-			var self = this;			
-			$('#actuator-list table').html('');
-			api.get_actuators(function(data){
-				$('#actuator-list table').append(Library.listify(data, true, Library.set_flavors, "actuators"));
-			});	
-		}
-		Library.set_behaviors = function(flavor_id){
+		Library.set_tags = function(flavor_id){
 			var self = this;			
 			if(flavor_id == this.current_flavor) return;
 			
 			this.current_flavor = flavor_id;
-			$('#behavior-list table').html('');
-			api.get_behaviors(flavor_id, function(data){
-				$('#behavior-list table').append(Library.listify(data, false, Library.set_wave, null));
+			
+			$('#tag-list table tr').not(".header").remove();
+			
+
+			api.get_tags(flavor_id, function(data){
+				$('#tag-list .header').after(Library.listify(data, false, Library.set_behaviors, "tags", flavor_id));
+			});	
+		}
+
+		Library.set_behaviors = function(flavor_id, label){
+			if(label == this.current_label) return;
+			
+			this.current_label = label;
+			$('#behavior-list table tr').not(".header").remove();
+			console.log("setting_behaviors");
+			api.get_behaviors_via_tags(flavor_id, label, function(data){
+				console.log(data);
+				$('#behavior-list .header').after(Library.listify(data, false, Library.set_wave, null));
 			});	
 		}
 		Library.set_wave = function(behavior_id){
@@ -64,25 +78,42 @@
 		$(el).parent().addClass('selected2').siblings().removeClass('selected selected2')
 	}
 
-	Library.listify = function(els, with_decor, get, type){
+	Library.listify = function(els, has_decor, get, type, id){
+
 		return $.map(els, function(el, i){
 			// If no <next_order_semantic>  found, disable the caller;
-			var count = type ? "(" + api.count(type)[el.id] + ")" : "";
+			var count = type ? "(" + api.count(type, id)[el.id] + ")" : "";
 			var nullify = count  == "(undefined)";
+			var has_metadata = typeof el.duration !== "undefined";
 			var count = nullify ? "" : count;
 
-			var play = DOM.tag("span").addClass("glyphicon glyphicon-play").attr("aria-hidden","true");
-			var decoration = DOM.tag("td").addClass('decoration-right').attr('data-id', el.id).html(play);
+			
 			var name = DOM.tag("td").addClass('noselect')
 									.attr('data-id', el.id)
 									.html(el.name + " "+ count)
 									.click(function(){
-										var id = parseInt($(this).attr('data-id'));
-										get(id);
+										var elid = $(this).attr('data-id');
+										
+										if(id) get(id, elid);
+										else get(elid);
 										Library.selected(this);
 									});
 
 			if(nullify) name.addClass("disabled").unbind("click");
-			return with_decor && !nullify ? DOM.tag("tr").html([name, decoration]) : DOM.tag("tr").html(name);
+
+			// ROW LOGIC
+			var row = DOM.tag("tr").append(name);
+			
+			if(has_metadata){
+				var metadata = DOM.tag("td").attr('data-id', el.id).html(el.duration);
+				row.append(metadata);
+			}
+			if(has_decor && !nullify){
+				var play = DOM.tag("span").addClass("glyphicon glyphicon-play").attr("aria-hidden","true");
+				var decoration = DOM.tag("td").addClass('decoration-right').attr('data-id', el.id).html(play);
+				row.append(decoration);
+			}
+			
+			return row;
 		});
 	} 
