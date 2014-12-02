@@ -56,7 +56,6 @@
 				</div>
 				<div class="field">
 				 	Select a preview actuator<br>
-				 	<!--TODO: change to select actuator, not flavor -->
 				    <%= select(behavior.name, "", Actuator.all.collect {|p| [ p.name.humanize, p.id ] }, {include_blank: 'None'}) %>
 				</div>
 			</td>

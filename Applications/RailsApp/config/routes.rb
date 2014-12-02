@@ -14,6 +14,10 @@ FlixelLights::Application.routes.draw do
     end
     # get "diary"
   end
+
+  # TEMPORARY
+  get "composer/test"
+
   namespace :study do
       get "index"
       get "info"

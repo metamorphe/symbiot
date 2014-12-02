@@ -178,6 +178,8 @@ class Experiment:
 
 		# magnitude [79, 120, 300, 589, 800, 1000]; brightness [0, 1, 2, 3, 4, 5]
 		plt.legend(loc='upper left')
+		print "a-value: ", popt[1]
+		print "error: ", pcov
 		plt.show()
 	
 	#generates expected y values for actuator used to plot Steven's power curve

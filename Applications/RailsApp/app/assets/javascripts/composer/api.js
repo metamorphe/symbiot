@@ -52,5 +52,5 @@
 				return hash;
 			}
 			else return this.get_async("/api/"+ type + "/counts.json");
-		}
+		},
 	}

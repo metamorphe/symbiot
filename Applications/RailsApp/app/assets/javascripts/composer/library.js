@@ -64,7 +64,7 @@ Library.prototype = {
 
 	Library.set_behaviors = function(flavor_id, label){
 		if(label == this.current_label) return;
-		
+
 		this.current_label = label;
 		$('#behavior-list table tr').not(".header").remove();
 		console.log("setting_behaviors");
@@ -76,7 +76,9 @@ Library.prototype = {
 	Library.set_wave = function(behavior_id){
 		if(behavior_id == this.current_behavior) return;
 		this.current_behavior = behavior_id;
+
 		Library.on_behavior_click();
+		api.get_async('/api/behaviors/' + behavior_id);
 	}
 
 Library.selected = function(el){
