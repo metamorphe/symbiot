@@ -5,7 +5,7 @@
 	API.cache = {};
 	API.prototype = {
 		get: function(url, callback){
-			console.log(url);
+			// console.log(url);
 			var data = API.cache[url];
 			if(typeof data !== "undefined"){ if(callback) callback(data); }
 			else{

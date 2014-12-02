@@ -29,10 +29,12 @@
   </div>
     <div class="field">
     <%= f.label :behaviors %><br>
+    <% if @behaviors %>
     <% @behaviors.each do |behavior| %>
       <%= check_box_tag("behavior_ids[]", behavior.id) %>
       <%= label_tag(behavior.id, behavior.name) %>
     <% end %>
+  <% end %>
   </div>
   <div class="actions">
     <%= f.submit %>

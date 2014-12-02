@@ -20,6 +20,7 @@ class KeyEventThread(threading.Thread):
 
 			#Start actuator
 			if ord(z) == ord('r'):
+				# self.controller.open();
 				self.experiment.actuator_setup()
 				self.value = self.experiment.get_query()
 				print "new value ", self.value

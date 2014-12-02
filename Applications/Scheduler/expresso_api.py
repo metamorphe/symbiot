@@ -6,7 +6,7 @@ password = "potatoes123"
 # base = "http://expresso.cearto.com"
 
 def get(url, cached=True):
-	print url, cached
+	# print url, cached
 
 	if cached: 
 		with requests_cache.enabled('api_cache'):
@@ -14,7 +14,6 @@ def get(url, cached=True):
 	else:
 		with requests_cache.disabled():
 			resp = requests.get(base + url)
-	
 	return resp.json()
 
 def post(url, payload):
@@ -38,6 +37,9 @@ def get_actuator(id):
 def get_behavior(id):
 	url = "/api/behaviors/" + str(id)
 	return get(url)
+def get_flavor(id):
+	url = "/api/flavors/" + str(id)
+	return get(url)
 
 def get_active_schedule(user_id, task_id):
 	url = "/api/tasks/" + str(task_id) + "/schedule.json?user_id=" + str(user_id)
@@ -52,7 +54,8 @@ def get_commands(id, velocity = 1):
 	a = np.array(commands, dtype=np.float).T
 
 	base_velocity = 6 + velocity
-	a[0] = a[0] * base_velocity / 1000.
+	print base_velocity
+	a[0] = a[0] * base_velocity/ 1000.
 
 	# NORMALIZING MAGNITUDES TO 0 - 1000
 	norm = np.nanmax( a[1])

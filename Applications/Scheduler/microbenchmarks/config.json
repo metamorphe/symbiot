@@ -1,0 +1,13 @@
+{"board":{
+	"1": {"flavor_id": 12, "interface": "Adafruit_PCA9685"}, 
+	"2": {"flavor_id": 12, "interface": "Adafruit_PCA9685"}, 
+	"3": {"flavor_id": 4, "interface": "Adafruit_PCA9685"}, 
+	"4": {"flavor_id": 4, "interface": "Adafruit_PCA9685"}, 
+	"5": {"flavor_id": 4, "interface": "Adafruit_PCA9685"}, 
+	"6": {"flavor_id": 4, "interface": "Adafruit_PCA9685"}, 
+	"7": {"flavor_id": 4, "interface": "Adafruit_PCA9685"}, 
+	"8": {"flavor_id": 5 , "interface": "Adafruit_PCA9685"}, 
+	"9": {"flavor_id": 5, "interface": "Adafruit_PCA9685"}, 
+	"10": {"flavor_id": 5, "interface": "Adafruit_PCA9685"}, 
+	}
+}
