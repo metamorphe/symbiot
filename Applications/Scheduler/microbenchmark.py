@@ -12,19 +12,7 @@ import copy, time
 directory = "microbenchmarks/"
 benchmark_file = 'tests.yaml'
 
-def preprocess(velocity = 1): 
-	files = [line.strip() for line in open(directory + benchmark_file, 'r') if line[0] != "#" and len(line) > 1]
-	
-	tests = []
-	for f in files:
-		data = get_json(directory + f)
 
-		commands = []
-		for d in data: 
-			commands.append((d["addr"], d["flavor_id"], d["behavior_id"], d["t0"]))
-		tests.append((f, microbenchmark(commands, velocity)))
-
-	return tests
 
 def get_json(filename):
 	json_data = open(filename)
@@ -33,9 +21,14 @@ def get_json(filename):
 	return data
 
 def microbenchmark(commands, velocity=1):
+	# get alpha value
+
 	q = Queue.PriorityQueue(maxsize=0)
+	
+
 	for addr, f_id, b_id, t0 in commands:
-		for t, v in api.get_commands(b_id):
+		a = api.get_flavor(f_id)["alpha"]
+		for t, v in api.get_commands(b_id, alpha = a):
 			if math.isnan(v):
 				q.put(Job(b_id, f_id, t * velocity + t0, 0, addr))
 			else:
@@ -53,9 +46,9 @@ def calc_collisions(commands):
 
 	for c in commands_cpy: 
 		try:
-			collisions[c.priority].append(c)
+			collisions[str(c.priority)].append(c)
 		except KeyError, e:
-			collisions[c.priority] = []
+			collisions[str(c.priority)] = [c]
 
 	# count collisions
 	conflicts = dict([(timestamp, len(jobs)) for timestamp, jobs in collisions.iteritems() if len(jobs) > 2])
@@ -66,19 +59,33 @@ def calc_collisions(commands):
 
 	return sum/size
 
+def preprocess(velocity = 1): 
+	files = [line.strip() for line in open(directory + benchmark_file, 'r') if line[0] != "#" and len(line) > 1]
+	
+	tests = []
+	for f in files:
+		data = get_json(directory + f)
+
+		commands = []
+		for d in data: 
+			commands.append((d["addr"], d["flavor_id"], d["behavior_id"], d["t0"]))
+
+		tests.append((f, microbenchmark(commands, velocity)))
+	return tests
+
 def run(tests):
 	master = jnd.JNDArduino();
 	master.open()
 	time.sleep(2)
 
 	for name, commands in tests:
-		print name
-		print "COLLISION RATE: ", calc_collisions(commands), "N:", len(commands)
+		print name,
+		print "COLLISION RATE: ", calc_collisions(commands), "N:", len(commands),
 		print "ERROR", scheduler.send(master, commands)
 	master.close()
 
 def main(): 
-	tests = preprocess(5)
+	tests = preprocess(velocity = 1)
 	run(tests)
 if __name__ == "__main__": ard = main()
 
