@@ -3,10 +3,11 @@ class Behavior < ActiveRecord::Base
 	has_many :behavior_links, dependent: :destroy
 	has_many :sequences, through: :behavior_links
 
-	has_many :actuations
+	has_many :actuations, dependent: :destroy
 	has_many :flavors, through: :actuations
 
-	has_many :experiments
+	has_many :tags, dependent: :destroy
+	has_many :experiments, dependent: :destroy
 
 	def states
 		if self[:states]
@@ -78,7 +79,13 @@ class Behavior < ActiveRecord::Base
 		self.where("is_smooth", true).order("is_smooth DESC")
 			.map{ |behavior| behavior.name }.to_json.html_safe
 	end
-
+	def metadata
+		duration = self.states.length
+		r = self.attributes.extract!("name", "id") 
+		r["duration"] = duration;
+		r["picture"] = "/wave.png";
+		return r
+	end
 	# ouputs tuple array #[[time, value]]
 	def sparse(alpha)
 		states = self.states

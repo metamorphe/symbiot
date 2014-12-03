@@ -33,6 +33,7 @@
 			<th>ID</th>
 			<th></th>
 			<th>Name</th>
+			<th>Tags</th>
 			<th>Waveform</th>
 			<th>Preview</th>
 			<th colspan="3"></th>
@@ -42,15 +43,19 @@
 		<tr>
 			<td><%= behavior.id %></td>
 			<td><div class="btn btn-primary play-btn" onclick="behaviorHash['<%= behavior.name %>'].sample(function() {})">Play</div></td>
-			<td><%= behavior.name.humanize %></td>
+			<td><%= behavior.name.humanize %></td> 
+			<td><% behavior.tags.collect{|t| t.label }.each do |t| %>
+					<span class="label label-primary"><%= t %></span>
+				<% end %>
+			</td> 
 			<td class='view' id='<%= behavior.name %>'></td>
+
 			<td>
 				<div class="led-box" data-name="<%= behavior.name %>">
 					
 				</div>
 				<div class="field">
 				 	Select a preview actuator<br>
-				 	<!--TODO: change to select actuator, not flavor -->
 				    <%= select(behavior.name, "", Actuator.all.collect {|p| [ p.name.humanize, p.id ] }, {include_blank: 'None'}) %>
 				</div>
 			</td>

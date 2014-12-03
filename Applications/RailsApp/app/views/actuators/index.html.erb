@@ -15,6 +15,7 @@
   <tbody>
     <% @actuators.each do |actuator| %>
       <tr>
+        <td><%= image_tag actuator.picture_url, :width => "20px" %></td>
         <td><%= actuator.name %></td>
         <td><%= link_to 'Show', actuator %></td>
         <td><%= link_to 'Edit', edit_actuator_path(actuator) %></td>

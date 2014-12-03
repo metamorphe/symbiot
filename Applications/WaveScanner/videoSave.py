@@ -5,9 +5,15 @@ import sys
 def videoSave(videoName):
     cap = cv2.VideoCapture(0)
 
+    w=int(cap.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH ))
+    h=int(cap.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT ))
+    # video recorder
+    fourcc = cv2.cv.CV_FOURCC(*'XVID')  # cv2.VideoWriter_fourcc() does not exist
+    out = cv2.VideoWriter(videoName, fourcc, 20.0, (w, h), isColor=False)
+
     # Define the codec and create VideoWriter object
-    fourcc = cv2.VideoWriter_fourcc(*'DIVX')
-    out = cv2.VideoWriter(videoName,fourcc, 20.0, (640,480), isColor=False)
+    # fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    # out = cv2.VideoWriter(videoName,fourcc, 20.0, (640,480), isColor=False)
 
     while(cap.isOpened()):
         ret, frame = cap.read()

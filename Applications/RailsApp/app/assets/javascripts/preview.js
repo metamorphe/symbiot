@@ -11,6 +11,7 @@ Preview.prototype = {
 		this.active_actuator = this.actuators.led;
 	},
 	switchRep: function(newRep) {
+		this.container.empty();
 		this.active_actuator = this.actuators[newRep];
 		this.active_actuator.DOM.appendTo(this.container);
 	},
@@ -36,14 +37,12 @@ LEDRep.prototype = {
 
 function motorRep() {
 	this.DOM = null;
+	this.init();
 }
 
 motorRep.prototype = {
 	init: function() {
-		this.DOM =  $("#motor .template").clone();
+		this.DOM =  $(".motor.template").clone().attr('class', 'motor');;
 	},
-	changeColor: function(value) {
-		value *= 2;
-		this.DOM.children('#LEDColor').children().attr('fill-opacity', value);
-	}
+	//TODO: implement the rest
 }

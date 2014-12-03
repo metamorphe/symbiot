@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141130201900) do
+ActiveRecord::Schema.define(version: 20141201061652) do
 
   create_table "actuations", force: true do |t|
     t.integer  "flavor_id"
@@ -25,6 +25,14 @@ ActiveRecord::Schema.define(version: 20141130201900) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "picture"
+  end
+
+  create_table "assignments", force: true do |t|
+    t.integer  "task_id"
+    t.integer  "user_id"
+    t.boolean  "completed",  default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "behavior_links", force: true do |t|
@@ -49,6 +57,23 @@ ActiveRecord::Schema.define(version: 20141130201900) do
     t.boolean  "is_library",   default: false
   end
 
+  create_table "commands", force: true do |t|
+    t.integer  "task_id"
+    t.integer  "user_id"
+    t.text     "code",       limit: 2147483647
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "data_streams", force: true do |t|
+    t.string   "api_name"
+    t.string   "api_url"
+    t.string   "api_params"
+    t.string   "api_response"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
   create_table "experiments", force: true do |t|
     t.integer  "actuator_id"
     t.string   "physical_mag"
@@ -59,6 +84,15 @@ ActiveRecord::Schema.define(version: 20141130201900) do
     t.datetime "updated_at"
   end
 
+  create_table "fiddle_codes", force: true do |t|
+    t.text     "code",       limit: 2147483647
+    t.string   "editor"
+    t.integer  "user_id"
+    t.integer  "stl_id"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
   create_table "flavors", force: true do |t|
     t.float    "alpha"
     t.datetime "created_at"
@@ -66,6 +100,55 @@ ActiveRecord::Schema.define(version: 20141130201900) do
     t.string   "img"
     t.integer  "actuator_id"
     t.string   "name"
+  end
+
+  create_table "friendly_id_slugs", force: true do |t|
+    t.string   "slug",                      null: false
+    t.integer  "sluggable_id",              null: false
+    t.string   "sluggable_type", limit: 40
+    t.datetime "created_at"
+  end
+
+  add_index "friendly_id_slugs", ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type", unique: true, using: :btree
+  add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id", using: :btree
+  add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
+
+  create_table "multiples", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "stl_id"
+    t.text     "fv",         limit: 2147483647
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  create_table "neighbors", force: true do |t|
+    t.integer  "part_id"
+    t.integer  "sibling_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "parts", force: true do |t|
+    t.string   "name"
+    t.text     "faces",              limit: 2147483647
+    t.integer  "stl_id"
+    t.integer  "parent_id"
+    t.datetime "created_at",                                                             null: false
+    t.datetime "updated_at",                                                             null: false
+    t.float    "volume",                                default: 0.0
+    t.string   "pca1",                                  default: "---\n- 1\n- 0\n- 0\n"
+    t.string   "pca2",                                  default: "---\n- 0\n- 1\n- 0\n"
+    t.string   "pca3",                                  default: "---\n- 0\n- 0\n- 1\n"
+    t.integer  "neighbor_id"
+    t.boolean  "neighbors_computed",                    default: false
+  end
+
+  add_index "parts", ["stl_id"], name: "index_parts_on_stl_id", using: :btree
+
+  create_table "phylas", force: true do |t|
+    t.string  "name"
+    t.string  "subphyla"
+    t.integer "count"
   end
 
   create_table "schemes", force: true do |t|
@@ -83,6 +166,41 @@ ActiveRecord::Schema.define(version: 20141130201900) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name"
+  end
+
+  create_table "stls", force: true do |t|
+    t.string   "name"
+    t.integer  "author"
+    t.string   "stl_path"
+    t.string   "segmentation_path"
+    t.string   "img"
+    t.string   "img_thumb"
+    t.integer  "times_used"
+    t.integer  "phyla_id"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.float    "rotate_x",          default: 0.0
+    t.float    "rotate_y",          default: 0.0
+    t.float    "rotate_z",          default: 0.0
+    t.string   "ascii"
+    t.string   "binary"
+    t.string   "slug"
+  end
+
+  add_index "stls", ["slug"], name: "index_stls_on_slug", unique: true, using: :btree
+
+  create_table "tags", force: true do |t|
+    t.integer  "behavior_id"
+    t.string   "label"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tasks", force: true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|

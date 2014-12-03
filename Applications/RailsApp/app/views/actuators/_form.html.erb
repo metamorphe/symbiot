@@ -19,7 +19,7 @@
     <%= f.label :flavors %><br>
     <% @flavors.each do |flavor| %>
       <%= check_box_tag("flavor_ids[]", flavor.id) %>
-      <%= label_tag(flavor.id, flavor.name.humanize) %>
+      <%= label_tag(flavor.id, flavor.name) %>
     <% end %>
   </div>
 

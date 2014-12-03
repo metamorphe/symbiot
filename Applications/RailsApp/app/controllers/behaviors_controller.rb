@@ -95,7 +95,7 @@ end
 	end
 
 	def index
-		@behaviors = Behavior.all
+		@behaviors = Behavior.preload(:tags)
 	end
 
 	def edit

@@ -1,0 +1,23 @@
+<script>
+
+var api, wave_view;
+
+$(function(){
+	api = new API();
+	waveView = new WaveView();
+});
+
+</script>
+
+<div id="current-wave" class="col-xs-12 current-wave">
+	<table class="field"></table>
+	<table class="preview"></table>
+</div>
+
+<style type="text/css">
+	.template{
+		display: none;
+	}
+</style>
+<%= render 'partials/led' %>
+<%= render 'partials/motor' %>
