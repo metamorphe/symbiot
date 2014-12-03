@@ -48,13 +48,12 @@ def get_active_schedule(user_id, task_id):
 	return schedule
 
 	
-def get_commands(id, velocity = 1):
+def get_commands(id):
 	url = "/api/behaviors/" + str(id) + "/sparse.json"
 	commands = get(url)["sparse_commands"]
 	a = np.array(commands, dtype=np.float).T
 
-	base_velocity = 6 + velocity
-	print base_velocity
+	base_velocity = 6
 	a[0] = a[0] * base_velocity/ 1000.
 
 	# NORMALIZING MAGNITUDES TO 0 - 1000

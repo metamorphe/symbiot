@@ -1,25 +1,29 @@
 # Runs microbenchmark tests
 
-import Queue, math, json
+import Queue, math, json, sys
+sys.path.append('lib')
 import expresso_api as api
 from job import Job
 from pprint import pprint
 import jnd_arduino as jnd
 import scheduler as scheduler
+import copy, time
 
 directory = "microbenchmarks/"
 benchmark_file = 'tests.yaml'
 
-def preprocess(): 
+def preprocess(velocity = 1): 
 	files = [line.strip() for line in open(directory + benchmark_file, 'r') if line[0] != "#" and len(line) > 1]
 	
 	tests = []
 	for f in files:
 		data = get_json(directory + f)
+
 		commands = []
 		for d in data: 
 			commands.append((d["addr"], d["flavor_id"], d["behavior_id"], d["t0"]))
-		tests.append((f, microbenchmark(commands, 1)))
+		tests.append((f, microbenchmark(commands, velocity)))
+
 	return tests
 
 def get_json(filename):
@@ -31,11 +35,11 @@ def get_json(filename):
 def microbenchmark(commands, velocity=1):
 	q = Queue.PriorityQueue(maxsize=0)
 	for addr, f_id, b_id, t0 in commands:
-		for t, v in api.get_commands(b_id, velocity):
+		for t, v in api.get_commands(b_id):
 			if math.isnan(v):
-				q.put(Job(b_id, f_id, t + t0, 0, addr))
+				q.put(Job(b_id, f_id, t * velocity + t0, 0, addr))
 			else:
-				q.put(Job(b_id, f_id, t + t0, v, addr))
+				q.put(Job(b_id, f_id, t * velocity + t0, v, addr))
 	compiled_commands = []
 	while not q.empty():
 		compiled_commands.append(q.get())
@@ -43,10 +47,11 @@ def microbenchmark(commands, velocity=1):
 
 
 def calc_collisions(commands):
+	commands_cpy = copy.deepcopy(commands)
 	collisions = {}
 	size = len(commands)
 
-	for c in commands: 
+	for c in commands_cpy: 
 		try:
 			collisions[c.priority].append(c)
 		except KeyError, e:
@@ -64,14 +69,16 @@ def calc_collisions(commands):
 def run(tests):
 	master = jnd.JNDArduino();
 	master.open()
+	time.sleep(2)
+
 	for name, commands in tests:
 		print name
 		print "COLLISION RATE: ", calc_collisions(commands), "N:", len(commands)
-		scheduler.send(master, commands)
+		print "ERROR", scheduler.send(master, commands)
 	master.close()
 
 def main(): 
-	tests = preprocess()
+	tests = preprocess(5)
 	run(tests)
 if __name__ == "__main__": ard = main()
 
