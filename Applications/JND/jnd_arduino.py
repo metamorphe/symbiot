@@ -1,5 +1,7 @@
 import serial, sys, glob, time
 
+# Opens a serial connection to an Arduino
+
 class JNDArduino:
 	def __init__(self):
 		avail_ports = serial_ports()
@@ -15,6 +17,7 @@ class JNDArduino:
 		Ex. actuate(1, 1000) => Turn on LED at location 1
 	"""
 	def actuate(self, address, value):	
+		value = int(value)
 		self.ser.write(str(address))
 		self.ser.write(",")
 		self.ser.write(str(value))
@@ -24,13 +27,13 @@ class JNDArduino:
 	def open(self):
 		self.ser.open()
 		self.ser.flush()
-		time.sleep(1)
+		time.sleep(1) # give the Arduino time to start up
 
 	def flush(self):
 		self.ser.flush();
 
 	def close(self):
-		time.sleep(1)
+		time.sleep(1)  # let it finish what its doing. 
 		self.ser.close()
 
 

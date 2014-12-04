@@ -104,6 +104,18 @@ class Actuator(object):
         # commands, mech_ratio = self.adjust_mechanical_impedance(commands)
         commands, sft_ratio = self.adjust_software_impedance(commands)
 
+        # commands, sparse_ratio = compact(commands)
+
+        # FINAL COMPACTING
+        compacts = []
+        prev = None
+        for i, v in commands:
+            if v != prev:
+                prev = v
+                compacts.append((i, v))
+        compacts.append((len(values), None))
+        commands = compacts
+
         compression_ratio = len(commands) / len(values)
         return commands, compression_ratio
 

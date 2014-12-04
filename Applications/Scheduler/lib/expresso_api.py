@@ -7,7 +7,6 @@ password = "potatoes123"
 
 def get(url, cached=True):
 	# print url, cached
-
 	if cached: 
 		with requests_cache.enabled('api_cache'):
 			resp = requests.get(base + url)
@@ -48,13 +47,12 @@ def get_active_schedule(user_id, task_id):
 	return schedule
 
 	
-def get_commands(id, velocity = 1):
-	url = "/api/behaviors/" + str(id) + "/sparse.json"
+def get_commands(id, alpha=1):
+	url = "/api/behaviors/" + str(id) + "/sparse.json?alpha=" + str(alpha)
 	commands = get(url)["sparse_commands"]
 	a = np.array(commands, dtype=np.float).T
 
-	base_velocity = 6 + velocity
-	print base_velocity
+	base_velocity = 6
 	a[0] = a[0] * base_velocity/ 1000.
 
 	# NORMALIZING MAGNITUDES TO 0 - 1000
