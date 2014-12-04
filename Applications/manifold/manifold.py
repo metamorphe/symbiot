@@ -113,7 +113,6 @@ class Actuator(object):
             if v != prev:
                 prev = v
                 compacts.append((i, v))
-        compacts.append((len(values), None))
         commands = compacts
 
         compression_ratio = len(commands) / len(values)

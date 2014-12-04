@@ -1,16 +1,14 @@
 # job.py
 
 class Job(object):
-    def __init__(self, b_id, f_id, priority, value, addr):
+    def __init__(self, metadata, priority, value):
         self.priority = priority
         self.value = value
-        self.behavior_id = b_id
-        self.flavor_id = f_id
-        self.addr = addr
+        self.metadata = metadata
         return
     def __cmp__(self, other):
         return cmp(self.priority, other.priority)
     def __str__(self):
-    	return "{:1.0f}".format(self.addr) + ":" + "{:3.0f}".format(self.value)
+    	return "@{:3.2f} ".format(self.priority) + "to {:1.0f}".format(self.metadata.addr) + ":" + "{:3.0f}".format(self.value)
     def __sub__(self, other):
     	return abs(self.priority - other.priority)

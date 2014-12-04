@@ -57,7 +57,7 @@ def get_commands(id, alpha=1):
 
 	# NORMALIZING MAGNITUDES TO 0 - 1000
 	norm = np.nanmax( a[1])
-	a[1] =  a[1] / norm * 1000;
+	a[1] =  a[1] / norm * 1000.;
 
 	return a.T
 
