@@ -76,9 +76,7 @@ Library.prototype = {
 	Library.set_wave = function(behavior_id){
 		if(behavior_id == this.current_behavior) return;
 		this.current_behavior = behavior_id;
-
-		Library.on_behavior_click();
-		api.get_async('/api/behaviors/' + behavior_id);
+		waveView.loadBehavior(behavior_id);
 	}
 
 Library.selected = function(el){
