@@ -7,9 +7,14 @@ function Wave(name, data, isSmooth){
 	this.name = name;
 	this.data = data;
 	this.isSmooth = isSmooth;
+	this.strech = 1;
+	this.repeat = 1;
 }
 
 const DEFAULT_LEN = 300;
+const DEFAULT_STRETCH = 1;
+const DEFAULT_REPEAT = 1;
+
 var newArr;
 var xAxis;
 
@@ -25,6 +30,31 @@ Wave.prototype = {
 	setData: function(newData) {
 		this.data = newData;
 	},
+	getStretch: function() {
+		return this.stretch;
+	},
+	setStretch: function(stretch) {
+		this.stretch = stretch;
+		// do stretch operations
+	},
+	clearStretch: function() {
+		this.setStretch(DEFAULT_STRETCH);
+	},
+	getRepeat: function() {
+		return this.repeat;
+	},
+	setRepeat: function(repeat) {
+		this.repeat = repeat;
+	},
+	clearRepeat: function() {
+		this.setRepeat(DEFAULT_REPEAT);
+	},
+	reset: function() {
+		this.clearStretch();
+		this.clearRepeat();
+	},
+
+	/* Begin math transforms */
 	add: function(w, modify){
 		// TODO: Add to waves together, return a new Wave if modify is false
 		newArr = numeric.addVV(this.getData(DEFAULT_LEN),
