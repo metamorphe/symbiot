@@ -11,6 +11,7 @@
 			var name = $(el).attr('id');
 			var wave = new Wave(name, waveStates[name], waveIsSmooths[name]);
 			var behavior = new Behavior(wave, false);
+			behavior.setPreview($('.led-box[data-name="' + name + '"]'));
 			behaviorHash[name] = behavior;
 			behavior.load($(el));
 		});

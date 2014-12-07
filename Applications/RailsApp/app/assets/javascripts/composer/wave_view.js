@@ -25,24 +25,36 @@ WaveView.prototype = {
 		this.previewDom = $('.preview');
 		this.repeatDom = $('.repeat');
 		this.stretchDom = $('.stretch');
+		this.resetDom = $('.reset')
 		this.repeatDom.change(function() {
 			var num = parseInt(scope.repeatDom.val());
+			var oldRepeat = scope.currentBehavior.wave.getRepeat();
 			scope.currentBehavior.wave.setRepeat(num);
+			scope.currentBehavior.rate = num
+					* scope.currentBehavior.rate / oldRepeat;
 			scope.refresh();
 		});
 		this.stretchDom.change(function() {
-			var num = parseInt(scope.repeatDom.val());
+			var num = parseInt(scope.stretchDom.val());
+			var oldStretch = scope.currentBehavior.wave.getStretch();
 			scope.currentBehavior.wave.setStretch(num);
+			scope.currentBehavior.rate = num
+					* scope.currentBehavior.rate / oldStretch;
 			scope.refresh();
 		});
+		this.resetDom.click(function() {
+			scope.currentBehavior.wave.reset();
+			scope.currentBehavior.rate = scope.currentBehavior.DEFAULT_RATE;
+			scope.refresh();
+		})
 		this.repeatDom.hide();
 		this.stretchDom.hide();
 	},
 	loadBehavior: function(behaviorId) {
-		var behavior = api.get_async('/api/behaviors/' + behaviorId);
-		behavior.wave = new Wave(behavior.name, behavior.states, null);
+		var rawObj = api.get_async('/api/behaviors/' + behaviorId);
+		var wave = new Wave(rawObj.name, rawObj.states, rawObj.is_smooth);
+		var behavior = new Behavior(wave, false);
 		behavior.preview = new Preview(this.previewDom);
-		behavior.__proto__ = Behavior.prototype;
 		console.log(behavior);
 		behavior.load(this.fieldDom);
 		behavior.preview.switchRep("light"); // default to LED Rep, TODO: change later
@@ -55,6 +67,7 @@ WaveView.prototype = {
 		this.currentBehavior.preview.switchRep(repName);
 	},
 	refresh: function() {
-		console.log('Todo: refresh wave');
+		this.fieldDom.empty();
+		this.currentBehavior.load(this.fieldDom);
 	}
 }

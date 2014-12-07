@@ -6,9 +6,10 @@
 function Wave(name, data, isSmooth){
 	this.name = name;
 	this.data = data;
+	this.defaultData = data;
 	this.isSmooth = isSmooth;
-	this.strech = 1;
-	this.repeat = 1;
+	this.stretch = DEFAULT_STRETCH;
+	this.repeat = DEFAULT_REPEAT;
 }
 
 const DEFAULT_LEN = 300;
@@ -36,6 +37,7 @@ Wave.prototype = {
 	setStretch: function(stretch) {
 		this.stretch = stretch;
 		// do stretch operations
+		this.data = this._stretch(stretch);
 	},
 	clearStretch: function() {
 		this.setStretch(DEFAULT_STRETCH);
@@ -45,6 +47,11 @@ Wave.prototype = {
 	},
 	setRepeat: function(repeat) {
 		this.repeat = repeat;
+		var copy = this.data.slice();
+		this.data = [];
+		for (var i = 0; i < repeat; i++) {
+			this.data = this.data.concat(copy);
+		}
 	},
 	clearRepeat: function() {
 		this.setRepeat(DEFAULT_REPEAT);
@@ -52,6 +59,16 @@ Wave.prototype = {
 	reset: function() {
 		this.clearStretch();
 		this.clearRepeat();
+	},
+	_stretch: function(factor) {
+		// TODO: get a better resampler
+		newArr = [];
+		this.data.forEach(function(el, idx) {
+			for (var i = 0; i < factor; i++) {
+				newArr.push(el);
+			}
+		});
+		return newArr;
 	},
 
 	/* Begin math transforms */

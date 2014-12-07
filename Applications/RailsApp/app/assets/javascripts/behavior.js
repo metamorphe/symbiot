@@ -12,21 +12,24 @@ function Behavior(wave, isSVG){
 	this.name = wave.name;
 	this.wave = wave;
 	this.interval = null;
-	this.rate = 0;
+	this.DEFAULT_RATE = 5;
+	this.rate = this.DEFAULT_RATE;
 	this.isSVG = isSVG;
 	this._boundinterval = null;
 	this.index = 0;
 	this.states = [];
 	this.linked = { next: null, prev: null };
-	this.preview = new Preview($('.led-box[data-name="' + this.name + '"]'));
+	this.preview = null;
 }
 
 Behavior.prototype = {
+	setPreview: function(dom) {
+		this.preview = new Preview(dom);
+	},
 	// an output channel event - onSample event -- 
 	// TODO - turn this into a binder
 	channel: function(val){
 		this.states[this.index] = val;
-		$(".led-value").css('opacity', 1 - val);
 		this.preview.channel(1 - val);
 		// console.log(val);
 	},
@@ -114,6 +117,10 @@ Behavior.prototype = {
 		return rtn;
 	},
 	sample: function(fn){
+		if (!this.preview.getRep()) {
+			alert("Need to assign an actuator to " + this.name);
+			return;
+		}
 		var scope = this;
 		var slice = function(){
 			scope._slice(function(v){ scope.channel(v); }, fn);
