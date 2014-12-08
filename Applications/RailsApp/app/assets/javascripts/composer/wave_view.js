@@ -30,21 +30,23 @@ WaveView.prototype = {
 			var num = parseInt(scope.repeatDom.val());
 			var oldRepeat = scope.currentBehavior.wave.getRepeat();
 			scope.currentBehavior.wave.setRepeat(num);
-			scope.currentBehavior.rate = num
-					* scope.currentBehavior.rate / oldRepeat;
+			scope.currentBehavior.rate = scope.currentBehavior.rate
+										* (num / oldRepeat);
 			scope.refresh();
 		});
 		this.stretchDom.change(function() {
 			var num = parseInt(scope.stretchDom.val());
 			var oldStretch = scope.currentBehavior.wave.getStretch();
 			scope.currentBehavior.wave.setStretch(num);
-			scope.currentBehavior.rate = num
-					* scope.currentBehavior.rate / oldStretch;
+			scope.currentBehavior.rate = scope.currentBehavior.rate
+										* (num / oldStretch);
 			scope.refresh();
 		});
 		this.resetDom.click(function() {
-			scope.currentBehavior.wave.reset();
+			this.repeatDom.val(this.currentBehavior.wave.DEFAULT_REPEAT);
+			this.stretchDom.val(this.currentBehavior.wave.DEFAULT_STRETCH);
 			scope.currentBehavior.rate = scope.currentBehavior.DEFAULT_RATE;
+			scope.currentBehavior.wave.reset();
 			scope.refresh();
 		})
 		this.repeatDom.hide();
@@ -69,5 +71,12 @@ WaveView.prototype = {
 	refresh: function() {
 		this.fieldDom.empty();
 		this.currentBehavior.load(this.fieldDom);
+	},
+	clear: function() {
+		this.stretchDom.val(this.currentBehavior.wave.DEFAULT_STRETCH);
+		this.repeatDom.val(this.currentBehavior.wave.DEFAULT_REPEAT);
+		this.currentBehavior = null;
+		this.fieldDom.empty();
+		this.previewDom.empty();
 	}
 }

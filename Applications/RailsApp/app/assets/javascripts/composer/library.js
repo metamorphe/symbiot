@@ -76,6 +76,7 @@ Library.prototype = {
 	Library.set_wave = function(behavior_id){
 		if(behavior_id == this.current_behavior) return;
 		this.current_behavior = behavior_id;
+		if (waveView.currentBehavior) { waveView.clear(); }
 		waveView.loadBehavior(behavior_id);
 	}
 
