@@ -8,7 +8,7 @@ class JNDArduino:
 		if(len(avail_ports) == 0):
 			raise EnvironmentError("No ports detected. Plug in the Arduino! >:(");
 
-		self.ser = serial.Serial(avail_ports[0], 9600)
+		self.ser = serial.Serial(avail_ports[0], 115200)
 		self.connected = self.ser._isOpen
 		# Make sure its closed
 		self.close()
@@ -27,12 +27,14 @@ class JNDArduino:
 	def open(self):
 		self.ser.open()
 		self.ser.flush()
+		print "Starting up Arduino ..."
 		time.sleep(1) # give the Arduino time to start up
 
 	def flush(self):
 		self.ser.flush();
 
 	def close(self):
+		print "Shutting down Arduino ..."
 		time.sleep(1)  # let it finish what its doing. 
 		self.ser.close()
 
