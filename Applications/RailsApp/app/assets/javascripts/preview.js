@@ -10,6 +10,9 @@ Preview.prototype = {
 		this.actuators = { light: new LEDRep(), motor: new motorRep() };
 		this.active_actuator = this.actuators.led;
 	},
+	getRep: function() {
+		return this.active_actuator;
+	},
 	switchRep: function(newRep) {
 		this.container.empty();
 		this.active_actuator = this.actuators[newRep];
@@ -17,7 +20,7 @@ Preview.prototype = {
 	},
 	channel: function(val) {
 		this.active_actuator.changeColor(val);
-	}
+	},
 }
 
 function LEDRep() {
@@ -42,7 +45,7 @@ function motorRep() {
 
 motorRep.prototype = {
 	init: function() {
-		this.DOM =  $(".motor.template").clone().attr('class', 'motor');;
+		this.DOM = $(".motor.template").clone().attr('class', 'motor');;
 	},
 	//TODO: implement the rest
 }
