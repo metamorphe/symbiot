@@ -45,9 +45,16 @@ def run(time_to_complete = 1):
 	master = jnd.JNDArduino();
 	master.open()
 	time.sleep(2)
-	for test in tests:
-		print test,
-		print "|| EDF perceptual error: ", "{:2.2f}%".format(scheduler.send(master, test.sequence, scheduler.to_commands))
+	for t in tests:
+		print t,
+		schedule = t.get_sequence()
+		Us, Qs, Ts, timescale = scheduler.calculate_edf_cbs(schedule, scheduler.atmega328_k)
+		schedule = scheduler.elongate(schedule, timescale)
+		schedule = scheduler.cbs(schedule, Us, Ts)
+		for job in schedule:
+			# print job
+			pass
+		print "|| EDF perceptual error: ", "{:2.2f}%".format(scheduler.send(master, schedule))
 
 		# test.print_sequence()
 	time.sleep(2)

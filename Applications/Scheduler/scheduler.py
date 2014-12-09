@@ -6,7 +6,7 @@
 #real-time scheduling
 import jnd_arduino as jnd
 import time, numpy as np
-import Queue, sys
+import Queue, sys, operator
 sys.path.append('lib')
 from job import Job
 
@@ -15,47 +15,93 @@ from job import Job
 atmega328_k = 0.578 # rate of execution Hz
 
 def histogram(elements):
-	histogram = {}
+	hist = {}
 	for el in elements:
-		if hist[el.priority]:
+		if hist.has_key(el.priority):
 			hist[el.priority].append(el)
 		else:
-			hist[el.priority] = []
-	print histogram
+			hist[el.priority] = [el]
+	return hist
 
 
 def edf_params(schedule):
 	quanta = histogram(schedule)
-	max = -1
-	for i, quantum in enumerate(quanta):
-		if len(quantum) > max:
-			max = len(quantum)
-			max_quantum = quantum
+	itemized_schedule = sorted(quanta.items(), key=operator.itemgetter(0))
+	i = 0
+	max_requests = -1
+	max_collisions = []
+	for n, q in itemized_schedule:
+		if len(q) > max_requests:
+			max_requests = len(q)
+			max_collisions = []
+			max_collisions.append(i)
+			max_quanta = q
 
-	collision_time = max_quantum[-1].time - max_quantum[0].time 
-	total_time = schedule[-1].time - schedule[0].time
+		if len(q) == max_requests:
+			max_collisions.append(i)
 
-	return collision_time, total_time, max_collisions
+		i += 1
 
+	t_s = [itemized_schedule[idx + 1][0] - itemized_schedule[idx][0] for idx in max_collisions if idx < len(itemized_schedule)-1]
+	collision_time = min(t_s)
+	total_time = itemized_schedule[-1][0] - itemized_schedule[0][0]
+	return collision_time, total_time, max_requests
+	
 def calculate_edf_cbs(schedule, k):
 	''' Content-based selection of Us and Ts parameters'''
-	t_s, t_e, m_col = edf_params(schedule)
-	c_i = k * m_col #bandwidth
-	t_i = c_i * t_e / t_s # scale so that collision space meets minimum val
-	return c_i, t_i 
+	t_s, t_e, m_col = edf_params(schedule) # in seconds
+	# print t_s, t_e, m_col 
+	Ts = k * m_col /1000. #bandwidth
+	nT = Ts * t_e / t_s
+	
+	time_scale = nT/ t_e
 
 
-def cbs(schedule, Us, Ts, k):
+	# time_scale = (Ts * ) / t_e  # scale so that collision space meets minimum val
+
+	Qs = m_col  
+	Us = Qs/Ts
+	
+	return Us, Qs, Ts, time_scale
+
+def elongate(schedule, scalar):
+	for job in schedule:
+		job.longer(scalar)
+	return schedule
+
+def cbs(schedule, Us, Ts):
 	''' Implements a bandwidth-divided server and enqueues Jobs 
 		Us is server bandwidth per time period Ts
 	'''
-	schedule = histogram(Ts)
-	# filter commands and apply dither and resurrect
-	needed_bandwidth = (len(server_chunk) - (Us  / k))
-	for i, server_chunk in enumerate(schedule):
-		server_chunk = clean_server_chunk(server_chunk, i, Us, k)
+	for job in schedule:
+		job.set_priority("cbs", Ts)
 
-	schedule = commands
+	quanta = histogram(schedule)
+	quanta = sorted(quanta.items(), key=operator.itemgetter(0))
+	
+	Qs = Us * Ts
+	# filter commands and apply dither and resurrect
+	idx = 0
+	for n, q in quanta:
+		# print n, len(q)
+		if len(q) > Qs:
+			# print "oversubscribed"
+			pass
+		else:
+			# print idx, "is utilized", "{:3.2f}%".format(len(q) / Qs * 100) 
+			pass
+		idx += 1
+
+	# 	server_chunk = clean_server_chunk(server_chunk, i, Us, k)
+
+
+
+	# histogram back to schedule
+	schedule = []
+	for n, q in quanta: 
+		schedule.append(q)
+	schedule = sum(schedule, [])
+
 	return schedule
 
 def server_chunk_clean(server_chunk, i, Us, k):
@@ -111,24 +157,23 @@ def to_commands(schedule, priority_type = "edf", param = None):
 	return compiled_commands
 
 # send behavior
-def send(ard, base, scheduling_algorithm,  verbose=False):
+def send(ard, base, verbose=False):
 	if verbose: 
 		print "SCHEDULED SEND"
-	
-	base = scheduling_algorithm(base)
 	
 	# Need to put this on a separate thread
 	t0 = time.time()
 	log = []
 	
 	for job in base:
-		next_time = job.priority # delays for x ms
+		next_time = job.metadata.time # delays for x ms
 		current_time = time.time() - t0
 		
 		while(next_time > current_time):
-			# print "Sleeping at", "{:3.0f}ms".format(current_time * 1000), "for", "{:3.0f}ms".format((next_time - current_time) * 1000)
+			print "Sleeping at", "{:3.0f}ms".format(current_time * 1000), "for", "{:3.0f}ms".format((next_time - current_time) * 1000)
 			time.sleep((next_time - current_time))
 			current_time = (time.time() - t0)
+
 		if verbose:
 			print "COMMAND @", "{:3.0f}ms".format(current_time * 1000), "to", job
 

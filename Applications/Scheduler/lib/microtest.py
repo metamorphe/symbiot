@@ -33,7 +33,7 @@ def harden(sequence):
 
 
 		hardness = [abs(i - find_nearest(temporal_mask, timestamps[i])) for i, h in enumerate(jnd_diff)]
-
+	
 		
 		hardened_commands = np.vstack([original_commands, hardness])
 		return hardened_commands.T
@@ -47,8 +47,8 @@ class Test:
 	    
 	    self.commands = commands
 	    self.time = time_to_complete
-	    # self.sequence = self.get_sequence()
-	    # self.collision_rate = self.collisions()
+	    self.sequence = self.get_sequence()
+	    self.collision_rate = self.collisions()
 	   
 	    return
 
