@@ -48,8 +48,9 @@ Wave.prototype = {
 		this.setRepeat(this.DEFAULT_REPEAT);
 	},
 	reset: function() {
-		this.clearStretch();
+		// Repeat must be applied before stretch
 		this.clearRepeat();
+		this.clearStretch();
 		this.data = this.defaultData;
 	},
 	_applyParams: function() {
@@ -69,7 +70,7 @@ Wave.prototype = {
 	_repeat: function(factor) {
 		var newArr = []
 		for (var i = 0; i < factor; i++) {
-			newArr = newArr.concat(this.data.slice());
+			newArr = newArr.concat(this.defaultData.slice());
 		}
 		return newArr;
 	},
