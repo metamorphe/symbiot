@@ -69,6 +69,14 @@ def elongate(schedule, scalar):
 		job.longer(scalar)
 	return schedule
 
+
+def possess(dead_job, generations):
+	child = find(generations, dead_job.addr)
+	age_diff = chid.time - dead_job.time
+	energy_diff = child.value - dead_job.value
+
+
+
 def cbs(schedule, Us, Ts):
 	''' Implements a bandwidth-divided server and enqueues Jobs 
 		Us is server bandwidth per time period Ts
@@ -82,24 +90,32 @@ def cbs(schedule, Us, Ts):
 	Qs = Us * Ts
 	# filter commands and apply dither and resurrect
 	idx = 0
+
+	schedule = []
+
+	oversubcribers = []
+	push_to_next = []
 	for n, q in quanta:
+		inner_quanta = to_commands(q, priority_type = "edf")
+		inner_quanta.append(push_to_next)
 		# print n, len(q)
 		if len(q) > Qs:
 			# print "oversubscribed"
+			# over = len(q) - Qs
+			# push_to_next.append(inner_quanta[-over:-1])
+			# inner_quanta = inner_quanta[:-over ]
 			pass
 		else:
 			# print idx, "is utilized", "{:3.2f}%".format(len(q) / Qs * 100) 
 			pass
 		idx += 1
-
 	# 	server_chunk = clean_server_chunk(server_chunk, i, Us, k)
-
+		schedule.append(inner_quanta)
 
 
 	# histogram back to schedule
-	schedule = []
-	for n, q in quanta: 
-		schedule.append(q)
+	
+	
 	schedule = sum(schedule, [])
 
 	return schedule
@@ -170,7 +186,7 @@ def send(ard, base, verbose=False):
 		current_time = time.time() - t0
 		
 		while(next_time > current_time):
-			print "Sleeping at", "{:3.0f}ms".format(current_time * 1000), "for", "{:3.0f}ms".format((next_time - current_time) * 1000)
+			# print "Sleeping at", "{:3.0f}ms".format(current_time * 1000), "for", "{:3.0f}ms".format((next_time - current_time) * 1000)
 			time.sleep((next_time - current_time))
 			current_time = (time.time() - t0)
 
