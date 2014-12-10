@@ -8,18 +8,18 @@ class KeyEventThread(threading.Thread):
 		super(KeyEventThread, self).__init__()
 		self.controller = ard
 		self.experiment = Experiment()
-		self.value = 1000; #MAKE RANDOM
+		self.value = 1000;
 
 	def run(self):
 		while True:
 			z = getch.getch()
 			# escape key to exit
-			if ord(z) == ord('o'):
+			if ord(z) == ord('o'): #need to change letter
 				print "Opened serial connection:"
 				self.controller.open();
 
 			#Start actuator
-			if ord(z) == ord('r'):
+			if ord(z) == ord('['):
 				# self.controller.open();
 				self.experiment.actuator_setup()
 				self.value = self.experiment.get_query()
@@ -49,23 +49,21 @@ class KeyEventThread(threading.Thread):
 
 
 			#Set/Reset upper and lower limits
-			if ord(z) == ord('u'):
+			if ord(z) == ord('k'):
 				self.experiment.set_lower_limit(self.value)
 				self.experiment.remove_jnd_range()
-
-			if ord(z) == ord('k'):
-				self.experiment.set_lower_limit(self.experiment.query) #reset to query
-				print "reset lower limit"
-			#set upper limit
-			if ord(z) == ord('i'):
+			if ord(z) == ord('l'):
 				self.experiment.set_upper_limit(self.value)
 				self.experiment.remove_jnd_range()
-			if ord(z) == ord('l'):
+			if ord(z) == ord('i'):
+				self.experiment.set_lower_limit(self.experiment.query) #reset to query
+				print "reset lower limit"
+			if ord(z) == ord('o'):
 				self.experiment.set_upper_limit(self.experiment.query) #reset to query
 				print "reset upper limit"
 
  			#find next range
-			if ord(z) == ord('n'):
+			if ord(z) == 32: #spacebar
 				self.value = self.experiment.next_range()
 
 
