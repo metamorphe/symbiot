@@ -2,13 +2,14 @@ from bunch import Bunch
 import numpy as np
 # job.py
 class Job(object):
-    def __init__(self, metadata, priority, value):
+    def __init__(self, metadata, priority, value, prev = None):
         self.priority = priority
         mc = Bunch()
         for k in metadata:
             mc[k] = metadata[k]
         self.metadata = mc
         self.value = value
+        self.prev = prev
         return
 
     def __cmp__(self, other):
@@ -20,7 +21,7 @@ class Job(object):
                 "|t(ms): {:4.0f} ".format(self.metadata.time * 1000) +   
                 "|l: {:2.0f} ".format(self.metadata.locality) +  
                 "|h: {:3.0f} ".format(self.metadata.hardness) +  
-                "|v: {:3.0f} ".format(self.value))
+                "|v: {:3.0f} ".format(self.value)) + hex(id(self.prev))
 
     	# return "@{:3.2f} ".format(self.priority) + "to {:1.0f}".format(self.metadata.addr) + ":" + "{:3.0f}".format(self.value)
     def __sub__(self, other):

@@ -37,11 +37,12 @@ def get_tests(time_to_complete = 1):
 		tests.append(test)
 	return tests
 	
-def run(time_to_complete = 1):
+def run(time_to_complete = 1, virtual = True):
 	tests = get_tests(time_to_complete)
-	master = jnd.JNDArduino();
-	master.open()
-	time.sleep(2)
+	if not virtual:
+		master = jnd.JNDArduino();
+		master.open()
+		time.sleep(2)
 	for t in tests:
 		print t,
 		schedule = t.get_sequence()
@@ -49,13 +50,14 @@ def run(time_to_complete = 1):
 		schedule = scheduler.elongate(schedule, timescale)
 		schedule = scheduler.cbs(schedule, Us, Ts)
 		for job in schedule:
-			# print job
+			print job
 			pass
-		print "|| EDF perceptual error: ", "{:2.2f}%".format(scheduler.send(master, schedule))
+		if not virtual:
+			print "|| EDF perceptual error: ", "{:2.2f}%".format(scheduler.send(master, schedule))
 
-		# test.print_sequence()
-	time.sleep(2)
-	master.close()
+	if not virtual:
+		time.sleep(2)
+		master.close()
 
 
 def main(): 

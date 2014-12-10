@@ -97,7 +97,7 @@ def cbs(schedule, Us, Ts):
 	push_to_next = []
 	for n, q in quanta:
 		inner_quanta = to_commands(q, priority_type = "edf")
-		inner_quanta.append(push_to_next)
+		# inner_quanta.append(push_to_next)
 		# print n, len(q)
 		if len(q) > Qs:
 			# print "oversubscribed"

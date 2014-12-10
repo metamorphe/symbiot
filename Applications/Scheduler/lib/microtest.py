@@ -90,15 +90,19 @@ class Test:
 			subsequence = harden(subsequence)
 			subsequence = self.bulls_eye(c.addr, subsequence)
 
+			prev = None
 			for t, v, h, d in subsequence:
 				c.hardness = h
 				c.locality = d
 				c.time = t * self.velocity + c.t0
 
 				if math.isnan(v):
-					sequence.append(Job(c, t * self.velocity + c.t0, 0))
+					curr = Job(c, t * self.velocity + c.t0, 0, prev)
+					sequence.append(curr)
 				else:
-					sequence.append(Job(c, t * self.velocity + c.t0, v))
+					curr = Job(c, t * self.velocity + c.t0, v, prev)
+					sequence.append(curr)
+				prev = curr
 
 		return sequence
 
