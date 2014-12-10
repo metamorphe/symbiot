@@ -29,7 +29,7 @@ def get_tests(time_to_complete = 1):
 
 	tests =[]
 	for f in files:
-		print f
+		# print f
 		data = open_yaml(directory + f)
 		data =  data["commands"]
 		commands = [Bunch(**command) for command in data]
@@ -44,38 +44,56 @@ def run(time_to_complete = 1, virtual = True):
 		master.open()
 		time.sleep(2)
 	for t in tests:
-		print t,
+		print t
 		schedule = t.get_sequence()
-		Us, Qs, Ts, timescale = scheduler.calculate_edf_cbs(schedule, scheduler.atmega328_k)
-		schedule = scheduler.elongate(schedule, timescale)
-		schedule = scheduler.cbs(schedule, Us, Ts)
-		for job in schedule:
-			print job
-			pass
+		schedule = scheduler.psf(schedule)
+		# for i, job in enumerate(schedule):
+		# 	print i, job
+		# 	pass
 		if not virtual:
-			print "|| EDF perceptual error: ", "{:2.2f}%".format(scheduler.send(master, schedule))
+			scheduler.send(master, schedule)
 
 	if not virtual:
 		time.sleep(2)
 		master.close()
 
 
-def main(): 
-	# t = 0.00178
-	# print t
-	# run(time_to_complete = t)
-	print "RUNNING PERCEPTUAL TESTS"
-	t = 1.29
-	# # print t
-	run(time_to_complete = t)
 
-	# t = 1.3
-	# print t
-	# run(time_to_complete = t)
 
-	# t = 5
-	# print t
-	# run(time_to_complete = 1)
+import sys, getopt
+
+def main(argv):
+	is_virtual = False
+	time_to_complete = None
+	try:
+		opts, args = getopt.getopt(argv,"ht:v",["ifile=","ofile="])
+	except getopt.GetoptError:
+		print 'microbenchmark.py -t <time_to_complete> -v <virtual>'
+		sys.exit(2)
+		
+	for opt, arg in opts:
+		print opt, arg
+		if opt == '-h':
+			print 'microbenchmark.py -t <time_to_complete> -v <virtual>'
+			sys.exit()
+		elif opt in ("-t", "--t"):
+			time_to_complete = arg
+		elif opt in ("-v", "--virtual"):
+			is_virtual = arg == ""
+
+	print "RUNNING PERCEPTUAL TESTS",
+	if is_virtual:
+		print "VIRTUALLY",
+	else:
+		print "TO ARDUINO",
+
+	if not time_to_complete:
+		time_to_complete = 1.29
+
+	print "IN", time_to_complete, "(S)"
+
+	run(time_to_complete, is_virtual)
+
 
 
 
@@ -84,6 +102,6 @@ def open_yaml(filename):
  		dataMap = yaml.load(f)
 	return dataMap
 		
-if __name__ == "__main__": main()
-
+if __name__ == "__main__":
+   main(sys.argv[1:])
 

@@ -7,8 +7,10 @@
 import jnd_arduino as jnd
 import time, numpy as np
 import Queue, sys, operator
+from quanta_schedule import QuantaSchedule
 sys.path.append('lib')
 from job import Job
+from quanta import Quanta
 
 
 
@@ -53,7 +55,6 @@ def calculate_edf_cbs(schedule, k):
 	# print t_s, t_e, m_col 
 	Ts = k * m_col /1000. #bandwidth
 	nT = Ts * t_e / t_s
-	
 	time_scale = nT/ t_e
 
 
@@ -76,86 +77,51 @@ def possess(dead_job, generations):
 	energy_diff = child.value - dead_job.value
 
 
-
-def cbs(schedule, Us, Ts):
+def cbs(schedule, Qs, Ts):
 	''' Implements a bandwidth-divided server and enqueues Jobs 
 		Us is server bandwidth per time period Ts
 	'''
-	for job in schedule:
-		job.set_priority("cbs", Ts)
-
-	quanta = histogram(schedule)
-	quanta = sorted(quanta.items(), key=operator.itemgetter(0))
 	
-	Qs = Us * Ts
-	# filter commands and apply dither and resurrect
-	idx = 0
+	qs = QuantaSchedule(schedule, Qs, Ts)
+	# print qs
 
-	schedule = []
+	qs.clean()
+	# print qs
 
-	oversubcribers = []
-	push_to_next = []
-	for n, q in quanta:
-		inner_quanta = to_commands(q, priority_type = "edf")
-		# inner_quanta.append(push_to_next)
-		# print n, len(q)
-		if len(q) > Qs:
-			# print "oversubscribed"
-			# over = len(q) - Qs
-			# push_to_next.append(inner_quanta[-over:-1])
-			# inner_quanta = inner_quanta[:-over ]
-			pass
-		else:
-			# print idx, "is utilized", "{:3.2f}%".format(len(q) / Qs * 100) 
-			pass
-		idx += 1
-	# 	server_chunk = clean_server_chunk(server_chunk, i, Us, k)
-		schedule.append(inner_quanta)
+	for q in qs.quanta:
+		if q.id >= 573:
+			print q
+			for j in q.jobs:
+				print "\t", j
+		# print q
 
-
-	# histogram back to schedule
-	
-	
-	schedule = sum(schedule, [])
-
-	return schedule
-
-def server_chunk_clean(server_chunk, i, Us, k):
-	needed_bandwidth = (len(server_chunk) - (Us  / k))
-	cut_out = server_chunk[0:-needed_bandwidth]
-	for job in cut_out:
-		if job.isHard(): 
-			dither(job, i)
-		else:
-			resurrect(job, i)
-
-	return server_chunk
+	return qs.to_schedule()
 
 def psf(schedule):
-	Us, Ts = calculate_edf_cbs(schedule, atmega328_k)
-	cbs_schedule = cbs(schedule, Us, Ts, atmega328_k)
-	psf = dither(schedule)
-	psf = resurrect(schedule)
-	psf = diligent_server(schedule)
-	return psf
+	# Us, Qs, Ts, timescale = calculate_edf_cbs(schedule, atmega328_k)
+	# print "Us", Us, "Qs", Qs, "Ts", Ts, timescale
+	
+	# ARDUINO CAPACITY, EDF PARAMS
+	
+	Us = 1. / atmega328_k
+	Qs = 16.
+	Ts = Qs / Us / 1000
+	
+	# ADJUSTMENTS
+	t_s, t_e, m_col = edf_params(schedule) # in seconds
+	nT = Ts * t_e / t_s
 
-def dither(job):
-	''' Moves energy evenly across synchronous elements over time '''
-	return schedule
+	print "minimum time", nT, "current_time", t_e,
+	timescale = nT/ t_e  * 2
+	print "scale", timescale
 
-def resurrect(schedule):
-	''' 
-	Graveyard jobs are resurrected and benignly possess 
-	their children's offspring until its mortal deed can be accomplished.
-	'''
-	return schedule
+	# ARTIFICIAL SIMULATION
+	Qs /= 2
 
-def diligent_server(schedule):
-	'''
-	When the server is idle and has some extra bandwidth, it goes ahead and
-	runs the scheduling algorithm ahead of itself
-	'''
-	return schedule
+	schedule = elongate(schedule, timescale)
+	cbs_schedule = cbs(schedule, Qs, Ts)
+
+	return cbs_schedule
 
 
 def to_commands(schedule, priority_type = "edf", param = None):

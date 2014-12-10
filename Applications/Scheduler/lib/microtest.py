@@ -7,7 +7,7 @@ def find_nearest(array, query):
 	idx = (np.abs(array - query)).argmin()
 	return idx
 
-def harden(sequence):
+def harden(sequence, alpha, k):
 		'''
 		Converts a behavior B into hard and soft tasks.
 		Hardness attribute added to the Job definition. 
@@ -19,12 +19,18 @@ def harden(sequence):
 		
 		jnd_diff = np.convolve(original_commands[1], [1, -1])#[1:-1] # d/dt, remove extra element
 		jnd_diff = jnd_diff[:-1]
-
+		# print jnd_diff
+		# convert to perceptual values
+		# jnd_diff[-1] = 1000 # silence exp(NaN) runtime error
+		# minmax = (jnd_diff / k) **  alpha
 		minmax = np.absolute(jnd_diff)
+
 		# start and end are always min and max
 		minmax[0] = 1000 
 		minmax[-1] = 1000
+
 		min_max_mask = np.logical_not(np.logical_or(minmax > hardening_threshold_max, minmax < hardening_threshold_min))
+		# print min_max_mask
 
 		timestamps = original_commands[0]
 		temporal_mask = timestamps.copy()
@@ -73,7 +79,9 @@ class Test:
 
 	def get_sequence(self):
 		for c in self.commands:
-			c.alpha = api.get_flavor(c.flavor_id)["alpha"]
+			flavor = api.get_flavor(c.flavor_id)
+			c.k = flavor["k"]
+			c.alpha = flavor["alpha"]
 			c.alpha = 0.3
 
 
@@ -87,22 +95,19 @@ class Test:
 		sequence = []
 		for c in self.commands:
 			subsequence = api.get_commands(c.behavior_id, alpha = c.alpha)
-			subsequence = harden(subsequence)
+			subsequence = harden(subsequence, c.alpha, c.k)
 			subsequence = self.bulls_eye(c.addr, subsequence)
 
-			prev = None
 			for t, v, h, d in subsequence:
 				c.hardness = h
 				c.locality = d
 				c.time = t * self.velocity + c.t0
 
 				if math.isnan(v):
-					curr = Job(c, t * self.velocity + c.t0, 0, prev)
-					sequence.append(curr)
+					sequence.append(Job(c, t * self.velocity + c.t0, 0))
 				else:
-					curr = Job(c, t * self.velocity + c.t0, v, prev)
-					sequence.append(curr)
-				prev = curr
+					sequence.append(Job(c, t * self.velocity + c.t0, v))
+
 
 		return sequence
 
