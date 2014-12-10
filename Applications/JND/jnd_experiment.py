@@ -36,13 +36,14 @@ class Experiment:
 	#creates file structure Actuator/participantNumber
 	def new_actuator(self, participantNumber):
 		self.actuator = random.choice(self.actuators)
-		if not os.path.exists(self.actuator):
+		print 'my actuator is ', self.actuator
+		if not os.path.exists(self.actuator): # if folder for actuator doesn't exist
 			os.makedirs(self.actuator)
 			participant = 'Participant'
 			participant += str(self.participantNumber)
 			participantFolder = self.actuator + '/' + participant + '/'
 			os.makedirs(participantFolder)
-
+		# create file
 
 
 	#sets query; resets limit and jnd_range
@@ -193,6 +194,15 @@ class Experiment:
 		data['a-value'] = avalue
 		data['error'] = error.tolist() #prevents type error
 		json_data = json.dumps(data)
+
+		# write to file
+		participant = 'Participant'
+		participant += str(self.participantNumber)
+		participantFolder = self.actuator + '/' + participant + '/'
+		fileName = os.path.join(participantFolder, 'data.txt')         
+		with open(fileName, 'w') as outfile:
+		    json.dump(data, outfile)
+		    
 		# url = "http://localhost:8080"
 		# r = requests.post(url, data=jsonText)
 
@@ -250,10 +260,11 @@ class JNDTestCases(unittest.TestCase):
     	#tests when actuators are empty if the experiment ends
     	experiment = Experiment()
     	experiment.actuators = []
-    	experiment.actuator_setup() #s hould print "Experiment complete!"
+    	experiment.actuator_setup() #should print "Experiment complete!"
 
     def test_visualize(self):
     	experiment = Experiment()
+    	experiment.actuator_setup()
     	experiment.values = [[40, [0, 79]], [100, [80, 120]], [200, [121, 300]], [400, [301, 589]], [690, [590, 800]], [900, [801, 1000]]]
     	experiment.visualize()
 
