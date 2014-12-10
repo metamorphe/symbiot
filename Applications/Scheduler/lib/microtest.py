@@ -82,7 +82,7 @@ class Test:
 			flavor = api.get_flavor(c.flavor_id)
 			c.k = flavor["k"]
 			c.alpha = flavor["alpha"]
-			c.alpha = 0.3
+			# c.alpha = 0.3
 
 
 		if self.time == None:

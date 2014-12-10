@@ -89,12 +89,12 @@ def cbs(schedule, Qs, Ts):
 	# print qs
 
 	for q in qs.quanta:
-		if q.id >= 573:
+		# print q
+		if q.id >= 288:
 			print q
 			for j in q.jobs:
 				print "\t", j
-		# print q
-
+		
 	return qs.to_schedule()
 
 def psf(schedule):
@@ -112,11 +112,11 @@ def psf(schedule):
 	nT = Ts * t_e / t_s
 
 	print "minimum time", nT, "current_time", t_e,
-	timescale = nT/ t_e  * 2
+	timescale = nT/ t_e 
 	print "scale", timescale
 
 	# ARTIFICIAL SIMULATION
-	Qs /= 2
+	Qs /= 4
 
 	schedule = elongate(schedule, timescale)
 	cbs_schedule = cbs(schedule, Qs, Ts)

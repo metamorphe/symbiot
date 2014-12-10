@@ -7,10 +7,14 @@ class Job(object):
         mc = Bunch()
         for k in metadata:
             mc[k] = metadata[k]
+        mc.hardhit = False
         self.metadata = mc
         self.value = value
 
         return
+
+    def clone(self):
+        return Job(self.metadata, self.priority, self.value)
 
     def __cmp__(self, other):
         return cmp(self.priority, other.priority)
@@ -23,46 +27,59 @@ class Job(object):
                 "|v: {:6.2f} ".format(self.value)+
                 "|| pr {:6.2f} ".format(self.priority))  
 
+    def q_str(self, T):
+
+        tween = "TWEENED" if not self.metadata.hardhit else "HARDHIT"
+        # JOB: DEADLINE: X, LOCALITY: X, HARDNESS: X, VALUE: X
+        return (tween + "|| q:  {:3.0f} ".format(np.floor(self.metadata.time / T)) + 
+                "addr: 0x{:02x} ".format(self.metadata.addr) + 
+                "|t(ms): {:4.0f} ".format(self.metadata.time * 1000) +   
+                "|v: {:6.2f} ".format(self.value))  
     	# return "@{:3.2f} ".format(self.priority) + "to {:1.0f}".format(self.metadata.addr) + ":" + "{:3.0f}".format(self.value)
     def __sub__(self, other):
     	return abs(self.metadata.time - other.metadata.time)
     
     def dv(self, other):
-        return float(other.value - self.value) 
+        o = other.value
+        s = self.value
 
-    def tween(self, other, segments, pos, T):
+        o = (o / self.metadata.k) **  self.metadata.alpha
+        s = (s / self.metadata.k) **  self.metadata.alpha
+        # CONVERT INTO PERCEPTUAL SPACE
+
+        return float(o - s) 
+
+    def tween(self, other, segments, pos, T, clone):
         # linear interpolation
-        # print self
-        # print other
-        # d_t = abs(np.floor(self.metadata.time / T) - np.floor(other.metadata.time / T))
-
-        d_t = (pos + abs(np.floor(self.metadata.time / T))) * T
-        # print "d_t", d_t,
-        # before = 0, now = 100, = (100  - 0) -100 pos = -1 ==> -100
-        # before = 100, now = 0, = (0 - 100) 100 pos = -1 ==> 100
-
-        # now = 0, after = 100, (0 - 100) 100 pos = 1 ==> 100
-        # now = 100, after = 0, (100 - 0) -100  pos = 1 ==> -100
-
+        # print "DEAD JOB", self.q_str(T)
+        # print "NEIG JOB", other.q_str(T)
+        d_t = pos + abs(np.floor(self.metadata.time / T))
+        # print "d_t", d_t
+        d_t *=  T
+      
         d_v = self.dv(other)
-        # print "d_v", d_v
         d_v /= segments
-        # print "d_energy", d_v
-
-        # 1000 - 0
 
 
-        # print "v", d_v, 
-       
-        # d_v *= pos
 
-        # print "final", d_t, d_v, "vars", segments, pos,
-        # print "place", np.floor(d_t / 0.004624)
-        self.metadata.time = d_t
-        self.value += d_v
-        # print self, '\n'
-       
-        return self
+        # convert in intensity space
+        p = (self.value / self.metadata.k) **  self.metadata.alpha
+        p += d_v
+        I = int( (p ** (1 / self.metadata.alpha)) * self.metadata.k)
+
+      
+        if clone:
+            j = self.clone()
+            # print "CLONE   ", j.q_str(T)
+            j.metadata.time = d_t
+            j.value = I
+            # print "CLONE'   ", j.q_str(T)   
+            return j
+        else:
+            other.metadata.time = d_t
+            other.value = I
+            return self
+
 
 
     def set_priority(self, type, param = None):

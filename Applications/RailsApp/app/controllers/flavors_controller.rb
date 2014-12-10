@@ -13,7 +13,7 @@ class FlavorsController < ApplicationController
     @behaviors = Behavior.all
     @flavor = Flavor.find(params[:id])
     h = @flavor.attributes
-    h["k"] = 255.0 / (255.0 ** (1.0 / @flavor.alpha))
+    h["k"] = 1000.0 / (1000.0 ** (1.0 / @flavor.alpha))
     respond_to do |format|
        format.html
        format.json { render json:  h}

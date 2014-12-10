@@ -37,25 +37,43 @@ class QuantaSchedule:
 		self.quanta = linked_quanta
 
 	def clean(self):
-		# dead_jobs = self.quanta[-1].schedule()
-		dead_jobs = [(q.id, q.schedule()) for q in self.quanta]
-		
-		# for id, j in dead_jobs:
-		# 	print id, j
+		dead_jobs = [1]
+		i = 0
+		while len(dead_jobs) > 0:
+			print "ITERATION:", i,
+			dead_jobs = [q.schedule() for q in self.quanta]
+			dead_jobs = sum(dead_jobs, [])
+			print "TOTAL:",  len(dead_jobs), 
+			removed = [q.reject() for q in self.quanta]
 
-		dead_jobs = [q for i, q in dead_jobs]
-
-		removed = [q.reject() for q in self.quanta]
 			
-		dead_jobs = sum(dead_jobs, [])
-		# for j in dead_jobs:
-		# 	print j
+			loss = len([ j for j in dead_jobs if j.metadata.hardhit])
+			
+			print "LOST:", loss
+			
+			revived = [ j for j in dead_jobs if not j.metadata.hardhit]
+			self.append(revived)
+			i += 1
+
 		
-		# these need to be added
-		# print "APPENDING"
-		self.append(dead_jobs)
-		# for q in self.quanta[0:80]: 
-			# print q
+
+
+
+
+		
+		# removed = [q.reject() for q in self.quanta]
+
+		# for j in dead_jobs:
+		# 	print j.q_str(self.period)
+		# removed = [q.reject() for q in self.quanta]
+		
+		# self.append(dead_jobs)
+
+		# print self
+
+
+
+
 
 
 	def find(self, id):
@@ -75,18 +93,11 @@ class QuantaSchedule:
 		self.quanta = sorted(self.quanta,  key=lambda q: q.id)
 				
 	def append(self, jobs):
-		# print self.period
-		
-
-
 		jobs = [j.set_priority("cbs", self.period) for j in jobs]
 
 		for j in jobs:
-			# print j
 			q = self.find(j.priority)
-			# print q
 			if q:
-				# print "Added to ", q.id
 				q.jobs.append(j)
 			else:
 				self.add_quanta(j)

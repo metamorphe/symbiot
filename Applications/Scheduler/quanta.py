@@ -52,32 +52,34 @@ class Quanta:
 		quanta_a, job_a = self.closest(query, -1)
 		quanta_b, job_b = self.closest(query, 1)
 		
-		if job_a:
-			# print "backward"
-			direction = -1
-			d = abs(quanta_a.id - self.id)
+		if not quanta_a or quanta_b:
+			query.metadata.hardhit = True
+			return query
 
-			if d > 1 or not quanta_a.is_full():
-				# print "BEFORE", query, "\n", job_b
-				query.tween(job_a, d, -1, self.period) # make tweened job at quanta - 1
-				# print query
-				# print "\n"
-				return query
-		if job_b:
-			# print "forward"
-			direction = 1
-			d = abs(quanta_b.id - self.id)
-			if d > 1 or not quanta_b.is_full():
-				# print "AFTER", query, "\n", job_b
-				query.tween(job_b, d, 1, self.period) # make tweened job at quanta - 1
-				# print query
-				# print "\n"
-				return query
-	
-		return query
+
+		d = abs(quanta_a.id - self.id) if job_a else abs(quanta_b.id - self.id)
+		is_full = quanta_a.is_full() if job_a else quanta_b.is_full()
+		direction = -1 if job_a else 1
+		job = job_a if job_a else job_b
+
+
+		# print job.q_str(self.period), "TWEENED: ", d, d > 1 or not is_full
+
+		if d > 1 or not is_full: 
+			j = query.tween(job, d, direction, self.period, True) # make tweened job at quanta - 1
+			return j
+
+		if d == 1:
+			# tween in between, replace the neighbor with tween 
+			j = query.tween(job, d, direction, self.period, False)
+			j.metadata.hardhit = True
+			return j
+
+		
 	def reject(self):
 		dead_jobs = self.jobs[int(self.capacity):]
 		for j in dead_jobs:
+			# print j.metadata
 			self.jobs.remove(j)
 		return True
 
