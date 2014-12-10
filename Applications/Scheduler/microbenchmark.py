@@ -37,7 +37,7 @@ def get_tests(time_to_complete = 1):
 		tests.append(test)
 	return tests
 	
-def run(time_to_complete = 1, virtual = True):
+def run(time_to_complete = 1, virtual = True, time_morph = 1, Q_reduce = 16):
 	tests = get_tests(time_to_complete)
 	if not virtual:
 		master = jnd.JNDArduino();
@@ -46,7 +46,7 @@ def run(time_to_complete = 1, virtual = True):
 	for t in tests:
 		print t
 		schedule = t.get_sequence()
-		schedule = scheduler.psf(schedule)
+		schedule = scheduler.psf(schedule, time_morph, Q_reduce)
 		# for i, job in enumerate(schedule):
 		# 	print i, job
 		# 	pass
@@ -67,19 +67,24 @@ import sys, getopt
 def main(argv):
 	is_virtual = False
 	time_to_complete = None
+	q_reduce = 16
+	time_morph = 1
 	try:
-		opts, args = getopt.getopt(argv,"ht:v",["ifile=","ofile="])
+		opts, args = getopt.getopt(argv,"vhs:q:t")
 	except getopt.GetoptError:
-		print 'microbenchmark.py -t <time_to_complete> -v <virtual>'
+		print 'microbenchmark.py -t <time_to_complete> -v <virtual> -q <q_s> -s <time_scale>'
 		sys.exit(2)
-		
+	print opts
 	for opt, arg in opts:
-		print opt, arg
+		# print opt, arg
 		if opt == '-h':
 			print 'microbenchmark.py -t <time_to_complete> -v <virtual>'
 			sys.exit()
-		elif opt in ("-t", "--t"):
-			time_to_complete = arg
+		elif opt in ("-q", "--qreduce"):
+			print arg
+			q_reduce = float(arg)
+		elif opt in ("-s", "--scale"):
+			time_morph = float(arg)
 		elif opt in ("-v", "--virtual"):
 			is_virtual = arg == ""
 
@@ -92,9 +97,13 @@ def main(argv):
 	if not time_to_complete:
 		time_to_complete = 1.29
 
-	print "IN", time_to_complete, "(S)"
+	print "IN", time_to_complete, "(S)", 
+	print " x ", time_morph,
+	print "at", "{:3.2f}%".format(q_reduce/16.*100), "PERFORMANCE" 
+	
 
-	run(time_to_complete, is_virtual)
+
+	run(time_to_complete, is_virtual, time_morph, q_reduce)
 
 
 

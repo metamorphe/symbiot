@@ -17,6 +17,7 @@ class QuantaSchedule:
 		self.period = Ts
 		self.quantize();
 		
+		
 
 	def quantize(self):
 		for j in self.jobs:
@@ -39,7 +40,11 @@ class QuantaSchedule:
 	def clean(self):
 		dead_jobs = [1]
 		i = 0
-		while len(dead_jobs) > 0:
+
+		# if hard_clean:
+			# removed = [q.reject() for q in self.quanta]
+
+		while len(dead_jobs) > 0 and i < 5:
 			print "ITERATION:", i,
 			dead_jobs = [q.schedule() for q in self.quanta]
 			dead_jobs = sum(dead_jobs, [])

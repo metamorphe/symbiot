@@ -1,4 +1,5 @@
 import scheduler
+import Queue
 class Quanta:
 	def __init__(self, idx, Qs, T, jobs, prev=None):
 		self.id = idx
@@ -52,7 +53,8 @@ class Quanta:
 		quanta_a, job_a = self.closest(query, -1)
 		quanta_b, job_b = self.closest(query, 1)
 		
-		if not quanta_a or quanta_b:
+		# print quanta_a or quanta_b
+		if not (quanta_a or quanta_b):
 			query.metadata.hardhit = True
 			return query
 
@@ -75,8 +77,23 @@ class Quanta:
 			j.metadata.hardhit = True
 			return j
 
-		
+	
+
+	def update(self, priority_type = "pdf"):
+		# get alpha value
+		q = Queue.PriorityQueue(maxsize=0)
+		for job in self.jobs: 
+			q.put(job.set_priority(priority_type))
+			
+		compiled_commands = []
+		while not q.empty():
+			compiled_commands.append(q.get())
+
+		self.jobs = compiled_commands
+
+
 	def reject(self):
+		self.update()
 		dead_jobs = self.jobs[int(self.capacity):]
 		for j in dead_jobs:
 			# print j.metadata

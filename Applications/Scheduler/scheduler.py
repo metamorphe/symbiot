@@ -90,14 +90,15 @@ def cbs(schedule, Qs, Ts):
 
 	for q in qs.quanta:
 		# print q
-		if q.id >= 288:
-			print q
-			for j in q.jobs:
-				print "\t", j
+		# if q.id >= 288:
+		# 	print q
+		# 	for j in q.jobs:
+		# 		print "\t", j
+		pass
 		
 	return qs.to_schedule()
 
-def psf(schedule):
+def psf(schedule, time_morph = 1, Q_reduce = 16):
 	# Us, Qs, Ts, timescale = calculate_edf_cbs(schedule, atmega328_k)
 	# print "Us", Us, "Qs", Qs, "Ts", Ts, timescale
 	
@@ -112,11 +113,12 @@ def psf(schedule):
 	nT = Ts * t_e / t_s
 
 	print "minimum time", nT, "current_time", t_e,
-	timescale = nT/ t_e 
+
+	timescale = nT/ t_e * time_morph 
 	print "scale", timescale
 
 	# ARTIFICIAL SIMULATION
-	Qs /= 4
+	Qs = Q_reduce
 
 	schedule = elongate(schedule, timescale)
 	cbs_schedule = cbs(schedule, Qs, Ts)
