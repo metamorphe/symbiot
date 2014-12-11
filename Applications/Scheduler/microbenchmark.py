@@ -54,7 +54,7 @@ def run(time_to_complete = 1, virtual = True, time_morph = 1, Q_reduce = 16):
 			scheduler.send(master, schedule)
 
 	if not virtual:
-		for i in range(0, 15):
+		for i in range(0, 32):
 			master.actuate(i, 0)
 		time.sleep(2)
 		master.close()
