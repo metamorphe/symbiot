@@ -76,6 +76,9 @@ class Test:
 	def print_sequence(self):
 		for s in self.sequence:
 			print s
+	def get_addr_list(self):
+		addrs = [command.addr for command in self.commands]
+		return set(addrs)
 
 	def get_sequence(self):
 		for c in self.commands:

@@ -37,6 +37,9 @@ class QuantaSchedule:
 
 		self.quanta = linked_quanta
 
+	def squeeky_clean(self):
+		removed = [q.reject() for q in self.quanta]
+
 	def clean(self):
 		dead_jobs = [1]
 		i = 0
@@ -45,16 +48,16 @@ class QuantaSchedule:
 			# removed = [q.reject() for q in self.quanta]
 
 		while len(dead_jobs) > 0 and i < 5:
-			print "ITERATION:", i,
+			# print "ITERATION:", i,
 			dead_jobs = [q.schedule() for q in self.quanta]
 			dead_jobs = sum(dead_jobs, [])
-			print "TOTAL:",  len(dead_jobs), 
+			# print "TOTAL:",  len(dead_jobs), 
 			removed = [q.reject() for q in self.quanta]
 
 			
 			loss = len([ j for j in dead_jobs if j.metadata.hardhit])
 			
-			print "LOST:", loss
+			# print "LOST:", loss
 			
 			revived = [ j for j in dead_jobs if not j.metadata.hardhit]
 			self.append(revived)

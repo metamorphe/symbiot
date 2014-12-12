@@ -1,21 +1,21 @@
 commands:
-  # - {"addr":0, "behavior_id":16, "flavor_id":5, "t0" : 0}
-  # - {"addr":1, "behavior_id":16, "flavor_id":5, "t0" : 0}
-  # - {"addr":2, "behavior_id":16, "flavor_id":5, "t0" : 0}
-  # - {"addr":3, "behavior_id":16, "flavor_id":5, "t0" : 0}
-  # - {"addr":4, "behavior_id":16, "flavor_id":5, "t0" : 0}
-  # - {"addr":5, "behavior_id":16, "flavor_id":5, "t0" : 0}
-  # - {"addr":6, "behavior_id":16, "flavor_id":5, "t0" : 0}
-  # - {"addr":7, "behavior_id":16, "flavor_id":5, "t0" : 0}
-  # - {"addr":8, "behavior_id":16, "flavor_id":5, "t0" : 0}
-  # - {"addr":9, "behavior_id":16, "flavor_id":5, "t0" : 0}
-  # - {"addr":10, "behavior_id":16, "flavor_id":5, "t0" : 0}
-  # - {"addr":11, "behavior_id":16, "flavor_id":5, "t0" : 0}
-  # - {"addr":12, "behavior_id":16, "flavor_id":5, "t0" : 0}
-  # - {"addr":13, "behavior_id":16, "flavor_id":5, "t0" : 0}
-  # - {"addr":14, "behavior_id":16, "flavor_id":5, "t0" : 0}
-  # - {"addr":15, "behavior_id":16, "flavor_id":5, "t0" : 0}
-  # # GREEN BOARD
+  - {"addr":0, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":1, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":2, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":3, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":4, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":5, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":6, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":7, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":8, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":9, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":10, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":11, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":12, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":13, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":14, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":15, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  # # # GREEN BOARD
   - {"addr":16, "behavior_id":16, "flavor_id":5, "t0" : 0}
   - {"addr":17, "behavior_id":16, "flavor_id":5, "t0" : 0}
   - {"addr":18, "behavior_id":16, "flavor_id":5, "t0" : 0}
@@ -34,8 +34,21 @@ commands:
   - {"addr":30, "behavior_id":16, "flavor_id":5, "t0" : 0}
   - {"addr":31, "behavior_id":16, "flavor_id":5, "t0" : 0}
   # MOTORS
-  - {"addr":43, "behavior_id":16, "flavor_id":2, "t0" : 0}
-  - {"addr":44, "behavior_id":16, "flavor_id":2, "t0" : 0}
-  - {"addr":45, "behavior_id":16, "flavor_id":2, "t0" : 0}
-  - {"addr":46, "behavior_id":16, "flavor_id":2, "t0" : 0}
-  - {"addr":47, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  # - {"addr":43, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  # - {"addr":44, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  # - {"addr":45, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  # - {"addr":46, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  # - {"addr":47, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  # # VIRTUAL
+  # - {"addr":32, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  # - {"addr":33, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  # - {"addr":34, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  # - {"addr":35, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  # - {"addr":36, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  # - {"addr":37, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  # - {"addr":38, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  # - {"addr":39, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  # - {"addr":40, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  # - {"addr":41, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  # - {"addr":42, "behavior_id":16, "flavor_id":2, "t0" : 0}
+

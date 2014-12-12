@@ -85,7 +85,7 @@ def cbs(schedule, Qs, Ts):
 	qs = QuantaSchedule(schedule, Qs, Ts)
 	# print qs
 
-	qs.clean()
+
 	# print qs
 
 	for q in qs.quanta:
@@ -96,9 +96,10 @@ def cbs(schedule, Qs, Ts):
 		# 		print "\t", j
 		pass
 		
-	return qs.to_schedule()
+	return qs
 
-def psf(schedule, time_morph = 1, Q_reduce = 16):
+
+def cbsedf(schedule, time_morph = 1, Q_reduce = 16, is_perfect = False):
 	# Us, Qs, Ts, timescale = calculate_edf_cbs(schedule, atmega328_k)
 	# print "Us", Us, "Qs", Qs, "Ts", Ts, timescale
 	
@@ -119,9 +120,44 @@ def psf(schedule, time_morph = 1, Q_reduce = 16):
 
 	# ARTIFICIAL SIMULATION
 	Qs = Q_reduce
+	if is_perfect:
+		Qs = m_col
 
 	schedule = elongate(schedule, timescale)
-	cbs_schedule = cbs(schedule, Qs, Ts)
+	qs = cbs(schedule, Qs, Ts)
+	qs.squeeky_clean()
+	cbs_schedule = qs.to_schedule()
+
+	return cbs_schedule
+
+def psf(schedule, time_morph = 1, Q_reduce = 16, is_perfect = False):
+	# Us, Qs, Ts, timescale = calculate_edf_cbs(schedule, atmega328_k)
+	# print "Us", Us, "Qs", Qs, "Ts", Ts, timescale
+	
+	# ARDUINO CAPACITY, EDF PARAMS
+	
+	Us = 1. / atmega328_k
+	Qs = 16.
+	Ts = Qs / Us / 1000
+	
+	# ADJUSTMENTS
+	t_s, t_e, m_col = edf_params(schedule) # in seconds
+	nT = Ts * t_e / t_s
+
+	print "minimum time", nT, "current_time", t_e,
+
+	timescale = nT/ t_e * time_morph 
+	print "scale", timescale
+
+	# ARTIFICIAL SIMULATION
+	Qs = Q_reduce
+	if is_perfect:
+		Qs = m_col
+
+	schedule = elongate(schedule, timescale)
+	qs = cbs(schedule, Qs, Ts)
+	qs.clean()
+	cbs_schedule = qs.to_schedule()
 
 	return cbs_schedule
 
@@ -141,7 +177,7 @@ def to_commands(schedule, priority_type = "edf", param = None):
 	return compiled_commands
 
 # send behavior
-def send(ard, base, verbose=False):
+def send(ard, base, addr_list, virtual=False, verbose=False):
 	if verbose: 
 		print "SCHEDULED SEND"
 	
@@ -160,16 +196,75 @@ def send(ard, base, verbose=False):
 
 		if verbose:
 			print "COMMAND @", "{:3.0f}ms".format(current_time * 1000), "to", job
-
-		ard.actuate(job.metadata.addr, int(job.value))
+		if not virtual:
+			ard.actuate(job.metadata.addr, int(job.value))
 		log.append(Job(job.metadata, time.time() - t0, job.value));
 
 	if verbose:
 		print "SCHEDULED END"
-	return calc_error(np.array(base), np.array(log))
 
-def calc_error(base, log):
-	return sum(base - log) / base.size * 100
+	error = []
+	# for addr in addr_list:
+		# print "Calculating error for", addr,
+		# error = np.concatenate((error, sampled_log(log, addr, atmega328_k / 1000.)))
+	# print error
+	return error
+
+def find_next(addr, log, ith):
+	indices = [i for i, j in enumerate(log) if j.metadata.addr == addr]
+	# print i, len(indices)
+	# print indices, ith
+	if ith > len(indices) - 1 :
+		return None
+	return log[indices[ith]]
+
+def sampled_log(log, addr, rate):
+	# print "sample rate: ",  rate, "n=", len(log), 
+
+	n = len(log)
+
+	T = log[-1].metadata.time
+	# print "Total_time", T
+	pos_t = 0
+
+	i = 0
+	curr_t = 0
+	curr_v = 0
+
+	samples = []
+
+	no_more_records = False
+	while pos_t < T:
+		# print pos_t * 1000, curr_v * 1000
+		if pos_t < curr_t or no_more_records:
+			samples.append((pos_t, curr_v))
+		else:
+			i += 1
+
+			next = find_next(addr, log, i)
+			if next:
+				# print next
+				curr_t = next.metadata.time 
+				curr_v = next.value
+				samples.append((pos_t, curr_v))
+			else:
+				# print "NO MORE RECORDS"
+				no_more_records = True
+		pos_t += rate
+
+	# print "E:", int(T/rate) + 1, "/", len(samples)
+
+	# for i, el in enumerate(samples):
+	# 	for t, v in el:
+	# 		if not v:
+	# 			print i, "HELLETH"
+	samples = [v for t, v, in samples]
+	# print samples
+	return np.array(samples)
+
+# def calc_error(base, log):
+# 	return sum(base - log) / base.size * 100
+
 
 
 

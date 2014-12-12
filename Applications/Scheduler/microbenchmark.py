@@ -9,6 +9,7 @@ import scheduler as scheduler
 import  time, yaml
 from microtest import Test
 from bunch import Bunch
+import numpy as np
 
 
 directory = "microbenchmarks/"
@@ -37,8 +38,50 @@ def get_tests(time_to_complete = 1):
 		tests.append(test)
 	return tests
 	
+def run_compare(time_to_complete = 1, virtual = True, time_morph = 1, Q_reduce = 16):
+	tests = get_tests(time_to_complete)
+	master = None
+	if not virtual:
+		master = jnd.JNDArduino();
+		master.open()
+		time.sleep(2)
+	for t in tests:
+		print t
+
+		addr_list = t.get_addr_list()
+		print "ADDR", addr_list
+		schedule = t.get_sequence()
+		schedule = scheduler.psf(schedule, time_morph, Q_reduce, True)
+		perfect_record = scheduler.send(master, schedule, addr_list, virtual)
+
+		schedule = t.get_sequence()
+		schedule = scheduler.psf(schedule, time_morph, Q_reduce)
+		psf_record = scheduler.send(master, schedule, addr_list, virtual)
+
+
+		schedule = t.get_sequence()
+		schedule = scheduler.cbsedf(schedule, time_morph, Q_reduce)
+		edf_record = scheduler.send(master, schedule, addr_list, virtual)
+
+	
+		n = min(len(psf_record), len(perfect_record), len(edf_record))
+
+
+		diff = np.absolute(perfect_record[:n] - psf_record[:n]) 
+		print "ERROR PSF:", np.sum(diff)/ n
+
+		diff = np.absolute(perfect_record[:n] - edf_record[:n]) 
+		print "ERROR EDF:", np.sum(diff)/ n
+
+	if not virtual:
+		for i in range(0, 32):
+			master.actuate(i, 0)
+		time.sleep(2)
+		master.close()
+
 def run(time_to_complete = 1, virtual = True, time_morph = 1, Q_reduce = 16):
 	tests = get_tests(time_to_complete)
+	master = None
 	if not virtual:
 		master = jnd.JNDArduino();
 		master.open()
@@ -50,8 +93,8 @@ def run(time_to_complete = 1, virtual = True, time_morph = 1, Q_reduce = 16):
 		# for i, job in enumerate(schedule):
 		# 	print i, job
 		# 	pass
-		if not virtual:
-			scheduler.send(master, schedule)
+		while True:
+			scheduler.send(master, schedule, False, virtual)
 
 	if not virtual:
 		for i in range(0, 32):
@@ -60,7 +103,32 @@ def run(time_to_complete = 1, virtual = True, time_morph = 1, Q_reduce = 16):
 		master.close()
 
 
+def bad_running(time_to_complete = 1, virtual = True, time_morph = 1, Q_reduce = 16):
+	tests = get_tests(time_to_complete)
+	master = None
+	addr_list = None
+	if not virtual:
+		master = jnd.JNDArduino();
+		master.open()
+		time.sleep(2)
+	for t in tests:
+		print t
+		schedule = t.get_sequence()
+		schedule = scheduler.cbsedf(schedule, time_morph, Q_reduce)
+		edf_record = scheduler.send(master, schedule, addr_list, virtual)
 
+		# for i, job in enumerate(schedule):
+		# 	print i, job
+		# 	pass
+		while True:
+			scheduler.send(master, schedule, None, False, virtual)
+
+	if not virtual:
+		for i in range(0, 32):
+			master.actuate(i, 0)
+		time.sleep(2)
+		master.close()
+	
 
 import sys, getopt
 
@@ -68,13 +136,14 @@ def main(argv):
 	is_virtual = False
 	time_to_complete = None
 	q_reduce = 16
+	bad_run = False
 	time_morph = 1
 	try:
-		opts, args = getopt.getopt(argv,"vhs:q:t")
+		opts, args = getopt.getopt(argv,"vbhs:q:t")
 	except getopt.GetoptError:
 		print 'microbenchmark.py -t <time_to_complete> -v <virtual> -q <q_s> -s <time_scale>'
 		sys.exit(2)
-	print opts
+	# print opts
 	for opt, arg in opts:
 		# print opt, arg
 		if opt == '-h':
@@ -87,6 +156,8 @@ def main(argv):
 			time_morph = float(arg)
 		elif opt in ("-v", "--virtual"):
 			is_virtual = arg == ""
+		elif opt in ("-b", "--bad"):
+			bad_run = arg == ""
 
 	print "RUNNING PERCEPTUAL TESTS",
 	if is_virtual:
@@ -102,8 +173,11 @@ def main(argv):
 	print "at", "{:3.2f}%".format(q_reduce/16.*100), "PERFORMANCE" 
 	
 
-
-	run(time_to_complete, is_virtual, time_morph, q_reduce)
+	if not bad_run:
+		run(time_to_complete, is_virtual, time_morph, q_reduce)
+	else:
+		bad_running(time_to_complete, is_virtual, time_morph, q_reduce)
+	# run_compare(time_to_complete, is_virtual, time_morph, q_reduce)
 
 
 

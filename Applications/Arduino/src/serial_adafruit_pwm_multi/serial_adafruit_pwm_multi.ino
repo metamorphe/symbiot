@@ -55,7 +55,8 @@ void process(String keyData, String valueData){
 
     // value = map(value, 0, 1000, 0, 255);
     value = constrain(value, 0, 4096);
-    value = map(value, 0, 1001, 0, 4096);
+    value = map(value, 0, 1001, 0, 500);
+    // value = map(value, 0, 1001, 0, 4096);
     
     // Serial.println(value);
     // analogWrite(key, value);
