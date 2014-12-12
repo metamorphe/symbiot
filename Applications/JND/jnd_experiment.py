@@ -6,10 +6,8 @@ import matplotlib.pyplot as plt
 
 class Experiment:
 	
-	participantNumber = 0
-
 	def __init__(self):
-		self.participantNumber += 1 #change participant counter
+		self.participantName = ""
 		self.actuators = ["LED"]
 		print "Press 's' to turn on the arduino and start the first actuator" #starts actuator setup
 		self.ranges = []
@@ -21,9 +19,10 @@ class Experiment:
 		self.query = random.choice(self.values)
 
 	#sets up new actuator
-	def actuator_setup(self):
+	def actuator_setup(self, username):
 		if len(self.actuators) != 0:
-			self.new_actuator(self.participantNumber)
+			self.participantName = username
+			self.new_actuator()
 			self.ranges = []
 			self.values = []
 			for i in range(0, 1001):
@@ -33,13 +32,13 @@ class Experiment:
 			print "Experiment complete!"
 
 
-	#creates file structure Actuator/participantNumber
-	def new_actuator(self, participantNumber):
+	#creates file structure Actuator/participantName
+	def new_actuator(self):
 		self.actuator = random.choice(self.actuators)
 		if not os.path.exists(self.actuator): # if folder for actuator doesn't exist
 			os.makedirs(self.actuator)
 			participant = 'Participant'
-			participant += str(self.participantNumber)
+			participant += str(self.participantName)
 			participantFolder = self.actuator + '/' + participant + '/'
 			os.makedirs(participantFolder)
 
@@ -214,7 +213,7 @@ class Experiment:
 
 		# write to file
 		participant = 'Participant'
-		participant += str(self.participantNumber)
+		participant += str(self.participantName)
 		participantFolder = self.actuator + '/' + participant + '/'
 		fileName = os.path.join(participantFolder, 'data.txt')         
 		with open(fileName, 'w') as outfile:
@@ -228,7 +227,7 @@ class JNDTestCases(unittest.TestCase):
     def test_init(self):
         """Is init method working setting up properly?"""
         experiment = Experiment()
-        self.assertTrue(experiment.participantNumber == 1) # participant 1
+        # self.assertTrue(experiment.participantNumber == 1) # participant 1
         self.assertTrue(len(experiment.values) == 1001) #values has [0, 1000]
         self.assertTrue(len(experiment.ranges) == 0) # ranges is empty
         self.assertTrue(experiment.query in experiment.values) # a random number from self.values is set as query

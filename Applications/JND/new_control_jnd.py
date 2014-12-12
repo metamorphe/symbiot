@@ -24,7 +24,8 @@ class KeyEventThread(threading.Thread):
 					open_connection = True
 					print "Opened serial connection:"
 					self.controller.open();
-				self.experiment.actuator_setup()
+				username = raw_input("Please enter your initials: ")
+				self.experiment.actuator_setup(username)
 				self.value = self.experiment.get_query()
 				# print "new value ", self.value
 				self.controller.actuate(5, self.value);
