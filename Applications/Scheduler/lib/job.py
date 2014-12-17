@@ -26,6 +26,9 @@ class Job(object):
                 "|h: {:3.0f} ".format(self.metadata.hardness)+
                 "|v: {:6.2f} ".format(self.value)+
                 "|| pr {:6.2f} ".format(self.priority))  
+   
+    def n_gamma(self):
+        return (self.value / self.metadata.k) **  self.metadata.alpha
 
     def q_str(self, T):
 

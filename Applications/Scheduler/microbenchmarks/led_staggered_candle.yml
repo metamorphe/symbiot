@@ -9,4 +9,3 @@ commands:
   - {"addr":7, "behavior_id":7, "flavor_id":5, "t0" : 0}
   - {"addr":8, "behavior_id":7, "flavor_id":5, "t0" : 0}
   - {"addr":9, "behavior_id":7, "flavor_id":5, "t0" : 0}
-  

@@ -113,10 +113,10 @@ def cbsedf(schedule, time_morph = 1, Q_reduce = 16, is_perfect = False):
 	t_s, t_e, m_col = edf_params(schedule) # in seconds
 	nT = Ts * t_e / t_s
 
-	print "minimum time", nT, "current_time", t_e,
+	# print "minimum time", nT, "current_time", t_e,
 
 	timescale = nT/ t_e * time_morph 
-	print "scale", timescale
+	# print "scale", timescale
 
 	# ARTIFICIAL SIMULATION
 	Qs = Q_reduce
@@ -144,10 +144,10 @@ def psf(schedule, time_morph = 1, Q_reduce = 16, is_perfect = False):
 	t_s, t_e, m_col = edf_params(schedule) # in seconds
 	nT = Ts * t_e / t_s
 
-	print "minimum time", nT, "current_time", t_e,
+	# print "minimum time", nT, "current_time", t_e,
 
 	timescale = nT/ t_e * time_morph 
-	print "scale", timescale
+	# print "scale", timescale
 
 	# ARTIFICIAL SIMULATION
 	Qs = Q_reduce
@@ -204,9 +204,9 @@ def send(ard, base, addr_list, virtual=False, verbose=False):
 		print "SCHEDULED END"
 
 	error = []
-	# for addr in addr_list:
+	for addr in addr_list:
 		# print "Calculating error for", addr,
-		# error = np.concatenate((error, sampled_log(log, addr, atmega328_k / 1000.)))
+		error = np.concatenate((error, sampled_log(log, addr, atmega328_k / 1000.)))
 	# print error
 	return error
 
@@ -245,7 +245,8 @@ def sampled_log(log, addr, rate):
 			if next:
 				# print next
 				curr_t = next.metadata.time 
-				curr_v = next.value
+				curr_v = next.n_gamma()
+				# print curr_v
 				samples.append((pos_t, curr_v))
 			else:
 				# print "NO MORE RECORDS"

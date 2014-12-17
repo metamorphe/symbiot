@@ -41,15 +41,12 @@ def get_tests(time_to_complete = 1):
 def run_compare(time_to_complete = 1, virtual = True, time_morph = 1, Q_reduce = 16):
 	tests = get_tests(time_to_complete)
 	master = None
-	if not virtual:
-		master = jnd.JNDArduino();
-		master.open()
-		time.sleep(2)
 	for t in tests:
 		print t
 
 		addr_list = t.get_addr_list()
-		print "ADDR", addr_list
+		print "AN:", len(addr_list),
+
 		schedule = t.get_sequence()
 		schedule = scheduler.psf(schedule, time_morph, Q_reduce, True)
 		perfect_record = scheduler.send(master, schedule, addr_list, virtual)
@@ -58,26 +55,24 @@ def run_compare(time_to_complete = 1, virtual = True, time_morph = 1, Q_reduce =
 		schedule = scheduler.psf(schedule, time_morph, Q_reduce)
 		psf_record = scheduler.send(master, schedule, addr_list, virtual)
 
-
 		schedule = t.get_sequence()
 		schedule = scheduler.cbsedf(schedule, time_morph, Q_reduce)
 		edf_record = scheduler.send(master, schedule, addr_list, virtual)
-
 	
 		n = min(len(psf_record), len(perfect_record), len(edf_record))
 
 
 		diff = np.absolute(perfect_record[:n] - psf_record[:n]) 
-		print "ERROR PSF:", np.sum(diff)/ n
+		# print np.sum(diff)
+		print "PTS:", 20 * np.log10(n * 999 / np.sqrt(np.sum(diff))),
+		print "PTS2:", np.sum(diff)/n,
 
-		diff = np.absolute(perfect_record[:n] - edf_record[:n]) 
-		print "ERROR EDF:", np.sum(diff)/ n
+		diff = np.absolute(perfect_record[:n] - edf_record[:n])
+		# print np.sum(diff) 
+		print "CBS:", 20 * np.log10(n * 999 / np.sqrt(np.sum(diff))),
+		print "CBS2:", np.sum(diff)/n
 
-	if not virtual:
-		for i in range(0, 32):
-			master.actuate(i, 0)
-		time.sleep(2)
-		master.close()
+	
 
 def run(time_to_complete = 1, virtual = True, time_morph = 1, Q_reduce = 16):
 	tests = get_tests(time_to_complete)
@@ -150,7 +145,6 @@ def main(argv):
 			print 'microbenchmark.py -t <time_to_complete> -v <virtual>'
 			sys.exit()
 		elif opt in ("-q", "--qreduce"):
-			print arg
 			q_reduce = float(arg)
 		elif opt in ("-s", "--scale"):
 			time_morph = float(arg)
@@ -159,25 +153,35 @@ def main(argv):
 		elif opt in ("-b", "--bad"):
 			bad_run = arg == ""
 
-	print "RUNNING PERCEPTUAL TESTS",
-	if is_virtual:
-		print "VIRTUALLY",
-	else:
-		print "TO ARDUINO",
+	# print "RUNNING PERCEPTUAL TESTS",
+	# if is_virtual:
+	# 	print "VIRTUALLY",
+	# else:
+	# 	print "TO ARDUINO",
 
 	if not time_to_complete:
 		time_to_complete = 1.29
 
-	print "IN", time_to_complete, "(S)", 
-	print " x ", time_morph,
-	print "at", "{:3.2f}%".format(q_reduce/16.*100), "PERFORMANCE" 
+	print "T:", time_to_complete * time_morph, "(S)", 
+	# print "T:", time_to_complete, "(S)", 
+	# print " x ", time_morph,
+	print "Qs", "{:2.0f}".format(q_reduce),
+	# print "at", "{:3.2f}%".format(q_reduce/16.*100) 
 	
 
-	if not bad_run:
-		run(time_to_complete, is_virtual, time_morph, q_reduce)
-	else:
-		bad_running(time_to_complete, is_virtual, time_morph, q_reduce)
-	# run_compare(time_to_complete, is_virtual, time_morph, q_reduce)
+	# if not bad_run:
+	# 	run(time_to_complete, is_virtual, time_morph, q_reduce)
+	# else:
+	# 	bad_running(time_to_complete, is_virtual, time_morph, q_reduce)
+	run_compare(time_to_complete, is_virtual, time_morph, q_reduce)
+	# run_compare(time_to_complete, is_virtual, time_morph, 1)
+	# run_compare(time_to_complete, is_virtual, time_morph, 2)
+	# run_compare(time_to_complete, is_virtual, time_morph, 5)
+	# run_compare(time_to_complete, is_virtual, time_morph, 10)
+	# run_compare(time_to_complete, is_virtual, time_morph, 20)
+	# run_compare(time_to_complete, is_virtual, time_morph, 30)
+	# run_compare(time_to_complete, is_virtual, time_morph, 40)
+	# run_compare(time_to_complete, is_virtual, time_morph, 48)
 
 
 

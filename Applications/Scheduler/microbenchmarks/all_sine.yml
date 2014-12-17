@@ -15,7 +15,7 @@ commands:
   - {"addr":13, "behavior_id":16, "flavor_id":5, "t0" : 0}
   - {"addr":14, "behavior_id":16, "flavor_id":5, "t0" : 0}
   - {"addr":15, "behavior_id":16, "flavor_id":5, "t0" : 0}
-  # # # GREEN BOARD
+  # # GREEN BOARD
   - {"addr":16, "behavior_id":16, "flavor_id":5, "t0" : 0}
   - {"addr":17, "behavior_id":16, "flavor_id":5, "t0" : 0}
   - {"addr":18, "behavior_id":16, "flavor_id":5, "t0" : 0}
@@ -34,21 +34,77 @@ commands:
   - {"addr":30, "behavior_id":16, "flavor_id":5, "t0" : 0}
   - {"addr":31, "behavior_id":16, "flavor_id":5, "t0" : 0}
   # MOTORS
-  # - {"addr":43, "behavior_id":16, "flavor_id":2, "t0" : 0}
-  # - {"addr":44, "behavior_id":16, "flavor_id":2, "t0" : 0}
-  # - {"addr":45, "behavior_id":16, "flavor_id":2, "t0" : 0}
-  # - {"addr":46, "behavior_id":16, "flavor_id":2, "t0" : 0}
-  # - {"addr":47, "behavior_id":16, "flavor_id":2, "t0" : 0}
-  # # VIRTUAL
-  # - {"addr":32, "behavior_id":16, "flavor_id":2, "t0" : 0}
-  # - {"addr":33, "behavior_id":16, "flavor_id":2, "t0" : 0}
-  # - {"addr":34, "behavior_id":16, "flavor_id":2, "t0" : 0}
-  # - {"addr":35, "behavior_id":16, "flavor_id":2, "t0" : 0}
-  # - {"addr":36, "behavior_id":16, "flavor_id":2, "t0" : 0}
-  # - {"addr":37, "behavior_id":16, "flavor_id":2, "t0" : 0}
-  # - {"addr":38, "behavior_id":16, "flavor_id":2, "t0" : 0}
-  # - {"addr":39, "behavior_id":16, "flavor_id":2, "t0" : 0}
-  # - {"addr":40, "behavior_id":16, "flavor_id":2, "t0" : 0}
-  # - {"addr":41, "behavior_id":16, "flavor_id":2, "t0" : 0}
-  # - {"addr":42, "behavior_id":16, "flavor_id":2, "t0" : 0}
-
+  - {"addr":43, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":44, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":45, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":46, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":47, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":32, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":33, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":34, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":35, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":36, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":37, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":38, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":39, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":40, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":41, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":42, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":43, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":44, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":45, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":46, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":47, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":48, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":49, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":50, "behavior_id":16, "flavor_id":2, "t0" : 0}
+  - {"addr":51, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":52, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":53, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":54, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":55, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":56, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":57, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":58, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":59, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":60, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":61, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":62, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":61, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":63, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":64, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":65, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":66, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":67, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":68, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":69, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":70, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":71, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":72, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":73, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":74, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":75, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":76, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":77, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":78, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":79, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":80, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":81, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":82, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":83, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":84, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":85, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":86, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":87, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":88, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":89, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":90, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":91, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":92, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":93, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":94, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":95, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":96, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":97, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":98, "behavior_id":16, "flavor_id":5, "t0" : 0}
+  - {"addr":99, "behavior_id":16, "flavor_id":5, "t0" : 0}
