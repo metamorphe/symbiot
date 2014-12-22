@@ -10,10 +10,11 @@ import  time, yaml
 from microtest import Test
 from bunch import Bunch
 import numpy as np
+import sys, getopt
 
 
 directory = "microbenchmarks/"
-benchmark_file = 'tests.yml'
+benchmark_file = 'stagger.yml'
 
 
 def get_json(filename):
@@ -37,95 +38,120 @@ def get_tests(time_to_complete = 1):
 		test = Test(f, commands, config, time_to_complete)
 		tests.append(test)
 	return tests
-	
-def run_compare(time_to_complete = 1, virtual = True, time_morph = 1, Q_reduce = 16):
-	tests = get_tests(time_to_complete)
-	master = None
+
+def evaluate(schedule):
+	n = min(len(psf_record), len(perfect_record), len(edf_record))
+
+	diff = np.absolute(perfect_record[:n] - psf_record[:n]) 
+	MSE = (np.sum(np.power(diff, 2))) / n
+	error = 20 * np.log10(999) - 10 * np.log10(MSE)
+	print ",", error,
+
+	diff = np.absolute(perfect_record[:n] - edf_record[:n])
+	MSE = (np.sum(np.power(diff, 2))) / n
+	error = 20 * np.log10(999) - 10 * np.log10(MSE)
+	print ",", error
+
+
+def send(arduino):
+
+
+def run_arduino(schedule):
+	controller = None
+	controller = jnd.JNDArduino();
+	controller.open()
+	send(controller, schedule)
+	controller.turn_all_off()
+	controller.close()
+
+
+def run(tests):	
 	for t in tests:
 		print t
-
 		addr_list = t.get_addr_list()
-		print "AN:", len(addr_list),
-
-		schedule = t.get_sequence()
+		schedule = t.get_sequence()		
 		schedule = scheduler.psf(schedule, time_morph, Q_reduce, True)
-		perfect_record = scheduler.send(master, schedule, addr_list, virtual)
+		base = scheduler.send(master, schedule, addr_list, virtual, False)
 
 		schedule = t.get_sequence()
-		schedule = scheduler.psf(schedule, time_morph, Q_reduce)
-		psf_record = scheduler.send(master, schedule, addr_list, virtual)
-
+		scheduleA = scheduler.psf(schedule, time_morph, Q_reduce)
 		schedule = t.get_sequence()
-		schedule = scheduler.cbsedf(schedule, time_morph, Q_reduce)
-		edf_record = scheduler.send(master, schedule, addr_list, virtual)
+		scheduleB = scheduler.cbsedf(schedule, time_morph, Q_reduce)
+		
+		print evaluate(base, scheduleA)
+		print evaluate(base, scheduleB)
+
+
+
+def macrobenchmark( time_to_complete = 1):
 	
-		n = min(len(psf_record), len(perfect_record), len(edf_record))
+	config = open_yaml("microbenchmarks/config.yml")
+	tests = []	
+	data =[]
+
+	f = "MACROBENCHMARK " 
+	for i in range (0, 7):
+		data.append({"addr":i, "behavior_id": 39, "flavor_id":5, "start" : 0})
+	for i in range (0, 16):
+		data.append({"addr":i, "behavior_id": 10, "flavor_id":5, "start" : 0})
+	for i in range (0, 30):
+		data.append({"addr":i, "behavior_id": 16, "flavor_id":5, "start" : 5})
+	for i in range (0, 2):
+		data.append({"addr":i, "behavior_id": 12, "flavor_id":5, "start" : 5})
+
+	step = 0.0001
+	for i in range (0, 30):
+			data.append({"addr":i, "behavior_id": 16, "flavor_id":5, "start" : 8 + i * step})
+
+	data.append({"addr":i, "behavior_id": 13, "flavor_id":5, "start" : 8 + i * step})
 
 
-		diff = np.absolute(perfect_record[:n] - psf_record[:n]) 
-		# print np.sum(diff)
-		print "PTS:", 20 * np.log10(n * 999 / np.sqrt(np.sum(diff))),
-		print "PTS2:", np.sum(diff)/n,
-
-		diff = np.absolute(perfect_record[:n] - edf_record[:n])
-		# print np.sum(diff) 
-		print "CBS:", 20 * np.log10(n * 999 / np.sqrt(np.sum(diff))),
-		print "CBS2:", np.sum(diff)/n
-
+	commands = [Bunch(**command) for command in data]
+	test = Test(f, commands, config, time_to_complete)
+	tests.append(test)
 	
+	return tests
 
-def run(time_to_complete = 1, virtual = True, time_morph = 1, Q_reduce = 16):
-	tests = get_tests(time_to_complete)
-	master = None
-	if not virtual:
-		master = jnd.JNDArduino();
-		master.open()
-		time.sleep(2)
-	for t in tests:
-		print t
-		schedule = t.get_sequence()
-		schedule = scheduler.psf(schedule, time_morph, Q_reduce)
-		# for i, job in enumerate(schedule):
-		# 	print i, job
-		# 	pass
-		while True:
-			scheduler.send(master, schedule, False, virtual)
-
-	if not virtual:
-		for i in range(0, 32):
-			master.actuate(i, 0)
-		time.sleep(2)
-		master.close()
-
-
-def bad_running(time_to_complete = 1, virtual = True, time_morph = 1, Q_reduce = 16):
-	tests = get_tests(time_to_complete)
-	master = None
-	addr_list = None
-	if not virtual:
-		master = jnd.JNDArduino();
-		master.open()
-		time.sleep(2)
-	for t in tests:
-		print t
-		schedule = t.get_sequence()
-		schedule = scheduler.cbsedf(schedule, time_morph, Q_reduce)
-		edf_record = scheduler.send(master, schedule, addr_list, virtual)
-
-		# for i, job in enumerate(schedule):
-		# 	print i, job
-		# 	pass
-		while True:
-			scheduler.send(master, schedule, None, False, virtual)
-
-	if not virtual:
-		for i in range(0, 32):
-			master.actuate(i, 0)
-		time.sleep(2)
-		master.close()
+def microbenchmark_budget(behavior_id, n=35, step=0):
+	config = open_yaml("microbenchmarks/config.yml")
+	scales = [11, 15, 20, 25, 30, 35, 40, 45]	
 	
+	tests = []
 
-import sys, getopt
+	for n in scales: 
+		data = []
+		f = "$$$/B" + str(behavior_id) + "/" + str(n) + "/" + 0
+
+		for i in range (0, n):
+			data.append({"addr": i, "behavior_id": behavior_id, "flavor_id": 5, "start" : i * step})
+
+		commands = [Bunch(**command) for command in data]
+		test = Test(f, commands, config, time_to_complete)
+		tests.append(test)
+	
+	return tests
+
+
+
+def microbenchmark_scale(behavior_id, q_s=10, step=0):
+	config = open_yaml("microbenchmarks/config.yml")
+	scales = [11, 15, 20, 25, 30, 35, 40, 45]	
+	tests = []
+
+	for n in scales: 
+		data =[]
+
+		f = "SCALE/B" + str(behavior_id) + "/" + str(n) + "/" + 0
+
+		for i in range (0, n):
+			data.append({"addr": i, "behavior_id": behavior_id, "flavor_id": 5, "start" : i * step})
+
+		commands = [Bunch(**command) for command in data]
+		test = Test(f, commands, config, time_to_complete)
+		tests.append(test)
+	
+	return tests
+
 
 def main(argv):
 	is_virtual = False
@@ -133,6 +159,8 @@ def main(argv):
 	q_reduce = 16
 	bad_run = False
 	time_morph = 1
+
+
 	try:
 		opts, args = getopt.getopt(argv,"vbhs:q:t")
 	except getopt.GetoptError:
@@ -165,23 +193,9 @@ def main(argv):
 	print "T:", time_to_complete * time_morph, "(S)", 
 	# print "T:", time_to_complete, "(S)", 
 	# print " x ", time_morph,
-	print "Qs", "{:2.0f}".format(q_reduce),
+	print "Qs", "{:2.0f}".format(q_reduce)
 	# print "at", "{:3.2f}%".format(q_reduce/16.*100) 
 	
-
-	# if not bad_run:
-	# 	run(time_to_complete, is_virtual, time_morph, q_reduce)
-	# else:
-	# 	bad_running(time_to_complete, is_virtual, time_morph, q_reduce)
-	run_compare(time_to_complete, is_virtual, time_morph, q_reduce)
-	# run_compare(time_to_complete, is_virtual, time_morph, 1)
-	# run_compare(time_to_complete, is_virtual, time_morph, 2)
-	# run_compare(time_to_complete, is_virtual, time_morph, 5)
-	# run_compare(time_to_complete, is_virtual, time_morph, 10)
-	# run_compare(time_to_complete, is_virtual, time_morph, 20)
-	# run_compare(time_to_complete, is_virtual, time_morph, 30)
-	# run_compare(time_to_complete, is_virtual, time_morph, 40)
-	# run_compare(time_to_complete, is_virtual, time_morph, 48)
 
 
 

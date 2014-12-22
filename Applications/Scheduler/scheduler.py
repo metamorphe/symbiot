@@ -117,7 +117,8 @@ def cbsedf(schedule, time_morph = 1, Q_reduce = 16, is_perfect = False):
 
 	timescale = nT/ t_e * time_morph 
 	# print "scale", timescale
-
+	if timescale > 2:
+		timescale = 2
 	# ARTIFICIAL SIMULATION
 	Qs = Q_reduce
 	if is_perfect:
@@ -142,13 +143,15 @@ def psf(schedule, time_morph = 1, Q_reduce = 16, is_perfect = False):
 	
 	# ADJUSTMENTS
 	t_s, t_e, m_col = edf_params(schedule) # in seconds
-	nT = Ts * t_e / t_s
 
+	nT = Ts * t_e / t_s
+	# print "EDF", m_col
 	# print "minimum time", nT, "current_time", t_e,
 
 	timescale = nT/ t_e * time_morph 
 	# print "scale", timescale
-
+	if timescale > 2:
+		timescale = 2
 	# ARTIFICIAL SIMULATION
 	Qs = Q_reduce
 	if is_perfect:
@@ -184,21 +187,24 @@ def send(ard, base, addr_list, virtual=False, verbose=False):
 	# Need to put this on a separate thread
 	t0 = time.time()
 	log = []
-	
+	current_time = 0
 	for job in base:
-		next_time = job.metadata.time # delays for x ms
-		current_time = time.time() - t0
+		# print job, current_time
+		# next_time = job.metadata.time # delays for x ms
+		# current_time = time.time() - t0
 		
-		while(next_time > current_time):
-			# print "Sleeping at", "{:3.0f}ms".format(current_time * 1000), "for", "{:3.0f}ms".format((next_time - current_time) * 1000)
-			time.sleep((next_time - current_time))
-			current_time = (time.time() - t0)
+		# while(next_time > current_time):
+		# 	# print "Sleeping at", "{:3.0f}ms".format(current_time * 1000), "for", "{:3.0f}ms".format((next_time - current_time) * 1000)
+		# 	time.sleep((next_time - current_time))
+		# 	current_time = (time.time() - t0)
 
-		if verbose:
-			print "COMMAND @", "{:3.0f}ms".format(current_time * 1000), "to", job
-		if not virtual:
-			ard.actuate(job.metadata.addr, int(job.value))
-		log.append(Job(job.metadata, time.time() - t0, job.value));
+		# if verbose:
+		# 	print "COMMAND @", "{:3.0f}ms".format(current_time * 1000), "to", job
+		# if not virtual:
+		# 	ard.actuate(job.metadata.addr, int(job.value))
+
+		log.append(job);
+		# log.append(Job(job.metadata, time.time() - t0, job.value));
 
 	if verbose:
 		print "SCHEDULED END"

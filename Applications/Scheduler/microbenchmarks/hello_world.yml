@@ -1,3 +1,14 @@
 commands:
-  - {addr: 0, behavior_id: 39, flavor_id: 5 , t0 : 0}
-  # - {addr: 1, behavior_id: 39, flavor_id: 5 , t0 : 0}
+  - {addr: 0, behavior_id: 39, flavor_id: 5 , start : 0}
+  - {addr: 1, behavior_id: 39, flavor_id: 5 , start : 0.1}
+  - {addr: 2, behavior_id: 39, flavor_id: 5 , start : 0.1}
+  - {addr: 3, behavior_id: 39, flavor_id: 5 , start : 0.2}
+  - {addr: 3, behavior_id: 39, flavor_id: 5 , start : 0.2}
+  # - {addr: 4, behavior_id: 39, flavor_id: 5 , start : 0.2}
+  # - {addr: 5, behavior_id: 39, flavor_id: 5 , start : 0.2}
+  # - {addr: 6, behavior_id: 39, flavor_id: 5 , start : 0.2}
+  # - {addr: 7, behavior_id: 39, flavor_id: 5 , start : 0.2}
+  # - {addr: 8, behavior_id: 39, flavor_id: 5 , start : 0.2}
+  # - {addr: 9, behavior_id: 39, flavor_id: 5 , start : 0.2}
+  # - {addr: 10, behavior_id: 39, flavor_id: 5 , start : 0.2}
+  # - {addr: 1, behavior_id: 39, flavor_id: 5 , start : 0}

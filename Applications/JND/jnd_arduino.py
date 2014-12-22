@@ -23,6 +23,9 @@ class JNDArduino:
 		self.ser.write(str(value))
 		self.ser.write("\n")
 
+	def turn_all_off(self):
+		for i in range(0, 32):
+			self.actuate(i, 0)
 
 	def open(self):
 		self.ser.open()

@@ -17,8 +17,6 @@ class QuantaSchedule:
 		self.period = Ts
 		self.quantize();
 		
-		
-
 	def quantize(self):
 		for j in self.jobs:
 			j.set_priority("cbs", self.period)
@@ -42,12 +40,9 @@ class QuantaSchedule:
 
 	def clean(self):
 		dead_jobs = [1]
-		i = 0
+		num_iter = 0
 
-		# if hard_clean:
-			# removed = [q.reject() for q in self.quanta]
-
-		while len(dead_jobs) > 0 and i < 5:
+		while len(dead_jobs) > 0 and num_iter < 5:
 			# print "ITERATION:", i,
 			dead_jobs = [q.schedule() for q in self.quanta]
 			dead_jobs = sum(dead_jobs, [])
@@ -55,33 +50,12 @@ class QuantaSchedule:
 			removed = [q.reject() for q in self.quanta]
 
 			
-			loss = len([ j for j in dead_jobs if j.metadata.hardhit])
-			
+			loss = len([ j for j in dead_jobs if j.metadata.hardhit])			
 			# print "LOST:", loss
-			
 			revived = [ j for j in dead_jobs if not j.metadata.hardhit]
+
 			self.append(revived)
-			i += 1
-
-		
-
-
-
-
-		
-		# removed = [q.reject() for q in self.quanta]
-
-		# for j in dead_jobs:
-		# 	print j.q_str(self.period)
-		# removed = [q.reject() for q in self.quanta]
-		
-		# self.append(dead_jobs)
-
-		# print self
-
-
-
-
+			num_iter += 1
 
 
 	def find(self, id):
@@ -92,11 +66,9 @@ class QuantaSchedule:
 			return results[0]
 		
 	def add_quanta(self, j):
-		# print j.priority
 		prev = min(self.quanta, key=lambda q: j.priority - q.id )
 		q = Quanta(j.priority, self.capacity, self.period, [j], prev)
 		q.created = True
-		# print "Created ", q.id
 		self.quanta.append(q)
 		self.quanta = sorted(self.quanta,  key=lambda q: q.id)
 				
@@ -121,6 +93,4 @@ class QuantaSchedule:
 		for q in self.quanta:
 			print q
 		# s += quanta
-		return s 
-
-	
+		return s

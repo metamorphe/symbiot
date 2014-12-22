@@ -104,12 +104,13 @@ class Test:
 			for t, v, h, d in subsequence:
 				c.hardness = h
 				c.locality = d
-				c.time = t * self.velocity + c.t0
+				c.time = (t * self.velocity) + c.start
+				# print t, (t * self.velocity), c.start, c.time
 
 				if math.isnan(v):
-					sequence.append(Job(c, t * self.velocity + c.t0, 0))
+					sequence.append(Job(c, (t * self.velocity) + c.start, 0))
 				else:
-					sequence.append(Job(c, t * self.velocity + c.t0, v))
+					sequence.append(Job(c, (t * self.velocity) + c.start, v))
 
 
 		return sequence
