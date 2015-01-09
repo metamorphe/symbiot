@@ -132,7 +132,6 @@ Behavior.prototype = {
 		this.tracker.position.x += this.width/500; // delta x
 		var intersections = this.tracker.getIntersections(this.path);
 		
-
 		for (var i = 0; i < intersections.length; i++) {
 			var val = (intersections[i].point.y/(this.height/1.35));
 			channel(val);

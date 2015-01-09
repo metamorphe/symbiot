@@ -42,10 +42,10 @@
 </div>
 <br/>
 
-<strong>Usable on these actuators:</strong>
+<strong>Usable with these flavors:</strong>
 <ul>
-<% @behavior.actuators.each do |actuator| %>
-	<li><%= link_to actuator.name.humanize, actuator %>
+<% @behavior.flavors.each do |flavor| %>
+	<li><%= link_to flavor.name.humanize, flavor %>
 <% end %>
 </ul>
 

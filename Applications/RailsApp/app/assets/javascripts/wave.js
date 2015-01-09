@@ -60,11 +60,20 @@ Wave.prototype = {
 	_stretch: function(factor) {
 		// TODO: get a better resampler
 		var newArr = [];
-		this.data.forEach(function(el, idx) {
-			for (var i = 0; i < factor; i++) {
-				newArr.push(el);
+		if (factor < 0) {
+			for(var i = 0; i < this.data.length;
+					i += Math.abs(factor) + 1) {
+				newArr.push(this.data[i]);
 			}
-		});
+		}
+		else {
+			this.data.forEach(function(el, idx) {
+				for (var i = 0; i <= factor; i++) {
+					newArr.push(el);
+				}
+			});
+		}
+		console.log(newArr.length);
 		return newArr;
 	},
 	_repeat: function(factor) {
