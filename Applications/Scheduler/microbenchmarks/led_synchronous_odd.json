@@ -1,6 +1,0 @@
-[{"addr":1, "behavior_id":2, "flavor_id":5, "t0" : 0},
- {"addr":3, "behavior_id":2, "flavor_id":5, "t0" : 0},
- {"addr":5, "behavior_id":2, "flavor_id":5, "t0" : 0},
- {"addr":7, "behavior_id":2, "flavor_id":5, "t0" : 0},
- {"addr":9, "behavior_id":2, "flavor_id":5, "t0" : 0}
- ]

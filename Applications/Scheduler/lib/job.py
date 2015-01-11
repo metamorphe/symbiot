@@ -1,4 +1,5 @@
 from bunch import Bunch
+import numpy as np
 # job.py
 class Job(object):
     def __init__(self, metadata, priority, value):
@@ -23,17 +24,22 @@ class Job(object):
 
     	# return "@{:3.2f} ".format(self.priority) + "to {:1.0f}".format(self.metadata.addr) + ":" + "{:3.0f}".format(self.value)
     def __sub__(self, other):
-    	return abs(self.priority - other.priority)
+    	return abs(self.metadata.time - other.metadata.time)
 
     def set_priority(self, type, param = None):
         if type == "edf":
             self.edf()
         if type == "pdf":
             self.pdf()
+        if type == "cbs":
+            self.cbs(param)
         return self
 
-    def cbs_priority(self, T):
-        self.priority = np.floor(self.priority / T) # 0.010 / 1  ==> 0  1.00001/ 1 ===> 1
+    def longer(self, s):
+        self.metadata.time *= s
+
+    def cbs(self, T):
+        self.priority = np.floor(self.metadata.time / T) # 0.010 / 1  ==> 0  1.00001/ 1 ===> 1
         return self
 
     def edf(self):

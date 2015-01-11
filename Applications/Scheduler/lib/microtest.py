@@ -33,7 +33,7 @@ def harden(sequence):
 
 
 		hardness = [abs(i - find_nearest(temporal_mask, timestamps[i])) for i, h in enumerate(jnd_diff)]
-
+	
 		
 		hardened_commands = np.vstack([original_commands, hardness])
 		return hardened_commands.T
@@ -47,8 +47,8 @@ class Test:
 	    
 	    self.commands = commands
 	    self.time = time_to_complete
-	    # self.sequence = self.get_sequence()
-	    # self.collision_rate = self.collisions()
+	    self.sequence = self.get_sequence()
+	    self.collision_rate = self.collisions()
 	   
 	    return
 
@@ -73,7 +73,7 @@ class Test:
 
 	def get_sequence(self):
 		for c in self.commands:
-			c.alpha = api.get_flavor(c.f_id)["alpha"]
+			c.alpha = api.get_flavor(c.flavor_id)["alpha"]
 			c.alpha = 0.3
 
 
@@ -81,12 +81,12 @@ class Test:
 			self.velocity = 1
 		else:
 			c = self.commands[-1]
-			t, v = api.get_commands(c.b_id, alpha = c.alpha)[-1]
+			t, v = api.get_commands(c.behavior_id, alpha = c.alpha)[-1]
 			self.velocity = self.time / t
 
 		sequence = []
 		for c in self.commands:
-			subsequence = api.get_commands(c.b_id, alpha = c.alpha)
+			subsequence = api.get_commands(c.behavior_id, alpha = c.alpha)
 			subsequence = harden(subsequence)
 			subsequence = self.bulls_eye(c.addr, subsequence)
 

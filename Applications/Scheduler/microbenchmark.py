@@ -12,7 +12,7 @@ from bunch import Bunch
 
 
 directory = "microbenchmarks/"
-benchmark_file = 'tests.yaml'
+benchmark_file = 'tests.yml'
 
 
 def get_json(filename):
@@ -22,32 +22,36 @@ def get_json(filename):
 	return data
 
 def get_tests(time_to_complete = 1):
+
 	files = [line.strip() for line in open(directory + benchmark_file, 'r') if line[0] != "#" and len(line) > 1]
-	config = open_yaml("microbenchmarks/config.yaml")
-	tests = []
+	config = open_yaml("microbenchmarks/config.yml")
+	files = open_yaml(directory + benchmark_file)["tests"]
+
+	tests =[]
 	for f in files:
-		data = get_json(directory + f)
-		commands = []
-		for d in data:
-			metadata = Bunch()
-			metadata.addr = d["addr"]
-			metadata.f_id = d["flavor_id"]
-			metadata.b_id = d["behavior_id"]
-			metadata.t0 = d["t0"]
-			commands.append(metadata)
+		print f
+		data = open_yaml(directory + f)
+		data =  data["commands"]
+		commands = [Bunch(**command) for command in data]
 		test = Test(f, commands, config, time_to_complete)
 		tests.append(test)
 	return tests
-
 	
 def run(time_to_complete = 1):
 	tests = get_tests(time_to_complete)
 	master = jnd.JNDArduino();
 	master.open()
 	time.sleep(2)
-	for test in tests:
-		print test,
-		print "|| EDF perceptual error: ", "{:2.2f}%".format(scheduler.send(master, test.sequence, scheduler.to_commands))
+	for t in tests:
+		print t,
+		schedule = t.get_sequence()
+		Us, Qs, Ts, timescale = scheduler.calculate_edf_cbs(schedule, scheduler.atmega328_k)
+		schedule = scheduler.elongate(schedule, timescale)
+		schedule = scheduler.cbs(schedule, Us, Ts)
+		for job in schedule:
+			# print job
+			pass
+		print "|| EDF perceptual error: ", "{:2.2f}%".format(scheduler.send(master, schedule))
 
 		# test.print_sequence()
 	time.sleep(2)
