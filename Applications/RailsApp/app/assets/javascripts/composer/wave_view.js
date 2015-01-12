@@ -73,8 +73,8 @@ WaveView.prototype = {
 		this.currentBehavior.load(this.fieldDom);
 	},
 	clear: function() {
-		this.stretchDom.val(this.currentBehavior.wave.DEFAULT_STRETCH);
-		this.repeatDom.val(this.currentBehavior.wave.DEFAULT_REPEAT);
+		this.stretchDom.val(scope.currentBehavior.wave.DEFAULT_STRETCH);
+		this.repeatDom.val(scope.currentBehavior.wave.DEFAULT_REPEAT);
 		this.currentBehavior = null;
 		this.fieldDom.empty();
 		this.previewDom.empty();

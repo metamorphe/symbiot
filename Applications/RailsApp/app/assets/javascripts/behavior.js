@@ -132,7 +132,6 @@ Behavior.prototype = {
 		this.tracker.position.x += this.width/500; // delta x
 		var intersections = this.tracker.getIntersections(this.path);
 		
-
 		for (var i = 0; i < intersections.length; i++) {
 			var val = (intersections[i].point.y/(this.height/1.35));
 			channel(val);
@@ -155,6 +154,7 @@ Behavior.plot = function(paper, params, isSmooth){
 	var path = new paper.Path({
 		segments: params.points,
 		strokeColor: 'black',
+		strokeWidth: 4,
 		fullySelected: true
 	});
 	if (params.isSmooth) {
@@ -168,6 +168,7 @@ Behavior.plot = function(paper, params, isSmooth){
 Behavior.axis = function(paper){
 	axis = new paper.Path();
 	axis.strokeColor = '#CCC';
+	axis.strokeWidth = 2;
 	axis.add(new paper.Point(0, paper.view.size.height/2.0));
 	axis.add(new paper.Point(paper.view.size.width, paper.view.size.height/2.0));
 	axis.selected = false;
@@ -177,6 +178,7 @@ Behavior.axis = function(paper){
 Behavior.trackerLine = function(paper){
 	var path = new paper.Path();
 	path.strokeColor = 'blue';
+	path.strokeWidth = 2;
 	path.add(new paper.Point(0, 0));
 	path.add(new paper.Point(0, paper.view.size.height));
 	path.selected = false;

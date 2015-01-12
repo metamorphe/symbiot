@@ -8,7 +8,7 @@ class JNDArduino:
 		if(len(avail_ports) == 0):
 			raise EnvironmentError("No ports detected. Plug in the Arduino! >:(");
 
-		self.ser = serial.Serial(avail_ports[0], 115200)
+		self.ser = serial.Serial(avail_ports[0], 9600)
 		self.connected = self.ser._isOpen
 		# Make sure its closed
 		self.close()
