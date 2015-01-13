@@ -1,11 +1,11 @@
 import sys
 sys.path.append('lib')
 import expresso_api as api
-import scheduler
+import scheduler, operator
 import unittest
 from  microtest import *
 from microbenchmark import get_tests
-
+from quanta import Quanta
 class TestSequenceFunctions(unittest.TestCase):
 
     def setUp(self):
@@ -17,9 +17,9 @@ class TestSequenceFunctions(unittest.TestCase):
 
     # def test_hardness(self):
     #     np.set_printoptions(suppress=True)
-    #     # print harden(self.pulse)
+    #     print harden(self.pulse, 0.5, 0.00392156862745098)
     #     # print harden(self.square)
-    #     # harden(self.candle)
+        # harden(self.candle)
 
     # def test_compact_simple(self):
     #     """ Test simple sparse format compression
@@ -41,21 +41,57 @@ class TestSequenceFunctions(unittest.TestCase):
     #         print t
     #         schedule = t.get_sequence()
     #         print scheduler.histogram(schedule)
-    def test_cbs(self):
+    # def test_cbs(self):
+    #     for t in self.tests:
+    #         print t
+    #         schedule = t.get_sequence()
+    #         Us, Qs, Ts, timescale = scheduler.calculate_edf_cbs(schedule, scheduler.atmega328_k)
+    #         print Us, Qs, Ts, timescale
+
+            
+    #         schedule = scheduler.elongate(schedule, timescale)
+    #         # for j in schedule:
+    #             # print j
+    #         schedule = scheduler.cbs(schedule, Us, Ts)
+    #         for j in schedule:
+    #             print j
+    def test_quanta(self):
         for t in self.tests:
             print t
             schedule = t.get_sequence()
-            Us, Qs, Ts, timescale = scheduler.calculate_edf_cbs(schedule, scheduler.atmega328_k)
-            print Us, Qs, Ts, timescale
+            schedule = scheduler.psf(schedule)
+            # Qs = Us * Ts
+            # # filter commands and apply dither and resurrect
+            # idx = 0
 
+            # schedule = []
+
+            # oversubcribers = []
+            # push_to_next = []
+            # for n, q in quanta:
+            #     inner_quanta = to_commands(q, priority_type = "edf")
+            #     # inner_quanta.append(push_to_next)
+            #     # print n, len(q)
+            #     if len(q) > Qs:
+            #         # print "oversubscribed"
+            #         # over = len(q) - Qs
+            #         # push_to_next.append(inner_quanta[-over:-1])
+            #         # inner_quanta = inner_quanta[:-over ]
+            #         pass
+            #     else:
+            #         # print idx, "is utilized", "{:3.2f}%".format(len(q) / Qs * 100) 
+            #         pass
+            #     idx += 1
+            # #   server_chunk = clean_server_chunk(server_chunk, i, Us, k)
+            #     schedule.append(inner_quanta)
+
+
+            # # histogram back to schedule
             
-            schedule = scheduler.elongate(schedule, timescale)
-            # for j in schedule:
-                # print j
-            schedule = scheduler.cbs(schedule, Us, Ts)
-            for j in schedule:
-                print j
+            
+            # schedule = sum(schedule, [])
 
+            # return schedule
 # if __name__ == '__main__':
 #     unittest.main()
 

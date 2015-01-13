@@ -1,70 +1,113 @@
 # 1 = green
 # 4 = yellow
 # 5 = red
+# PULSE TEST
 ---
  board:
-  0:
-   flavor_id: 1
-   interface: "Adafruit_PCA9685"
-   distance: 4 
-  1:
-    flavor_id: 1
-    interface: "Adafruit_PCA9685"
-    distance: 3
-  2:
-    flavor_id: 1
-    interface: "Adafruit_PCA9685"
-    distance: 2 
-  3:
-    flavor_id: 4
-    interface: "Adafruit_PCA9685"
-    distance: 1
-  4:
-    flavor_id: 4
-    interface: "Adafruit_PCA9685"
-    distance: 0 
-  5:
-    flavor_id: 4
-    interface: "Adafruit_PCA9685"
-    distance: 0 
-  6:
-    flavor_id: 4
-    interface: "Adafruit_PCA9685"
-    distance: 1 
-  7:
-    flavor_id: 4
-    interface: "Adafruit_PCA9685"
-    distance: 2 
-  8:
-    flavor_id: 5
-    interface: "Adafruit_PCA9685"
-    distance: 3 
-  9:
-    flavor_id: 5
-    interface: "Adafruit_PCA9685"
-    distance: 4 
-  10:
-   flavor_id: 5
-   interface: "Adafruit_PCA9685"
-   distance: 5 
-  11:
-   flavor_id: 5
-   interface: "Adafruit_PCA9685"
-   distance: 6 
-  12:
-   flavor_id: 5
-   interface: "Adafruit_PCA9685"
-   distance: 7 
-  13:
-   flavor_id: 5
-   interface: "Adafruit_PCA9685"
-   distance: 8  
-  14:
-   flavor_id: 5
-   interface: "Adafruit_PCA9685"
-   distance: 9  
-  15:
-   flavor_id: 5
-   interface: "Adafruit_PCA9685"
-   distance: 10  
-
+ # RED AND YELLOW
+  0: { "flavor_id": 4, interface: "Adafruit_PCA9685", distance: 4}
+  1: { "flavor_id": 4, interface: "Adafruit_PCA9685", distance: 3}
+  2: { "flavor_id": 4, interface: "Adafruit_PCA9685", distance: 2}
+  3: { "flavor_id": 4, interface: "Adafruit_PCA9685", distance: 1}
+  4: { "flavor_id": 4, interface: "Adafruit_PCA9685", distance: 1}
+  5: { "flavor_id": 4, interface: "Adafruit_PCA9685", distance: 2}
+  6: { "flavor_id": 4, interface: "Adafruit_PCA9685", distance: 3}
+  7: { "flavor_id": 4, interface: "Adafruit_PCA9685", distance: 4}
+  8: { "flavor_id": 5, interface: "Adafruit_PCA9685", distance: 4}
+  9: { "flavor_id": 5, interface: "Adafruit_PCA9685", distance: 3}
+  10: { "flavor_id": 5, interface: "Adafruit_PCA9685", distance: 2}
+  11: { "flavor_id": 5, interface: "Adafruit_PCA9685", distance: 1}
+  12: { "flavor_id": 5, interface: "Adafruit_PCA9685", distance: 1}
+  13: { "flavor_id": 5, interface: "Adafruit_PCA9685", distance: 2}
+  14: { "flavor_id": 5, interface: "Adafruit_PCA9685", distance: 3}
+  15: { "flavor_id": 5, interface: "Adafruit_PCA9685", distance: 4}
+  # GREEN LEDS
+  16: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 8}
+  17: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 7}
+  18: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 6}
+  19: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 5}
+  20: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 4}
+  21: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 3}
+  22: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 2}
+  23: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 1}
+  24: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 1}
+  25: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 2}
+  26: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 3}
+  27: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 4}
+  28: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 5}
+  29: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 6}
+  30: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 7}
+  31: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 8}
+  31: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 8}
+  # MOTORS
+  # 32: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 1}
+  32: { "flavor_id": 2, interface: "Adafruit_PCA9685", distance: 1}
+  33: { "flavor_id": 2, interface: "Adafruit_PCA9685", distance: 1}
+  34: { "flavor_id": 2, interface: "Adafruit_PCA9685", distance: 1}
+  35: { "flavor_id": 2, interface: "Adafruit_PCA9685", distance: 1}
+  36: { "flavor_id": 2, interface: "Adafruit_PCA9685", distance: 1}
+  36: { "flavor_id": 2, interface: "Adafruit_PCA9685", distance: 1}
+  37: { "flavor_id": 2, interface: "Adafruit_PCA9685", distance: 1}
+  38: { "flavor_id": 2, interface: "Adafruit_PCA9685", distance: 1}
+  39: { "flavor_id": 2, interface: "Adafruit_PCA9685", distance: 1}
+  40: { "flavor_id": 2, interface: "Adafruit_PCA9685", distance: 1}
+  41: { "flavor_id": 2, interface: "Adafruit_PCA9685", distance: 1}
+  42: { "flavor_id": 2, interface: "Adafruit_PCA9685", distance: 1}
+  43: { "flavor_id": 2, interface: "Adafruit_PCA9685", distance: 1}
+  44: { "flavor_id": 2, interface: "Adafruit_PCA9685", distance: 2}
+  45: { "flavor_id": 2, interface: "Adafruit_PCA9685", distance: 3}
+  46: { "flavor_id": 2, interface: "Adafruit_PCA9685", distance: 4}
+  47: { "flavor_id": 2, interface: "Adafruit_PCA9685", distance: 5}
+  # VIRTUAL
+  48: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 8}
+  49: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 7}
+  50: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 6}
+  51: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 5}
+  52: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 4}
+  53: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 1}
+  54: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 1}
+  55: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 2}
+  56: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 3}
+  57: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 4}
+  58: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 5}
+  59: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 6}
+  60: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 5}
+  61: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 4}
+  62: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 1}
+  63: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 1}
+  64: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 1}
+  65: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 2}
+  66: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 3}
+  67: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 4}
+  68: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 5}
+  69: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 6}
+  70: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 5}
+  71: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 4}
+  72: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 1}
+  73: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 1}
+  74: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 1}
+  75: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 2}
+  76: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 3}
+  77: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 4}
+  78: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 5}
+  79: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 6}
+  80: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 5}
+  81: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 4}
+  82: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 1}
+  83: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 1}
+  84: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 1}
+  85: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 2}
+  86: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 3}
+  87: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 4}
+  88: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 5}
+  89: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 6}
+  90: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 5}
+  91: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 4}
+  92: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 1}
+  93: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 1}
+  94: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 1}
+  95: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 2}
+  96: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 3}
+  97: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 4}
+  98: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 5}
+  99: { "flavor_id": 12, interface: "Adafruit_PCA9685", distance: 6}

@@ -11,6 +11,13 @@ class FlavorsController < ApplicationController
   # GET /flavors/1.json
   def show
     @behaviors = Behavior.all
+    @flavor = Flavor.find(params[:id])
+    h = @flavor.attributes
+    h["k"] = 1000.0 / (1000.0 ** (1.0 / @flavor.alpha))
+    respond_to do |format|
+       format.html
+       format.json { render json:  h}
+    end
   end
 
   # GET /flavors/1/behaviors

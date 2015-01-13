@@ -7,7 +7,7 @@ def find_nearest(array, query):
 	idx = (np.abs(array - query)).argmin()
 	return idx
 
-def harden(sequence):
+def harden(sequence, alpha, k):
 		'''
 		Converts a behavior B into hard and soft tasks.
 		Hardness attribute added to the Job definition. 
@@ -19,12 +19,18 @@ def harden(sequence):
 		
 		jnd_diff = np.convolve(original_commands[1], [1, -1])#[1:-1] # d/dt, remove extra element
 		jnd_diff = jnd_diff[:-1]
-
+		# print jnd_diff
+		# convert to perceptual values
+		# jnd_diff[-1] = 1000 # silence exp(NaN) runtime error
+		# minmax = (jnd_diff / k) **  alpha
 		minmax = np.absolute(jnd_diff)
+
 		# start and end are always min and max
 		minmax[0] = 1000 
 		minmax[-1] = 1000
+
 		min_max_mask = np.logical_not(np.logical_or(minmax > hardening_threshold_max, minmax < hardening_threshold_min))
+		# print min_max_mask
 
 		timestamps = original_commands[0]
 		temporal_mask = timestamps.copy()
@@ -70,11 +76,16 @@ class Test:
 	def print_sequence(self):
 		for s in self.sequence:
 			print s
+	def get_addr_list(self):
+		addrs = [command.addr for command in self.commands]
+		return set(addrs)
 
 	def get_sequence(self):
 		for c in self.commands:
-			c.alpha = api.get_flavor(c.flavor_id)["alpha"]
-			c.alpha = 0.3
+			flavor = api.get_flavor(c.flavor_id)
+			c.k = flavor["k"]
+			c.alpha = flavor["alpha"]
+			# c.alpha = 0.3
 
 
 		if self.time == None:
@@ -87,18 +98,20 @@ class Test:
 		sequence = []
 		for c in self.commands:
 			subsequence = api.get_commands(c.behavior_id, alpha = c.alpha)
-			subsequence = harden(subsequence)
+			subsequence = harden(subsequence, c.alpha, c.k)
 			subsequence = self.bulls_eye(c.addr, subsequence)
 
 			for t, v, h, d in subsequence:
 				c.hardness = h
 				c.locality = d
-				c.time = t * self.velocity + c.t0
+				c.time = (t * self.velocity) + c.start
+				# print t, (t * self.velocity), c.start, c.time
 
 				if math.isnan(v):
-					sequence.append(Job(c, t * self.velocity + c.t0, 0))
+					sequence.append(Job(c, (t * self.velocity) + c.start, 0))
 				else:
-					sequence.append(Job(c, t * self.velocity + c.t0, v))
+					sequence.append(Job(c, (t * self.velocity) + c.start, v))
+
 
 		return sequence
 

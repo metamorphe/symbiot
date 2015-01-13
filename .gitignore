@@ -1,3 +1,4 @@
 Applications/Arduino/bin
 *.csv
 .DS_Store
+*.yml
