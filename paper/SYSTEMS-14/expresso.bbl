@@ -1,0 +1,90 @@
+\begin{thebibliography}{10}
+
+\bibitem{abeni_integrating_1998}
+Abeni, L., and Buttazzo, G.
+\newblock Integrating multimedia applications in hard real-time systems.
+\newblock In {\em Real-Time Systems Symposium, 1998. Proceedings., The 19th
+  {IEEE}}, {IEEE} (1998), 4--13.
+
+\bibitem{ballagas_patch_2004}
+Ballagas, R., Szybalski, A., and Fox, A.
+\newblock Patch panel: Enabling control-flow interoperability in ubicomp
+  environments.
+\newblock In {\em Pervasive Computing and Communications, 2004. {PerCom} 2004.
+  Proceedings of the Second {IEEE} Annual Conference on}, {IEEE} (2004),
+  241--252.
+
+\bibitem{chaudhary_perceptual_2001}
+Chaudhary, A.~S.
+\newblock {\em Perceptual scheduling in real-time music and audio
+  applications}.
+\newblock PhD thesis, {University} of {California}, 2001.
+
+\bibitem{harrison_unlocking_2012}
+Harrison, C., Horstman, J., Hsieh, G., and Hudson, S.
+\newblock Unlocking the expressivity of point lights.
+\newblock In {\em Proceedings of the 2012 {ACM} annual conference on Human
+  Factors in Computing Systems} (2012), 1683--1692.
+
+\bibitem{heaton_physical_2000}
+Heaton, K.~B.
+\newblock {\em Physical pixels}.
+\newblock PhD thesis, Massachusetts Institute of Technology, 2000.
+
+\bibitem{huppi_breathing_2003}
+Huppi, B., Stringer, C., Bell, J., and Capener, C.
+\newblock {\em Breathing status {LED} indicator}.
+\newblock Google Patents, Dec. 2003.
+\newblock {US} Patent 6,658,577.
+
+\bibitem{ishii_tangible_1997}
+Ishii, H., and Ullmer, B.
+\newblock Tangible bits: towards seamless interfaces between people, bits and
+  atoms.
+\newblock In {\em Proceedings of the {ACM} {SIGCHI} Conference on Human factors
+  in computing systems}, {ACM} (1997), 234--241.
+
+\bibitem{kaliakatsospapakostas_interactive_2012}
+Kaliakatsos–Papakostas, M.~A., Epitropakis, M.~G., Floros, A., and Vrahatis,
+  M.~N.
+\newblock Interactive evolution of 8–bit melodies with genetic programming
+  towards finding aesthetic measures for sound.
+\newblock In {\em Evolutionary and Biologically Inspired Music, Sound, Art and
+  Design}. Springer, 2012, 141--152.
+
+\bibitem{kuznetsov_red_2011}
+Kuznetsov, S., Davis, G.~N., Paulos, E., Gross, M.~D., and Cheung, J.~C.
+\newblock Red balloon, green balloon, sensors in the sky.
+\newblock In {\em Proceedings of the 13th international conference on
+  Ubiquitous computing}, {ACM} (2011), 237--246.
+
+\bibitem{pelli_psychophysical_1995}
+Pelli, D.~G., and Farell, B.
+\newblock Psychophysical methods.
+\newblock {\em Handbook of optics 1\/} (1995), 29--1.
+
+\bibitem{schwarz_phone_2012}
+Schwarz, J., Klionsky, D., Harrison, C., Dietz, P., and Wilson, A.
+\newblock Phone as a pixel: enabling ad-hoc, large-scale displays using mobile
+  devices.
+\newblock In {\em Proceedings of the 2012 {ACM} annual conference on Human
+  Factors in Computing Systems}, {ACM} (2012), 2235--2238.
+
+\bibitem{scott_fadecandy_2013}
+Scott, M.~E., and Adafruit.
+\newblock {Fadecandy}, 2013.
+
+\bibitem{waldspurger_lottery_1994}
+Waldspurger, C.~A., and Weihl, W.~E.
+\newblock Lottery scheduling: Flexible proportional-share resource management.
+\newblock In {\em Proceedings of the 1st {USENIX} conference on Operating
+  Systems Design and Implementation}, {USENIX} Association (1994), 1.
+
+\bibitem{xu_scheduling_1990}
+Xu, J., and Parnas, D.~L.
+\newblock Scheduling processes with release times, deadlines, precedence and
+  exclusion relations.
+\newblock {\em Software Engineering, {IEEE} Transactions on 16}, 3 (1990),
+  360--369.
+
+\end{thebibliography}
