@@ -1,4 +1,6 @@
 FlixelLights::Application.routes.draw do
+  resources :mappers
+
   resources :tasks
 
   resources :commands
