@@ -1,0 +1,24 @@
+\BOOKMARK [1][-]{section*.1}{Abstract}{}% 1
+\BOOKMARK [1][-]{section*.4}{Introduction}{}% 2
+\BOOKMARK [1][-]{section*.5}{BACKGROUND}{}% 3
+\BOOKMARK [2][-]{section*.6}{Terminology and assumptions}{section*.5}% 4
+\BOOKMARK [2][-]{section*.7}{Perceptual Task Compiler}{section*.5}% 5
+\BOOKMARK [3][-]{section*.8}{Admission criteria}{section*.7}% 6
+\BOOKMARK [3][-]{section*.9}{Additional metadata}{section*.7}% 7
+\BOOKMARK [2][-]{section*.10}{Perceptual Task Evaluator}{section*.5}% 8
+\BOOKMARK [2][-]{section*.11}{Perceptual Scheduler}{section*.5}% 9
+\BOOKMARK [3][-]{section*.12}{A perceptual baseline - EDF parameters}{section*.11}% 10
+\BOOKMARK [2][-]{section*.13}{Schedulability test}{section*.5}% 11
+\BOOKMARK [2][-]{section*.14}{Perceptual saliency queue}{section*.5}% 12
+\BOOKMARK [2][-]{section*.15}{Temporal dithering}{section*.5}% 13
+\BOOKMARK [1][-]{section*.16}{EVALUATION}{}% 14
+\BOOKMARK [2][-]{section*.17}{Testbed - 38-node system}{section*.16}% 15
+\BOOKMARK [2][-]{section*.18}{Microbenchmarks}{section*.16}% 16
+\BOOKMARK [2][-]{section*.19}{Results - Microbenchmarks}{section*.16}% 17
+\BOOKMARK [2][-]{section*.20}{Macrobenchmarks}{section*.16}% 18
+\BOOKMARK [2][-]{section*.21}{Results - Macrobenchmark}{section*.16}% 19
+\BOOKMARK [1][-]{section*.22}{Future Work}{}% 20
+\BOOKMARK [1][-]{section*.23}{Limitations}{}% 21
+\BOOKMARK [1][-]{section*.24}{CONCLUSION}{}% 22
+\BOOKMARK [1][-]{section*.25}{ACKNOWLEDGMENTS}{}% 23
+\BOOKMARK [1][-]{section*.26}{REFERENCES }{}% 24
