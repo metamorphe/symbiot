@@ -25,7 +25,11 @@
  *
  */
 
+#ifndef BlinkM_funcs_h
+#define BlinkM_funcs_h
+
 #include <Arduino.h>
+#include <Wire.h>
 
 
 extern "C" { 
@@ -501,5 +505,7 @@ static int BlinkM_doFactoryReset()
     writeScript( addr, script);
   */
   
-}
+};
+
+#endif
 
