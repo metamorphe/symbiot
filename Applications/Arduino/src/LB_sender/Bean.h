@@ -12,11 +12,11 @@
 
 class Bean {
 
-	public:
-	  void setRolePingOut();
-          void setRolePongBack();
+    public:
+    void setRolePingOut();
+    void setRolePongBack();
           
-	private:
+    private:
 
 };
 #endif

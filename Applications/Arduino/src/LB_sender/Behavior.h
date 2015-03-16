@@ -11,17 +11,19 @@
 #include "Arduino.h"
 #include "BlinkM_funcs.h"
 
+#define MAX_NUM_LINES 256
+
 class Behavior {
 
-	public:
-		Behavior(blinkm_script_line scriptArr[]);
-		void setLines(blinkm_script_line scriptArr[]);
-		blinkm_script_line *getLines(void);
-		void setLine(uint8_t lineNum, blinkm_script_line line);
-		blinkm_script_line getLine(uint8_t lineNum);
-	
-	private:
-		blinkm_script_line _scriptArr[];
+  public:
+    Behavior(blinkm_script_line **);
+    void setLine(uint8_t, blinkm_script_line *);
+    blinkm_script_line *getLine(uint8_t);
+  
+  private:
+    /* Stores a copy of an array of length MAX_NUM_LINES where each
+       cell contains a blinkm_script_line struct. */
+    blinkm_script_line *_scriptArr;
 
 };
 
