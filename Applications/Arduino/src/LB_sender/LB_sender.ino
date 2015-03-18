@@ -11,7 +11,7 @@
 #include "RF24.h"
 
 /* rF configuration */
-RF24 radio(9,10);
+RF24 radio(9,10); 
 
 int blinkm_addr = 0x09;
 const uint64_t pipes[2] = { 0xF0F0F0F0E1LL, 0xF0F0F0F0D2LL };
@@ -21,7 +21,7 @@ const char* role_friendly_name[] = { "invalid", "Ping out", "Pong back"};
 role_e role = role_pong_back;
 
 /* Function Prototypes */
-void send_LB(blinkm_script_line *script_lines, uint8_t script_len);
+void send_LB(blinkm_script_line *script_lines, uint8_t script_len, uint8_t delay_sec);
 void check_receive(void);
 uint8_t readSerialString(void);
 void realloc_read_buf(blinkm_script_line *orig_ptr, uint8_t script_len);
@@ -34,6 +34,7 @@ static void setup_radio();
 
 typedef struct _lightscript_header {
   uint8_t num_lines;
+  uint8_t delay_sec;
 } lightscript_header;
 
 lightscript_header *READ_HEAD_BUF;
@@ -49,10 +50,11 @@ blinkm_script_line script1_lines[] = {
 blinkm_script_line script2_lines[] = {
   { 10, { 'n', 0xfe,0x00,0x00}},
   { 10, { 'n', 0x00,0xfe,0x00}},
-  { 10, { 'n', 0x00,0x00,0xfe}}
+  { 10, { 'n', 0x00,0x00,0xfe}},
+  { 1, { 'n', 0x00,0x00,0x00}}
 };
 uint8_t script1_len = 4;
-uint8_t script2_len = 3;
+uint8_t script2_len = 4;
 
 // Basic flash-red script for testing
 blinkm_script_line flash_red_lines[] = {
@@ -63,6 +65,12 @@ blinkm_script_line flash_red_lines[] = {
 };
 int flash_red_len = 4;
 
+/* Temporary variables for presentation*/
+const int beanNum = 0;
+const int buttonInput = 2;
+const int delayButtonInput = 3;
+static void playback(void);
+unsigned long lastPress = 0;
 
 char serInStr[30];  // array that will hold the serial input string
 
@@ -91,6 +99,31 @@ void setup()
 void loop()
 {
     check_receive();
+    
+    //temporary: check for button input and send if necessary
+    if (digitalRead(buttonInput) == HIGH) {
+      unsigned long pressTime = millis();
+      if (pressTime - lastPress > 1000) {
+        lastPress = pressTime;
+        Serial.print("Button pressed. Broadcasting behavior.\r\n");
+        BlinkM_writeScript( blinkm_addr, 0, script2_len, 0, script2_lines);
+        BlinkM_playScript( blinkm_addr, 0,1,0 );
+        send_LB(script2_lines, script2_len, 0);
+        Serial.print("\r\ncmd>");
+      }
+    }
+    if (digitalRead(delayButtonInput) == HIGH) {
+      unsigned long pressTime = millis();
+      if (pressTime - lastPress > 1000) {
+        lastPress = pressTime;
+        Serial.print("Button pressed. Broadcasting behavior.\r\n");
+        BlinkM_writeScript( blinkm_addr, 0, script2_len, 0, script2_lines);
+        BlinkM_playScript( blinkm_addr, 0,1,0 );
+        send_LB(script2_lines, script2_len, 2);
+        Serial.print("\r\ncmd>");
+      }
+    }
+        
   
     //read the serial port and create a string out of what you read
     if( readSerialString() ) {
@@ -105,7 +138,7 @@ void loop()
           Serial.print("\r\ncmd>");
         }
         else if ( cmd == 's') {
-          send_LB(script2_lines, script2_len);
+          send_LB(script2_lines, script2_len, 0);
           Serial.print("\r\ncmd>");
         }
         else if( cmd == 'o' ) {
@@ -179,12 +212,18 @@ void check_receive()
 {
   if (!radio.available()) { return; }
   /* Check header */
-  bool found_header;
-  found_header = radio.read( READ_HEAD_BUF, sizeof(lightscript_header));
-  if (!found_header) { Serial.println("could not find header"); return; }
+  bool found_header = false;
+  while (!found_header)
+  {
+    Serial.println("Attempting to read header...");
+    found_header = radio.read( READ_HEAD_BUF, sizeof(lightscript_header));
+  }
   uint8_t script_len = READ_HEAD_BUF->num_lines;
+  uint8_t delay_sec = READ_HEAD_BUF->delay_sec;
   Serial.print("Got header and will malloc read buffer with # lines: ");
   Serial.println(script_len);
+  Serial.print("Header dictates playback delay of seconds: ");
+  Serial.println(delay_sec);
   realloc_read_buf(READ_BUF, script_len);
   unsigned long temp_buf;
   
@@ -194,7 +233,6 @@ void check_receive()
   while (!done)
   {
     // Fetch the payload, and see if this was the last one.
-    // done = radio.read( READ_BUF[curr_line], sizeof(blinkm_script_line *) );
     if (!radio.available()) {
       continue; // spin if nothing available, does not account for packet loss
     }
@@ -208,12 +246,14 @@ void check_receive()
   }
   
   // Play script TODO: make function
+  delay(delay_sec * 1000);
   BlinkM_writeScript( blinkm_addr, 0, script_len, 0, READ_BUF);
   BlinkM_playScript( blinkm_addr, 0,1,0 );
   Serial.print("\r\ncmd>");
 }
 
-void send_LB(blinkm_script_line *script_lines, uint8_t script_len)
+void send_LB(blinkm_script_line *script_lines, uint8_t script_len,
+              uint8_t delay_sec)
 {
   Serial.println("Setting this node as transmitter...");
   role = role_ping_out;
@@ -225,27 +265,30 @@ void send_LB(blinkm_script_line *script_lines, uint8_t script_len)
   /* Send header */
   lightscript_header header;
   header.num_lines = script_len;
+  header.delay_sec = delay_sec;
   Serial.print("Sending header--script len is: ");
   Serial.println(header.num_lines);
+  Serial.print("Sending with delay: ");
+  Serial.println(header.delay_sec);
   bool ok = radio.write(&header, sizeof(lightscript_header));
   if (ok)
     Serial.println("Send ok... ");
   else
     Serial.println("Send failed.");
-  
+
+  delay(500);
   /* Send main script */
-  Serial.print("Now sending: ");
-  unsigned long temp_test_num = 9000;
-  // Pass in script1 by array; no pointer decay */
+  Serial.println("Now sending: ");
   for (int i = 0; i < script_len; i++)
   {
+
     ok = radio.write(&script_lines[i], sizeof(blinkm_script_line));
-//    ok = radio.write(&temp_test_num, sizeof(unsigned long) * 8);
     if (ok)
       Serial.println("Send line ok... ");
-    else
-      Serial.println("Send line failed.");
-//    temp_test_num++;
+    else {
+      Serial.println("Send line failed. Trying again...");
+      i--;
+    }
   }
   
   Serial.println("Setting back as receiver");
@@ -269,3 +312,10 @@ void free_read_buf(blinkm_script_line *buffer, uint8_t script_len)
 {
   free(buffer);
 }
+
+
+
+
+
+
+
