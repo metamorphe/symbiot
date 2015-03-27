@@ -127,27 +127,27 @@ Lastly, we define an perceptual error metric that can be used to evaluate the pe
   \subsection{Scheduling}
   The CBS algorithm \cite{abeni_integrating_1998} provides certain guarantees to systems that have a wide diversity of tasks. However, applications where output is the main actor have different constraints than just making a deadline.  Lottery scheduling provides certain statistical guarantees against starvation \cite{waldspurger_lottery_1994}, however the synchronization property of perceptual tasks requires a much harder guarantee. The most problematic issue for scheduling mechanisms for continuous media is the skip strategy, which discards tasks in order to modulate the flow of soft tasks. 
 
-\section{Perceptual Scheduling}
-  We term this class of dependencies perceptual events, or digital events which correspond to change in perceptual stimuli in physical space, it that events are highly dependent on previous and environmental stimuli. 
+% \section{Perceptual Scheduling}
+%   We term this class of dependencies perceptual events, or digital events which correspond to change in perceptual stimuli in physical space, it that events are highly dependent on previous and environmental stimuli. 
 
 
 
-  Properties of perceptual scheduling;
-  \begin{itemize}
-    \item Hysteresis - dependency on past events (e.g., dark/light adaptation) 
-    % Interference effects - some stimuli effect the perception of sister stimuli (McGurk effect, also referred to as the audio-visual contract or diegetic and non-diegetic stimuli)
-    % \item Mechanical impedances - differential resolution varies across multiple stimuli (e.g., heat pads heats up non-linearly, and non-discretely)
-    % Software impedances - smart actuator, such as the BlinkM I2C lights or Phillips hue, have built in auto-faders. 
-    \end{itemize}
+%   Properties of perceptual scheduling;
+%   \begin{itemize}
+%     \item Hysteresis - dependency on past events (e.g., dark/light adaptation) 
+%     % Interference effects - some stimuli effect the perception of sister stimuli (McGurk effect, also referred to as the audio-visual contract or diegetic and non-diegetic stimuli)
+%     % \item Mechanical impedances - differential resolution varies across multiple stimuli (e.g., heat pads heats up non-linearly, and non-discretely)
+%     % Software impedances - smart actuator, such as the BlinkM I2C lights or Phillips hue, have built in auto-faders. 
+%     \end{itemize}
  
-  Guarantees offered by Expresso: 
-   \begin{itemize}
-    \item Graceful perceptual degradation - many systems strive to provide graceful degradation, or the property that as the system becomes overloaded, that bandwidth remain at its maximum and all tasks evenly share in decrease in performance. Our approach assigns priority based on perceptual impact. 
-    \item Hysteresis-based error minimization - dependent events are adjusted by the scheduler to maximize performance. This is in contrast to hard-deadline reqs. 
-    \end{itemize}
-    Since applications within this space require traditional task guarantees, we implement a mixed model CBS scheduler where one mechanism controls hard, while other requires perceptual tasks. 
+%   Guarantees offered by Expresso: 
+%    \begin{itemize}
+%     \item Graceful perceptual degradation - many systems strive to provide graceful degradation, or the property that as the system becomes overloaded, that bandwidth remain at its maximum and all tasks evenly share in decrease in performance. Our approach assigns priority based on perceptual impact. 
+%     \item Hysteresis-based error minimization - dependent events are adjusted by the scheduler to maximize performance. This is in contrast to hard-deadline reqs. 
+%     \end{itemize}
+%     Since applications within this space require traditional task guarantees, we implement a mixed model CBS scheduler where one mechanism controls hard, while other requires perceptual tasks. 
 
-  Expresso is composed of three components: a perceptual task compiler which takes actuator-independent behaviors and converts it into resolution appropriate output for a given actuator, a perceptual task evaluator, which is used at runtime to characterize the perceptual accuracy of a task, and a perceptual scheduler, which uses soft estimates to guarantee graceful perceptual degradation. 
+%   Expresso is composed of three components: a perceptual task compiler which takes actuator-independent behaviors and converts it into resolution appropriate output for a given actuator, a perceptual task evaluator, which is used at runtime to characterize the perceptual accuracy of a task, and a perceptual scheduler, which uses soft estimates to guarantee graceful perceptual degradation. 
   
   \subsection{Terminology and assumptions} \label{sec:terms}
   In our system, we model an interaction as sending a signal, or task $\tau$, mediated by an actuator $A$, to produce a perceptual output behavior $B$. We define these entities below.

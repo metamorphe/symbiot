@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  17 DEC 2014 05:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  9 MAR 2015 14:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -499,7 +499,7 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 86.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 86.
-<figures/system.pdf, id=108, 487.8225pt x 336.25626pt>
+<figures/system.pdf, id=104, 487.8225pt x 336.25626pt>
 File: figures/system.pdf Graphic file (type pdf)
 
 <use figures/system.pdf>
@@ -520,7 +520,7 @@ Non-PDF special ignored!
 Underfull \vbox (badness 1533) has occurred while \output is active []
 
 
-<figures/behaviors.pdf, id=388, 504.88625pt x 370.38374pt>
+<figures/behaviors.pdf, id=384, 504.88625pt x 370.38374pt>
 File: figures/behaviors.pdf Graphic file (type pdf)
 
 <use figures/behaviors.pdf>
@@ -530,33 +530,35 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
 een already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.170     \end{itemize}
-                        [2]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+l.175 
+       [2 <./figures/behaviors.pdf>]
+Underfull \vbox (badness 4144) has occurred while \output is active []
 
-pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
-een already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.226 ...rac{d}{dt}(G_{B}) = \frac{dI}{dt} = v  $$
-                                                   [3 <./figures/behaviors.pdf>
-]
 LaTeX Font Info:    Try loading font information for OT1+pcr on input line 228.
 
- (/usr/local/texlive/2014/texmf-dist/tex/latex/psnfss/ot1pcr.fd
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-)
+)pdfTeX warning (ext4): destination with the same identifier (name{page.}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.251     \end{itemize}
+                        [3]
 Underfull \hbox (badness 2318) in paragraph at lines 267--269
 []\OT1/ptm/m/n/10 Using a per-cep-tual model de-rived from known stim-u-
  []
 
+
+Underfull \vbox (badness 1466) has occurred while \output is active []
+
 pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
 een already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.291   \begin{equation}
-                         [4]
-<figures/testbed.pdf, id=462, 912.40875pt x 585.18625pt>
+l.321     \end{align*}
+                       [4]
+<figures/testbed.pdf, id=461, 912.40875pt x 585.18625pt>
 File: figures/testbed.pdf Graphic file (type pdf)
 
 <use figures/testbed.pdf>
@@ -566,23 +568,26 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 376.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 376.
+
+Underfull \vbox (badness 3260) has occurred while \output is active []
+
 pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
 een already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.381 
-       [5]
+l.393   \subsection{Microbenchmarks}
+                                     [5 <./figures/testbed.pdf>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-<figures/pulse_actuators.pdf, id=480, 985.6825pt x 875.27pt>
+<figures/pulse_actuators.pdf, id=495, 985.6825pt x 875.27pt>
 File: figures/pulse_actuators.pdf Graphic file (type pdf)
 
 <use figures/pulse_actuators.pdf>
 Package pdftex.def Info: figures/pulse_actuators.pdf used on input line 415.
 (pdftex.def)             Requested size: 240.71092pt x 213.74185pt.
 
-<figures/micro_system.pdf, id=481, 985.6825pt x 424.58624pt>
+<figures/micro_system.pdf, id=496, 985.6825pt x 424.58624pt>
 File: figures/micro_system.pdf Graphic file (type pdf)
 
 <use figures/micro_system.pdf>
@@ -593,8 +598,7 @@ een already used, duplicate ignored
 <to be read again> 
                    \relax 
 l.429 
-       [6 <./figures/testbed.pdf> <./figures/pulse_actuators.pdf> <./figures/mi
-cro_system.pdf>]
+       [6 <./figures/pulse_actuators.pdf> <./figures/micro_system.pdf>]
 
 LaTeX Warning: Reference `fig:macro' on page \thepage  undefined on input line 
 430.
@@ -632,7 +636,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 460.
 Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 460.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 460.
 Package rerunfilecheck Info: File `expresso.out' has not changed.
-(rerunfilecheck)             Checksum: 92AF49B1BB6591A4F02DC977C3339D31;1603.
+(rerunfilecheck)             Checksum: 45039914F34D685AA6B3F676B4E2FC3C;1544.
 
 
 LaTeX Warning: There were undefined references.
@@ -640,18 +644,15 @@ LaTeX Warning: There were undefined references.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 460.
  ) 
 Here is how much of TeX's memory you used:
- 8896 strings out of 493117
- 126189 string characters out of 6135433
- 256258 words of memory out of 5000000
- 12141 multiletter control sequences out of 15000+600000
+ 8893 strings out of 493117
+ 126155 string characters out of 6135433
+ 255258 words of memory out of 5000000
+ 12140 multiletter control sequences out of 15000+600000
  37920 words of font info for 82 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,17n,35p,1024b,439s stack positions out of 5000i,500n,10000p,200000b,80000s
-pdfTeX warning (dest): name{section*.28} has been referenced but does not exi
+pdfTeX warning (dest): name{section*.27} has been referenced but does not exi
 st, replaced by a fixed one
-
-pdfTeX warning (dest): name{section*.27} has been referenced but does not exist
-, replaced by a fixed one
 
 pdfTeX warning (dest): name{section*.26} has been referenced but does not exist
 , replaced by a fixed one
@@ -662,11 +663,11 @@ pdfTeX warning (dest): name{section*.25} has been referenced but does not exist
 pdfTeX warning (dest): name{section*.24} has been referenced but does not exist
 , replaced by a fixed one
 
-pdfTeX warning (dest): name{section*.18} has been referenced but does not exist
+pdfTeX warning (dest): name{section*.23} has been referenced but does not exist
 , replaced by a fixed one
 
-pdfTeX warning (dest): name{section*.7} has been referenced but does not exist,
- replaced by a fixed one
+pdfTeX warning (dest): name{section*.17} has been referenced but does not exist
+, replaced by a fixed one
 
 pdfTeX warning (dest): name{section*.5} has been referenced but does not exist,
  replaced by a fixed one
@@ -698,10 +699,10 @@ e1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/
 helvetic/uhvro8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/times/
 utmb8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/times/utmr8a.pfb
 ></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on expresso.pdf (8 pages, 15011941 bytes).
+Output written on expresso.pdf (8 pages, 15010578 bytes).
 PDF statistics:
- 640 PDF objects out of 1000 (max. 8388607)
- 506 compressed objects within 6 object streams
- 73 named destinations out of 1000 (max. 500000)
- 234 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 632 PDF objects out of 1000 (max. 8388607)
+ 499 compressed objects within 5 object streams
+ 71 named destinations out of 1000 (max. 500000)
+ 226 words of extra memory for PDF output out of 10000 (max. 10000000)
 

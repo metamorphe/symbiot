@@ -34,43 +34,42 @@
 \citation{abeni_integrating_1998}
 \citation{abeni_integrating_1998}
 \citation{waldspurger_lottery_1994}
+\citation{harrison_unlocking_2012}
 \@writefile{toc}{\contentsline {section}{BACKGROUND}{\thepage }{section*.5}}
 \@writefile{toc}{\contentsline {subsection}{Scheduling}{\thepage }{section*.6}}
-\@writefile{toc}{\contentsline {section}{Perceptual Scheduling}{\thepage }{section*.7}}
-\@writefile{toc}{\contentsline {subsection}{Terminology and assumptions}{\thepage }{section*.8}}
-\newlabel{sec:terms}{{}{\thepage }{Terminology and assumptions}{section*.8}{}}
-\citation{harrison_unlocking_2012}
-\citation{chaudhary_perceptual_2001}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces  Example behaviors for point lights, encoded as pulse code modulations. }}{\thepage }{figure.2}}
 \newlabel{fig:behaviors}{{2}{\thepage }{Example behaviors for point lights, encoded as pulse code modulations}{figure.2}{}}
+\@writefile{toc}{\contentsline {subsection}{Terminology and assumptions}{\thepage }{section*.7}}
+\newlabel{sec:terms}{{}{\thepage }{Terminology and assumptions}{section*.7}{}}
+\citation{chaudhary_perceptual_2001}
 \newlabel{eq:server_u}{{1}{\thepage }{Terminology and assumptions}{equation.0.1}{}}
 \newlabel{stephens_power_law}{{2}{\thepage }{Terminology and assumptions}{equation.0.2}{}}
-\@writefile{toc}{\contentsline {subsection}{Perceptual Task Compiler}{\thepage }{section*.9}}
+\@writefile{toc}{\contentsline {subsection}{Perceptual Task Compiler}{\thepage }{section*.8}}
+\@writefile{toc}{\contentsline {subsubsection}{Admission criteria}{\thepage }{section*.9}}
+\@writefile{toc}{\contentsline {subsubsection}{Additional metadata}{\thepage }{section*.10}}
 \citation{abeni_integrating_1998}
-\@writefile{toc}{\contentsline {subsubsection}{Admission criteria}{\thepage }{section*.10}}
-\@writefile{toc}{\contentsline {subsubsection}{Additional metadata}{\thepage }{section*.11}}
-\@writefile{toc}{\contentsline {subsection}{Perceptual Task Evaluator}{\thepage }{section*.12}}
-\newlabel{eq:error}{{6}{\thepage }{Perceptual Task Evaluator}{equation.0.6}{}}
-\@writefile{toc}{\contentsline {subsection}{Perceptual Scheduler}{\thepage }{section*.13}}
-\@writefile{toc}{\contentsline {subsubsection}{A perceptual baseline - EDF parameters}{\thepage }{section*.14}}
 \citation{xu_scheduling_1990}
 \citation{abeni_integrating_1998}
+\@writefile{toc}{\contentsline {subsection}{Perceptual Task Evaluator}{\thepage }{section*.11}}
+\newlabel{eq:error}{{6}{\thepage }{Perceptual Task Evaluator}{equation.0.6}{}}
+\@writefile{toc}{\contentsline {subsection}{Perceptual Scheduler}{\thepage }{section*.12}}
+\@writefile{toc}{\contentsline {subsubsection}{A perceptual baseline - EDF parameters}{\thepage }{section*.13}}
 \newlabel{eq:collisions}{{7}{\thepage }{A perceptual baseline - EDF parameters}{equation.0.7}{}}
-\@writefile{toc}{\contentsline {subsection}{Schedulability test}{\thepage }{section*.15}}
-\@writefile{toc}{\contentsline {subsection}{Perceptual saliency queue}{\thepage }{section*.16}}
-\@writefile{toc}{\contentsline {subsection}{Temporal dithering}{\thepage }{section*.17}}
+\@writefile{toc}{\contentsline {subsection}{Schedulability test}{\thepage }{section*.14}}
+\@writefile{toc}{\contentsline {subsection}{Perceptual saliency queue}{\thepage }{section*.15}}
+\@writefile{toc}{\contentsline {subsection}{Temporal dithering}{\thepage }{section*.16}}
+\@writefile{toc}{\contentsline {section}{EVALUATION}{\thepage }{section*.17}}
 \@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces Temporal Dithering}}{\thepage }{algocf.1}}
 \newlabel{alg:dithering}{{1}{\thepage }{Temporal dithering}{algocf.1}{}}
-\@writefile{toc}{\contentsline {section}{EVALUATION}{\thepage }{section*.18}}
-\@writefile{toc}{\contentsline {subsection}{Testbed - 38-node system}{\thepage }{section*.19}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces  A testbed system consisting of 38 actuators, each individually controlled by a 16 MHz atmega328 micro controller (Arduino Uno, $Q_s = 10$) through a 12-bit PWM $\text  {I}^2$C interface (PCA9685). }}{\thepage }{figure.3}}
 \newlabel{fig:testbed}{{3}{\thepage }{A testbed system consisting of 38 actuators, each individually controlled by a 16 MHz atmega328 micro controller (Arduino Uno, $Q_s = 10$) through a 12-bit PWM $\text {I}^2$C interface (PCA9685)}{figure.3}{}}
-\@writefile{toc}{\contentsline {subsection}{Microbenchmarks}{\thepage }{section*.20}}
+\@writefile{toc}{\contentsline {subsection}{Testbed - 38-node system}{\thepage }{section*.18}}
+\@writefile{toc}{\contentsline {subsection}{Microbenchmarks}{\thepage }{section*.19}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  Microbenchmark tests altering the number of actuators in the system. These results were simulated in a budget (Qs = 10) on a heterogenous system. The top row displays synchronous commands to each actuator in the system, while the bottom displays staggered commands (on a 1ms time step). Larger PSNR values indicates better quality of service. }}{\thepage }{figure.4}}
 \newlabel{fig:pulse_actuators}{{4}{\thepage }{Microbenchmark tests altering the number of actuators in the system. These results were simulated in a budget (Qs = 10) on a heterogenous system. The top row displays synchronous commands to each actuator in the system, while the bottom displays staggered commands (on a 1ms time step). Larger PSNR values indicates better quality of service}{figure.4}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces  Microbenchmark tests altering the budget allocated to the system. These results were simulated in n = 35 node heterogenous system. The top row displays synchronous commands to each actuator in the system, while the bottom displays staggered commands (on a 1ms time step). Larger PSNR values indicates better quality of service. }}{\thepage }{figure.5}}
 \newlabel{fig:micro_system}{{5}{\thepage }{Microbenchmark tests altering the budget allocated to the system. These results were simulated in n = 35 node heterogenous system. The top row displays synchronous commands to each actuator in the system, while the bottom displays staggered commands (on a 1ms time step). Larger PSNR values indicates better quality of service}{figure.5}{}}
-\@writefile{toc}{\contentsline {subsection}{Results - Microbenchmarks}{\thepage }{section*.21}}
+\@writefile{toc}{\contentsline {subsection}{Results - Microbenchmarks}{\thepage }{section*.20}}
 \citation{chaudhary_perceptual_2001}
 \bibstyle{acm-sigchi}
 \bibdata{expresso}
@@ -79,13 +78,13 @@
 \bibcite{chaudhary_perceptual_2001}{3}
 \bibcite{harrison_unlocking_2012}{4}
 \bibcite{heaton_physical_2000}{5}
-\@writefile{toc}{\contentsline {subsection}{Macrobenchmarks}{\thepage }{section*.22}}
-\@writefile{toc}{\contentsline {subsection}{Results - Macrobenchmark}{\thepage }{section*.23}}
-\@writefile{toc}{\contentsline {section}{Future Work}{\thepage }{section*.24}}
-\@writefile{toc}{\contentsline {section}{Limitations}{\thepage }{section*.25}}
-\@writefile{toc}{\contentsline {section}{CONCLUSION}{\thepage }{section*.26}}
-\@writefile{toc}{\contentsline {section}{ACKNOWLEDGMENTS}{\thepage }{section*.27}}
-\@writefile{toc}{\contentsline {section}{{REFERENCES} }{\thepage }{section*.28}}
+\@writefile{toc}{\contentsline {subsection}{Macrobenchmarks}{\thepage }{section*.21}}
+\@writefile{toc}{\contentsline {subsection}{Results - Macrobenchmark}{\thepage }{section*.22}}
+\@writefile{toc}{\contentsline {section}{Future Work}{\thepage }{section*.23}}
+\@writefile{toc}{\contentsline {section}{Limitations}{\thepage }{section*.24}}
+\@writefile{toc}{\contentsline {section}{CONCLUSION}{\thepage }{section*.25}}
+\@writefile{toc}{\contentsline {section}{ACKNOWLEDGMENTS}{\thepage }{section*.26}}
+\@writefile{toc}{\contentsline {section}{{REFERENCES} }{\thepage }{section*.27}}
 \bibcite{huppi_breathing_2003}{6}
 \bibcite{ishii_tangible_1997}{7}
 \bibcite{kaliakatsospapakostas_interactive_2012}{8}
