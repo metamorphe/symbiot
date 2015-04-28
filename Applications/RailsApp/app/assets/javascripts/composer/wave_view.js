@@ -25,21 +25,17 @@ WaveView.prototype = {
 		this.previewDom = $('.preview');
 		this.repeatDom = $('.repeat');
 		this.stretchDom = $('.stretch');
-		this.resetDom = $('.reset')
+		this.resetDom = $('.reset');
 		this.repeatDom.change(function() {
 			var num = parseInt(scope.repeatDom.val());
 			var oldRepeat = scope.currentBehavior.wave.getRepeat();
 			scope.currentBehavior.wave.setRepeat(num);
-			scope.currentBehavior.rate = scope.currentBehavior.rate
-										* (num / oldRepeat);
 			scope.refresh();
 		});
 		this.stretchDom.change(function() {
 			var num = parseInt(scope.stretchDom.val());
 			var oldStretch = scope.currentBehavior.wave.getStretch();
 			scope.currentBehavior.wave.setStretch(num);
-			scope.currentBehavior.rate = scope.currentBehavior.rate
-										* (num / oldStretch);
 			scope.refresh();
 		});
 		this.resetDom.click(function() {

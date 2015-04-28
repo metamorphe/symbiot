@@ -8,8 +8,9 @@ function Wave(name, data, isSmooth){
 	this.data = data;
 	this.defaultData = data;
 	this.isSmooth = isSmooth;
-	this.DEFAULT_STRETCH = 1;
+	this.DEFAULT_STRETCH = 0;
 	this.DEFAULT_REPEAT = 1;
+	this.DEFAULT_RATE = 5;
 	this.DEFAULT_LEN = 300;
 	this.stretch = this.DEFAULT_STRETCH;
 	this.repeat = this.DEFAULT_REPEAT;
@@ -23,6 +24,15 @@ Wave.prototype = {
 		var xAxis = numeric.linspace(0, this.data.length - 1);
 		return numeric.spline(xAxis, this.data)
 					.at(numeric.linspace(0, this.data.length - 1, n));
+	},
+	getRate: function() {
+		var stretchFactor;
+		if (this.stretch == 0) {
+			stretchFactor = 1;
+		} else {
+			stretchFactor = this.stretch + 1;
+		}
+		return this.DEFAULT_RATE * this.repeat * stretchFactor;
 	},
 	setData: function(newData) {
 		this.data = newData;
@@ -133,10 +143,13 @@ Wave.prototype = {
 		return this;
 	}, 
 	dataPts: function(scale){
+		var tempData = this.data;
+		this._applyParams();
 		var t = numeric.linspace(0, 1, this.data.length);
 		return $.map(this.data, function(el, i){
 			return new paper.Point(t[i] * scale.width, el * (scale.height *0.45));
 		});
+		this.data = tempData;
 	}
 }
 
