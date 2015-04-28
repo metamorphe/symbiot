@@ -12,8 +12,6 @@ function Behavior(wave, isSVG){
 	this.name = wave.name;
 	this.wave = wave;
 	this.interval = null;
-	this.DEFAULT_RATE = 5;
-	this.rate = this.DEFAULT_RATE;
 	this.isSVG = isSVG;
 	this._boundinterval = null;
 	this.index = 0;
@@ -126,7 +124,8 @@ Behavior.prototype = {
 			scope._slice(function(v){ scope.channel(v); }, fn);
 		}
 		if(!this.interval)
-			this.interval = setInterval(slice, this.rate);
+			console.log(this.wave.getRate());
+			this.interval = setInterval(slice, this.wave.getRate());
 	},
 	_slice: function(channel, fn){
 		this.tracker.position.x += this.width/500; // delta x
