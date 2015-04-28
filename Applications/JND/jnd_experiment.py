@@ -1,17 +1,15 @@
 from pylab import *
-import random, os, unittest
+import random, os, unittest, json, sys
 from operator import itemgetter
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 
 class Experiment:
 	
-	participantNumber = 0
-
 	def __init__(self):
-		self.participantNumber += 1 #change participant counter
-		self.actuators = ["LED", "heatpad"]
-		print "Press 'r' to start the first actuator" #runs actuator_setup
+		self.participantName = ""
+		self.actuators = ["LED"]
+		print "Press 's' to turn on the arduino and start the first actuator" #starts actuator setup
 		self.ranges = []
 		self.values = []
 		self.jnd_range = []
@@ -21,9 +19,10 @@ class Experiment:
 		self.query = random.choice(self.values)
 
 	#sets up new actuator
-	def actuator_setup(self):
+	def actuator_setup(self, username):
 		if len(self.actuators) != 0:
-			self.new_actuator(self.participantNumber)
+			self.participantName = username
+			self.new_actuator()
 			self.ranges = []
 			self.values = []
 			for i in range(0, 1001):
@@ -33,34 +32,38 @@ class Experiment:
 			print "Experiment complete!"
 
 
-	#creates file structure Actuator/participantNumber
-	def new_actuator(self, participantNumber):
+	#creates file structure Actuator/participantName
+	def new_actuator(self):
 		self.actuator = random.choice(self.actuators)
-		if not os.path.exists(self.actuator):
+		if not os.path.exists(self.actuator): # if folder for actuator doesn't exist
 			os.makedirs(self.actuator)
 			participant = 'Participant'
-			participant += str(self.participantNumber)
+			participant += str(self.participantName)
 			participantFolder = self.actuator + '/' + participant + '/'
 			os.makedirs(participantFolder)
 
 
-
 	#sets query; resets limit and jnd_range
 	def next_range(self):
+
 		#choose random query
 		if len(self.values) != 0:
 			self.query = random.choice(self.values)
-			self.lower_limit = self.upper_limit = False
+			self.lower_limit = True
+			self.upper_limit = False
 			self.jnd_range = []
-			print "Start next range"
-			# print "Query is actuating to ", self.query
-			return self.query
+			print "Query is actuating to ", self.query
+
 		else:
 			print "Current actuator complete"
-			self.ranges = sorted(self.ranges, key=itemgetter(0))
 			self.actuators.remove(self.actuator) #remove current actuator from list of actuators
-			#visualization
+			self.query = False
 			# self.visualize()
+			if len(self.actuators) != 0:
+				print "When ready, press 's' to start a new actuator"
+			else:
+				print "You have finished all actuators. Press 'c' to end the experiment"
+		return self.query
 
 
 	#change actuated value by specified change
@@ -70,7 +73,7 @@ class Experiment:
 			actuate = 0
 		elif actuate > 1000:
 			actuate = 1000
-		# print "Actuating to ", actuate
+		print "Actuating to ", actuate
 		return actuate
 
 
@@ -78,10 +81,11 @@ class Experiment:
 	#set/reset limits
 	def set_lower_limit(self, value):
 		self.lower_limit = value
-		# print "lower limit set to ", value
+		print "lower limit set to", self.lower_limit
+
 	def set_upper_limit(self, value):
 		self.upper_limit = value
-		# print "upper limit set to ", value
+		print "upper limit set to", self.upper_limit
 
 
 
@@ -101,17 +105,26 @@ class Experiment:
 	def remove_jnd_range(self):
 		lower = self.get_lower_limit()
 		upper = self.get_upper_limit()
-		if (lower != False or lower == 0) and upper != False:
-			self.jnd_range = [lower, upper]
-			# print "JND RANGE ", self.jnd_range
+		# print "lower is ", lower, "upper is ", upper
 
-			#ranges are appending correctly
-			self.ranges.append([self.query, self.jnd_range])
+		try:
+			if (lower != False or lower == 0) and upper != False:
 
-			#values isn't updating correctly
-			self.values = self.update_values()
-			# print "Range added"
-			print "Press 'n' to start next range "
+				self.jnd_range = [lower, upper]
+				# print "JND RANGE ", self.jnd_range
+
+				#append ranges
+				self.ranges.append([self.query, self.jnd_range])
+				# print "ranges ", self.ranges
+
+				#remove values
+				self.values = self.update_values()
+				# print "values ", self.values
+
+				# print "Range added"
+				print "Press 'n' to start next range "
+		except AttributeError: #if lower or upper not set
+			pass
 
 
 	def update_values(self):
@@ -143,13 +156,17 @@ class Experiment:
 		# print "fifty down ", fifty_down
 
 		fifty_range = [fifty_down, fifty_up]
-		# print "fifty range ", fifty_range
+		print "fifty range ", fifty_range
 		return fifty_range
 
 
 	def visualize(self):
+		
 		magnitude = []
 		brightness = []
+
+		self.values = sorted(self.values, key=itemgetter(0)) #sort list
+
 		for i in range(len(self.values)):
 			#upper limits of ranges
 			magnitude.append(self.values[i][1][1])
@@ -166,55 +183,51 @@ class Experiment:
 		brightness = [float(yn) for yn in brightness] #every element (yn) in y becomes a float
 		magnitude = np.array(magnitude) #transform your data in a numpy array, 
 		brightness = np.array(brightness) #so the curve_fit can work
-
-		# brightness_predicted = np.array(self.y_predicted(magnitude)) # creates power curve using expected y values
 		
 		popt, pcov = curve_fit(self.func, magnitude, brightness)
-		plt.plot(magnitude, self.func(magnitude, *popt), 'r-', label="Steven's Power Curve") #same as line above \/ 
-		#returns index out of bounds error
-		# plt.plot(magnitude, popt[0]*magnitude**3 + popt[1]*magnitude**2 + popt[2]*magnitude + popt[3], label="Fitted Curve")
+		plt.plot(magnitude, self.func(magnitude, *popt), 'r-', label="Steven's Power Curve")
 		
-		# plt.plot(magnitude, self.func(magnitude, *self.fit_model(magnitude)), 'r-', label="Expected Curve")
-
-		# magnitude [79, 120, 300, 589, 800, 1000]; brightness [0, 1, 2, 3, 4, 5]
 		plt.legend(loc='upper left')
 		print "a-value: ", popt[1]
 		print "error: ", pcov
+		self.postjson(popt[1], pcov) #post json before showing plot
 		plt.show()
 	
 	#generates expected y values for actuator used to plot Steven's power curve
 	def y_predicted(self, magnitude):
-		#
 		y_predicted = [0.5, 1, 1.5, 2, 2.5, 3]
 		return y_predicted
 
 	def fit_model(self, magnitude, brightness, steven_power_law):
-		#
 		popt, pcov = curve_fit(self.func, magnitude, y_predicted)
 		return popt
-
-# model, error = fit_model(magnitude, brightness, stephen_power_law)
-# plot(magnitude, brightness, stephen_power_law(magnitude, *model))
-# => a = 0.19490441, error = 0.00044376
-
-# The model has a couple of parameters it can change, in your case k and a
-# The algorithm tries to find the k and a that minimize the models error 
-# It does this by choosing an arbitrary a and k, running it through all xs and comparing how far it was to the expected Ys
-# It then tweaks one of its parameters.  If choosing a smaller a yields a better result, it'll keep making the a smaller 
-# Until it's found an a and k that gets u the best error
-# In the end u should be able to plot all of these. ( xs. Ys. And the power law on the same plot*
 
 	def func(self, x, a, b):
 		return x**a + b
 
+	def postjson(self, avalue, error):
+		data = {}
+		data['a-value'] = avalue
+		data['error'] = error.tolist() #prevents type error
+		json_data = json.dumps(data)
 
+		# write to file
+		participant = 'Participant'
+		participant += str(self.participantName)
+		participantFolder = self.actuator + '/' + participant + '/'
+		fileName = os.path.join(participantFolder, 'data.txt')         
+		with open(fileName, 'w') as outfile:
+		    json.dump(data, outfile)
+
+		# url = "http://localhost:8080"
+		# r = requests.post(url, data=jsonText)
 
 class JNDTestCases(unittest.TestCase):
 
     def test_init(self):
         """Is init method working setting up properly?"""
         experiment = Experiment()
-        self.assertTrue(experiment.participantNumber == 1) # participant 1
+        # self.assertTrue(experiment.participantNumber == 1) # participant 1
         self.assertTrue(len(experiment.values) == 1001) #values has [0, 1000]
         self.assertTrue(len(experiment.ranges) == 0) # ranges is empty
         self.assertTrue(experiment.query in experiment.values) # a random number from self.values is set as query
@@ -244,13 +257,21 @@ class JNDTestCases(unittest.TestCase):
 
     def test_remove_jnd_range(self):
     	experiment = Experiment()
+
+    	experiment.query = 500
     	experiment.set_lower_limit(0)
     	experiment.set_upper_limit(1000)
-    	experiment.jnd_range = [0, 1000]
-    	experiment.remove_jnd_range()
-    	self.assertTrue(len(experiment.ranges) != 0) #jnd range added
-    	self.assertTrue(len(experiment.values) != 1001) #jnd range removed from values
+    	experiment.remove_jnd_range() #should remove range [250, 750]
     	self.assertTrue(len(experiment.values) == 500) # fifty() and update_values() are removing 50% of range
+    	self.assertTrue(len(experiment.ranges) == 1) #jnd range added
+
+    	# check for overlapping removal
+    	experiment.query = 200
+    	experiment.set_lower_limit(0)
+    	experiment.set_upper_limit(400)
+    	experiment.remove_jnd_range() #should remove range [100, 300]
+    	self.assertTrue(len(experiment.values) == 350)
+    	self.assertTrue(len(experiment.ranges) == 2) #jnd range added
 
     def test_new_actuator(self):
     	#tests when values is empty and a new actuator needs to be used
@@ -263,11 +284,12 @@ class JNDTestCases(unittest.TestCase):
     	#tests when actuators are empty if the experiment ends
     	experiment = Experiment()
     	experiment.actuators = []
-    	experiment.actuator_setup() #s hould print "Experiment complete!"
+    	experiment.actuator_setup() #should print "Experiment complete!"
 
     def test_visualize(self):
     	experiment = Experiment()
-    	experiment.values = [[40, [0, 79]], [100, [80, 120]], [200, [121, 300]], [400, [301, 589]], [690, [590, 800]], [900, [801, 1000]]]
+    	experiment.actuator_setup()
+    	experiment.values = [[400, [301, 589]], [200, [121, 300]], [40, [0, 79]], [690, [590, 800]], [100, [80, 120]], [900, [801, 1000]]]
     	experiment.visualize()
 
 if __name__ == '__main__':

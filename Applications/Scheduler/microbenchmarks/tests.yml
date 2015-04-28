@@ -1,0 +1,16 @@
+# LED TESTS
+tests:
+  # - hello_world.yml
+  # - led_synchronous_all.yml
+  # - led_synchronous_single_sine_wave.yml
+  # - led_synchronous_sine_wave.yml
+  # - led_synchronous_sixteen_sine_wave.yml
+  # - led_synchronous_complex_candle.yml
+  # - led_staggered_candle.yml
+  # - all_sine.yml
+  - 10a.yml
+  - 20a.yml
+  - 30a.yml
+  - 50a.yml
+  - 80a.yml
+  - 100a.yml

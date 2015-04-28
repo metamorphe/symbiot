@@ -6,29 +6,89 @@
 function Wave(name, data, isSmooth){
 	this.name = name;
 	this.data = data;
+	this.defaultData = data;
 	this.isSmooth = isSmooth;
+	this.DEFAULT_STRETCH = 1;
+	this.DEFAULT_REPEAT = 1;
+	this.DEFAULT_LEN = 300;
+	this.stretch = this.DEFAULT_STRETCH;
+	this.repeat = this.DEFAULT_REPEAT;
 }
-
-const DEFAULT_LEN = 300;
-var newArr;
-var xAxis;
 
 Wave.prototype = {
 	//return LED states
 	getData: function(n){
 		// TODO: Return a n-array representation of wave from this.data 
 		if (n == undefined) { return this.data; }
-		xAxis = numeric.linspace(0, this.data.length - 1);
+		var xAxis = numeric.linspace(0, this.data.length - 1);
 		return numeric.spline(xAxis, this.data)
 					.at(numeric.linspace(0, this.data.length - 1, n));
 	},
 	setData: function(newData) {
 		this.data = newData;
 	},
+	getStretch: function() {
+		return this.stretch;
+	},
+	setStretch: function(stretch) {
+		this.stretch = stretch;
+		this._applyParams();
+	},
+	clearStretch: function() {
+		this.setStretch(this.DEFAULT_STRETCH);
+	},
+	getRepeat: function() {
+		return this.repeat;
+	},
+	setRepeat: function(repeat) {
+		this.repeat = repeat;
+		this._applyParams();
+	},
+	clearRepeat: function() {
+		this.setRepeat(this.DEFAULT_REPEAT);
+	},
+	reset: function() {
+		// Repeat must be applied before stretch
+		this.clearRepeat();
+		this.clearStretch();
+		this.data = this.defaultData;
+	},
+	_applyParams: function() {
+		this.data = this._stretch(this.stretch);
+		this.data = this._repeat(this.repeat);
+	},
+	_stretch: function(factor) {
+		// TODO: get a better resampler
+		var newArr = [];
+		if (factor < 0) {
+			for(var i = 0; i < this.data.length;
+					i += Math.abs(factor) + 1) {
+				newArr.push(this.data[i]);
+			}
+		}
+		else {
+			this.data.forEach(function(el, idx) {
+				for (var i = 0; i <= factor; i++) {
+					newArr.push(el);
+				}
+			});
+		}
+		console.log(newArr.length);
+		return newArr;
+	},
+	_repeat: function(factor) {
+		var newArr = []
+		for (var i = 0; i < factor; i++) {
+			newArr = newArr.concat(this.defaultData.slice());
+		}
+		return newArr;
+	},
+
+	/* Begin math transforms */
 	add: function(w, modify){
 		// TODO: Add to waves together, return a new Wave if modify is false
-		newArr = numeric.addVV(this.getData(DEFAULT_LEN),
-									w.getData(DEFAULT_LEN));
+		var newArr = numeric.addVV(this.getData(this.DEFAULT_LEN),
+									w.getData(this.DEFAULT_LEN));
 		if (modify) {
 			this.setData(newArr);
 		} else {
@@ -37,8 +97,8 @@ Wave.prototype = {
 	},
 	sub: function(w, modify){
 		// TODO: Sub waves, return a new Wave if modify is false
-		newArr = numeric.subVV(this.getData(DEFAULT_LEN),
-									w.getData(DEFAULT_LEN));
+		var newArr = numeric.subVV(this.getData(this.DEFAULT_LEN),
+									w.getData(this.DEFAULT_LEN));
 		if (modify) {
 			this.setData(newArr);
 		} else {
@@ -47,8 +107,8 @@ Wave.prototype = {
 	},
 	mul: function(s,modify){
 		// TODO: Multiply scalar, return a new Wave if modify is false
-		newArr = numeric.mulVV(this.getData(DEFAULT_LEN).
-									w.getData(DEFAULT_LEN));
+		var newArr = numeric.mulVV(this.getData(this.DEFAULT_LEN).
+									w.getData(this.DEFAULT_LEN));
 		if (modify) {
 			this.setData(newArr);
 		} else {

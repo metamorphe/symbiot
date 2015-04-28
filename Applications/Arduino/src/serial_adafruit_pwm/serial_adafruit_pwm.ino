@@ -8,7 +8,7 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40);
 // Open a serial connection and flash LED when input is received
 
 void setup(){
-  Serial.begin(9600);
+  Serial.begin(115200);
   // Serial.println("16 channel PWM test!");
 
   // if you want to really speed stuff up, you can go into 'fast 400khz I2C' mode
@@ -23,8 +23,6 @@ void setup(){
   // must be changed after calling Wire.begin() (inside pwm.begin())
   TWBR = 12; // upgrade to 400KHz!
 
-
-  Serial.begin(9600);
 
   for (uint8_t pwmnum=0; pwmnum < 16; pwmnum++) {
     pwm.setPWM(pwmnum, 0, 0 );

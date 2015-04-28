@@ -1,0 +1,46 @@
+This is BibTeX, Version 0.99d (TeX Live 2014)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: expresso.aux
+The style file: acm-sigchi.bst
+Database file #1: expresso.bib
+You've used 14 entries,
+            2243 wiz_defined-function locations,
+            604 strings with 6586 characters,
+and the built_in function-call counts, 5361 in all, are:
+= -- 538
+> -- 223
+< -- 0
++ -- 92
+- -- 78
+* -- 343
+:= -- 827
+add.period$ -- 43
+call.type$ -- 14
+change.case$ -- 78
+chr.to.int$ -- 0
+cite$ -- 14
+duplicate$ -- 238
+empty$ -- 447
+format.name$ -- 78
+if$ -- 1179
+int.to.chr$ -- 0
+int.to.str$ -- 14
+missing$ -- 12
+newline$ -- 73
+num.names$ -- 28
+pop$ -- 109
+preamble$ -- 1
+purify$ -- 67
+quote$ -- 0
+skip$ -- 177
+stack$ -- 0
+substring$ -- 340
+swap$ -- 72
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 54
+warning$ -- 0
+while$ -- 54
+width$ -- 16
+write$ -- 152
