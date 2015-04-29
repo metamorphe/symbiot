@@ -1,13 +1,17 @@
 FlixelLights::Application.routes.draw do
   get "smart_story/new_story"
   get "smart_story/register"
-  resources :stories
+  resources :story_pages
+
+  resources :story_texts
 
   resources :story_images
 
-  resources :storytexts
-
-  resources :story_pages
+  resources :stories do 
+    member do 
+      get :ipad_output
+    end
+  end
 
   resources :mappers
 
