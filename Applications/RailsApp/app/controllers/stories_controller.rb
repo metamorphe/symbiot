@@ -3,7 +3,7 @@ class StoriesController < ApplicationController
 
   def ipad_output
     story = Story.find(params[:id])
-    output = story.story_pages.map{|s|
+    output = {story: story.story_pages.map{|s|
       {
         type: s.storytype, 
         text_labels: s.story_texts.map{|st| {
@@ -21,7 +21,7 @@ class StoriesController < ApplicationController
           }
         }
       }
-    }[0]
+    }}
       # story
       # story: story, 
       # pages: story.story_pages.map{|s| {text_labels: s.story_texts, image_labels: s.story_images}}
