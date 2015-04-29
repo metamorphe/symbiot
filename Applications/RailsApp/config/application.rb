@@ -21,6 +21,9 @@ module FlixelLights
     # config.i18n.default_locale = :de
 
     # enable below line for server (?)
-    # config.assets.prefix = ":3002/assets/"
+    #config.assets.enabled = true
+    #config.assets.prefix =":3002/assets"
+    # Version of your assets, change this if you want to expire all your assets
+    #config.assets.version = '1.0'
   end
 end

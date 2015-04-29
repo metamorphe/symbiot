@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141201061652) do
+ActiveRecord::Schema.define(version: 20150428232546) do
 
   create_table "actuations", force: true do |t|
     t.integer  "flavor_id"
@@ -113,6 +113,11 @@ ActiveRecord::Schema.define(version: 20141201061652) do
   add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id", using: :btree
   add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
 
+  create_table "mappers", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "multiples", force: true do |t|
     t.integer  "user_id"
     t.integer  "stl_id"
@@ -188,6 +193,42 @@ ActiveRecord::Schema.define(version: 20141201061652) do
   end
 
   add_index "stls", ["slug"], name: "index_stls_on_slug", unique: true, using: :btree
+
+  create_table "stories", force: true do |t|
+    t.string   "title"
+    t.string   "author"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "story_images", force: true do |t|
+    t.string   "file"
+    t.string   "size"
+    t.integer  "story_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "story_page_id"
+  end
+
+  create_table "story_pages", force: true do |t|
+    t.string   "storytype"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "story_id"
+    t.integer  "page_number"
+  end
+
+  create_table "story_texts", force: true do |t|
+    t.string   "text"
+    t.integer  "fontSize"
+    t.string   "center"
+    t.string   "textBackgroundHex"
+    t.float    "textBackgroundAlpha"
+    t.integer  "border"
+    t.string   "story_page_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "tags", force: true do |t|
     t.integer  "behavior_id"
