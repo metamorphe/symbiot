@@ -1,4 +1,16 @@
 FlixelLights::Application.routes.draw do
+  resources :story_pages
+
+  resources :story_texts
+
+  resources :story_images
+
+  resources :stories do 
+    member do 
+      get :ipad_output
+    end
+  end
+
   resources :mappers
 
   resources :tasks
