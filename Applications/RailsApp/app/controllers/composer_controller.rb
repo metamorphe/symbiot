@@ -13,11 +13,6 @@ class ComposerController < ApplicationController
 
   def library_selector
   	@library = Actuator.all
-  	# .collect{|a| [a.name, {actuator: a, flavors: a.flavors}] }
-  	# @library = Hash[@library]
-
-
-  	# render :json => @library
   	render :layout => "singe_page_app"
   end
 end

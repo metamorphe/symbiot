@@ -20,4 +20,9 @@ class SmartStoryController < ApplicationController
 		a = "New story"
 		render :json => a.to_json
 	end
+	def composer
+		@story = Story.find(params[:story_id])
+		@page = @story.story_pages.find{|s| s.page_number == params[:page_number].to_i}
+		render :layout => "singe_page_app"
+	end
 end
