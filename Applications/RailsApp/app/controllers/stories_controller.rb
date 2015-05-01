@@ -19,38 +19,18 @@ class StoriesController < ApplicationController
             imageURL: st.file_url, 
             imageSize: JSON.parse(st.size)
           }
+        }, 
+        actuator_labels: [{
+                            UUID: "3c10b74e-f027-11e4-90ec-1681e6b88ec1", 
+                            actuator_type: "SVCD", 
+                            metadata: {
+                              modality: "light", 
+                              action: "turn_on"
+                            }
+                          }]
         }
       }
-    }}
-      # story
-      # story: story, 
-      # pages: story.story_pages.map{|s| {text_labels: s.story_texts, image_labels: s.story_images}}
-
-#     {
-#     "type": "DrawingPrompterViewController",
-#     "text_labels": [
-#         {
-#             "text": "Down in the meadow where animals flocked.\rWere four flanky mammals, on two legs they walked!\rCreatures that young Tom had not seen before.\rThe curious chipmunk just had to know more.",
-#             "fontSize": 36,
-#             "center": [
-#                 0.5,
-#                 0.8
-#             ],
-#             "textBackgroundHex": "FFFFFF",
-#             "textBackgroundAlpha": 0.8,
-#             "border": 20
-#         }
-#     ],
-#     "image_labels": [
-#         {
-#             "imageURL": "https://api.built.io/v1/classes/story/objects/blt5fe6e3549984da5a/uploads/54949bdf2fa3e9e17b7c5768",
-#             "imageSize": [
-#                 1,
-#                 1
-#             ]
-#         }
-#     ]
-# }
+    }
 
     render :json => output
   end
