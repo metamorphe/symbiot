@@ -1,6 +1,8 @@
 FlixelLights::Application.routes.draw do
   get "smart_story/new_story"
   get "smart_story/register"
+  get "smart_story/echo"
+  put "smart_story/echo"
   resources :story_pages
 
   resources :story_texts

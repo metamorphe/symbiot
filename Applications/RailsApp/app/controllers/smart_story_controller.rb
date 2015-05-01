@@ -12,6 +12,9 @@ class SmartStoryController < ApplicationController
 			end
 		end
 	end
+	def echo
+		render :json => params
+	end
 	# generate based on nearby devices, segments with desired environment
 	def new_story
 		a = "New story"
