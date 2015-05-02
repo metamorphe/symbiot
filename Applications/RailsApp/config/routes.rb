@@ -1,6 +1,15 @@
 FlixelLights::Application.routes.draw do
-  get "smart_story/new_story"
-  get "smart_story/register"
+
+  get "smart_story/:story_id/composer/:page_number", :to => "smart_story#composer", 
+  :as => "smart_story_composer"
+  
+  namespace :smart_story do
+    get "new_story"
+    get "register"
+    get "echo"
+    put "echo"
+  end
+
   resources :story_pages
 
   resources :story_texts
